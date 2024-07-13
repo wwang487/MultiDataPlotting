@@ -311,29 +311,29 @@ This function transforms raw data into a visually intuitive heatmap, allowing fo
 
 _Parameters_
 
-**pair_freq** (dict): Dictionary with keys as tuple pairs of x and y coordinates (e.g., (x, y)) and values as their frequencies or intensities.
-**fig_size** (tuple, optional): The dimensions of the figure, in inches. Default is (10, 8).
-**title** (str, optional): The title of the heatmap. Default is 'Cross Relationship Heatmap'.
-**title_fontsize** (int, optional): Font size for the title. Default is 16.
-**xlabel** (str, optional): Label for the x-axis. Default is 'Variable 1'.
-**ylabel** (str, optional): Label for the y-axis. Default is 'Variable 2'.
-**label_fontsize** (int, optional): Font size for the axis labels. Default is 14.
-**tick_fontsize** (int, optional): Font size for the tick labels. Default is 12.
-**vmin** (float, optional): Minimum data value that corresponds to the colormap’s lower limit. If None, defaults to the data’s min value.
-**vmax** (float, optional): Maximum data value that corresponds to the colormap’s upper limit. If None, defaults to the data’s max value.
-**cmap** (str, optional): Colormap used for the heatmap. Default is 'viridis'.
-**cbar_label** (str, optional): Label for the colorbar. Default is 'Frequency'.
-**save_path** (str, optional): Path to save the figure. If provided, the plot is saved to this location.
-**is_show** (bool, optional): Whether to display the plot. Default is True.
-**xtick_rotation** (int, optional): Rotation angle for the x-axis tick labels. Default is 0.
-**ytick_rotation** (int, optional): Rotation angle for the y-axis tick labels. Default is 0.
-**xticklabels** (list, optional): Custom labels for the x-axis ticks. If None, default labels based on the data are used.
-**yticklabels** (list, optional): Custom labels for the y-axis ticks. If None, default labels based on the data are used.
+-**pair_freq** (dict): Dictionary with keys as tuple pairs of x and y coordinates (e.g., (x, y)) and values as their frequencies or intensities.
+-**fig_size** (tuple, optional): The dimensions of the figure, in inches. Default is (10, 8).
+-**title** (str, optional): The title of the heatmap. Default is 'Cross Relationship Heatmap'.
+-**title_fontsize** (int, optional): Font size for the title. Default is 16.
+-**xlabel** (str, optional): Label for the x-axis. Default is 'Variable 1'.
+-**ylabel** (str, optional): Label for the y-axis. Default is 'Variable 2'.
+-**label_fontsize** (int, optional): Font size for the axis labels. Default is 14.
+-**tick_fontsize** (int, optional): Font size for the tick labels. Default is 12.
+-**vmin** (float, optional): Minimum data value that corresponds to the colormap’s lower limit. If None, defaults to the data’s min value.
+-**vmax** (float, optional): Maximum data value that corresponds to the colormap’s upper limit. If None, defaults to the data’s max value.
+-**cmap** (str, optional): Colormap used for the heatmap. Default is 'viridis'.
+-**cbar_label** (str, optional): Label for the colorbar. Default is 'Frequency'.
+-**save_path** (str, optional): Path to save the figure. If provided, the plot is saved to this location.
+-**is_show** (bool, optional): Whether to display the plot. Default is True.
+-**xtick_rotation** (int, optional): Rotation angle for the x-axis tick labels. Default is 0.
+-**ytick_rotation** (int, optional): Rotation angle for the y-axis tick labels. Default is 0.
+-**xticklabels** (list, optional): Custom labels for the x-axis ticks. If None, default labels based on the data are used.
+-**yticklabels** (list, optional): Custom labels for the y-axis ticks. If None, default labels based on the data are used.
 
 _Code Example_
 
 ```python
-import multidataprocessing as msp
+import multidataplotting as msp
 
 # Example data: coordinates with frequencies
 data = {
@@ -357,30 +357,30 @@ Contour maps created by this function help in interpreting complex spatial data 
 
 _Parameters_
 
-**data** (dict or pandas.DataFrame): Data to plot, which should be a dictionary with tuple pairs (x, y) as keys and values representing the measurement at those coordinates, or a DataFrame with columns for x, y, and value.
-**fig_size** (tuple, optional): Dimensions of the figure, typically in inches. Default is (10, 8).
-**title** (str, optional): Title of the contour map. Default is 'Contour Map'.
-**title_fontsize** (int, optional): Font size for the title. Default is 16.
-**xlabel** (str, optional): Label for the x-axis. Default is 'X Coordinate'.
-**ylabel** (str, optional): Label for the y-axis. Default is 'Y Coordinate'.
-**colorbar_label** (str, optional): Label for the colorbar that describes the variable. Default is 'Frequency (%)'.
-**label_fontsize** (int, optional): Font size for the axis labels. Default is 14.
-**tick_fontsize** (int, optional): Font size for the tick labels. Default is 12.
-**contour_levels** (int, optional): Number of contour levels to draw. Default is 20.
-**cmap** (str, optional): Colormap used for the contour plot. Default is 'viridis'.
-**is_contour_line** (bool, optional): Whether to draw contour lines. Default is True.
-**contour_line_colors** (str, optional): Color of the contour lines. Default is 'white'.
-**contour_line_width** (float, optional): Width of the contour lines. Default is 1.0.
-**is_contour_label** (bool, optional): Whether to label the contour lines. Default is True.
-**contour_label_color** (str, optional): Color of the contour labels. Default is 'white'.
-**contour_label_size** (int, optional): Font size of the contour labels. Default is 10.
-**label_interval** (int, optional): Interval at which labels appear on contour lines. Default is 2.
-**save_path** (str, optional): Path to save the figure. If provided, the plot is saved to this location.
-**is_show** (bool, optional): Whether to display the plot. Default is True.
-**xticks** (list, optional): Custom tick intervals for the x-axis.
-**yticks** (list, optional): Custom tick intervals for the y-axis.
-**xtick_labels** (list, optional): Custom labels for the x-axis ticks.
-**ytick_labels** (list, optional): Custom labels for the y-axis ticks.
+-**data** (dict or pandas.DataFrame): Data to plot, which should be a dictionary with tuple pairs (x, y) as keys and values representing the measurement at those coordinates, or a DataFrame with columns for x, y, and value.
+-**fig_size** (tuple, optional): Dimensions of the figure, typically in inches. Default is (10, 8).
+-**title** (str, optional): Title of the contour map. Default is 'Contour Map'.
+-**title_fontsize** (int, optional): Font size for the title. Default is 16.
+-**xlabel** (str, optional): Label for the x-axis. Default is 'X Coordinate'.
+-**ylabel** (str, optional): Label for the y-axis. Default is 'Y Coordinate'.
+-**colorbar_label** (str, optional): Label for the colorbar that describes the variable. Default is 'Frequency (%)'.
+-**label_fontsize** (int, optional): Font size for the axis labels. Default is 14.
+-**tick_fontsize** (int, optional): Font size for the tick labels. Default is 12.
+-**contour_levels** (int, optional): Number of contour levels to draw. Default is 20.
+-**cmap** (str, optional): Colormap used for the contour plot. Default is 'viridis'.
+-**is_contour_line** (bool, optional): Whether to draw contour lines. Default is True.
+-**contour_line_colors** (str, optional): Color of the contour lines. Default is 'white'.
+-**contour_line_width** (float, optional): Width of the contour lines. Default is 1.0.
+-**is_contour_label** (bool, optional): Whether to label the contour lines. Default is True.
+-**contour_label_color** (str, optional): Color of the contour labels. Default is 'white'.
+-**contour_label_size** (int, optional): Font size of the contour labels. Default is 10.
+-**label_interval** (int, optional): Interval at which labels appear on contour lines. Default is 2.
+-**save_path** (str, optional): Path to save the figure. If provided, the plot is saved to this location.
+-**is_show** (bool, optional): Whether to display the plot. Default is True.
+-**xticks** (list, optional): Custom tick intervals for the x-axis.
+-**yticks** (list, optional): Custom tick intervals for the y-axis.
+-**xtick_labels** (list, optional): Custom labels for the x-axis ticks.
+-**ytick_labels** (list, optional): Custom labels for the y-axis ticks.
 
 _Code Example_
 
@@ -410,33 +410,33 @@ This function enhances data presentation by allowing for the visualization of co
 
 _Parameters_
 
-**pair_freq** (dict or pandas.DataFrame): Data to plot, either as a dictionary with tuple pairs (x, y) as keys and values as their frequency, or a DataFrame with suitable columns.
-**x_bin_ticks** (list): Bins or categories for the x-axis.
-**y_bin_ticks** (list): Bins or categories for the y-axis.
-**fig_size** (tuple, optional): Dimensions of the figure, typically in inches. Default is (12, 10).
-**title** (str, optional): Title of the 3D plot. Default is '3D Stacked Bar Plot'.
-**title_fontsize** (int, optional): Font size for the title. Default is 16.
-**xlabel** (str, optional): Label for the x-axis. Default is 'Variable 1'.
-**ylabel** (str, optional): Label for the y-axis. Default is 'Variable 2'.
-**zlabel** (str, optional): Label for the z-axis, representing the frequency or another measured variable. Default is 'Frequency'.
-**is_percent** (bool, optional): Whether to display the z-axis values as percentages. Default is False.
-**label_fontsize** (int, optional): Font size for the axis labels. Default is 10.
-**tick_fontsize** (int, optional): Font size for the tick labels. Default is 10.
-**color_map** (matplotlib.colors.Colormap, optional): Color map for the bars, affecting their color based on value. Default uses Matplotlib's viridis.
-**save_path** (str, optional): Path to save the figure. If provided, the plot is saved to this location.
-**is_show** (bool, optional): Whether to display the plot. Default is True.
-**x_ticklabel_left_close** (bool, optional): Whether to close the left side of x-tick labels. Default is False.
-**x_ticklabel_right_close** (bool, optional): Whether to close the right side of x-tick labels. Default is False.
-**y_ticklabel_top_close** (bool, optional): Whether to close the top side of y-tick labels. Default is False.
-**y_ticklabel_bottom_close** (bool, optional): Whether to close the bottom side of y-tick labels. Default is False.
-**elevation** (int, optional): Elevation angle of the 3D view. Default is 30.
-**azimuth** (int, optional): Azimuth angle of the 3D view. Default is 30.
-**background_color** (str, optional): Background color of the plot. Default is 'white'.
+-**pair_freq** (dict or pandas.DataFrame): Data to plot, either as a dictionary with tuple pairs (x, y) as keys and values as their frequency, or a DataFrame with suitable columns.
+-**x_bin_ticks** (list): Bins or categories for the x-axis.
+-**y_bin_ticks** (list): Bins or categories for the y-axis.
+-**fig_size** (tuple, optional): Dimensions of the figure, typically in inches. Default is (12, 10).
+-**title** (str, optional): Title of the 3D plot. Default is '3D Stacked Bar Plot'.
+-**title_fontsize** (int, optional): Font size for the title. Default is 16.
+-**xlabel** (str, optional): Label for the x-axis. Default is 'Variable 1'.
+-**ylabel** (str, optional): Label for the y-axis. Default is 'Variable 2'.
+-**zlabel** (str, optional): Label for the z-axis, representing the frequency or another measured variable. Default is 'Frequency'.
+-**is_percent** (bool, optional): Whether to display the z-axis values as percentages. Default is False.
+-**label_fontsize** (int, optional): Font size for the axis labels. Default is 10.
+-**tick_fontsize** (int, optional): Font size for the tick labels. Default is 10.
+-**color_map** (matplotlib.colors.Colormap, optional): Color map for the bars, affecting their color based on value. Default uses Matplotlib's viridis.
+-**save_path** (str, optional): Path to save the figure. If provided, the plot is saved to this location.
+-**is_show** (bool, optional): Whether to display the plot. Default is True.
+-**x_ticklabel_left_close** (bool, optional): Whether to close the left side of x-tick labels. Default is False.
+-**x_ticklabel_right_close** (bool, optional): Whether to close the right side of x-tick labels. Default is False.
+-**y_ticklabel_top_close** (bool, optional): Whether to close the top side of y-tick labels. Default is False.
+-**y_ticklabel_bottom_close** (bool, optional): Whether to close the bottom side of y-tick labels. Default is False.
+-**elevation** (int, optional): Elevation angle of the 3D view. Default is 30.
+-**azimuth** (int, optional): Azimuth angle of the 3D view. Default is 30.
+-**background_color** (str, optional): Background color of the plot. Default is 'white'.
 
 _Code Example_
 
 ```python
-import multidataprocessing as msp
+import multidataplotting as msp
 
 # Example data: Sales volume for different regions and product categories
 data = {
@@ -464,30 +464,30 @@ This function facilitates the analysis of how often events occur from different 
 
 _Parameters_
 
-**input_data** (pd.DataFrame): The DataFrame containing the data. It should include columns for direction (degrees or category) and the value or frequency of occurrences.
-**key_1** (str): Column name in input_data for directional data.
-**key_2** (str): Column name in input_data for the values associated with each direction.
-**interval** (int, optional): The bin size for directional data, in degrees. Default is 10.
-**value_interval** (int, optional): The bin size for value data, providing granularity in how values are segmented within the plot. Default is None, which means no binning.
-**title** (str, optional): Title of the rose map. Default is "Rose Map".
-**label_size** (int, optional): Font size for the labels on the plot. Default is 12.
-**label_interval** (int, optional): Interval for displaying labels around the rose, which can help in reducing label clutter. Default is 1.
-**color_ramp** (str, optional): Color map used for the plot. Default is "viridis".
-**tick_label_size** (int, optional): Font size for the tick labels. Default is 12.
-**tick_label_color** (str, optional): Color for the tick labels. Default is 'black'.
-**tick_font_name** (str, optional): Font name for the tick labels. Default is 'Arial'.
-**figsize** (tuple, optional): Dimensions of the plot, in inches. Default is (10, 8).
-**colorbar_label** (str, optional): Label for the color bar. Default is "Intensity".
-**colorbar_label_size** (int, optional): Font size for the color bar label. Default is 12.
-**max_radius** (float, optional): Maximum radius for the plot, controlling how far out the data extends. Default is None, which auto-scales.
-**save_path** (str, optional): File path where the plot will be saved, if desired.
-**is_show** (bool, optional): Whether to display the plot. Default is True.
+-**input_data** (pd.DataFrame): The DataFrame containing the data. It should include columns for direction (degrees or category) and the value or frequency of occurrences.
+-**key_1** (str): Column name in input_data for directional data.
+-**key_2** (str): Column name in input_data for the values associated with each direction.
+-**interval** (int, optional): The bin size for directional data, in degrees. Default is 10.
+-**value_interval** (int, optional): The bin size for value data, providing granularity in how values are segmented within the plot. Default is None, which means no binning.
+-**title** (str, optional): Title of the rose map. Default is "Rose Map".
+-**label_size** (int, optional): Font size for the labels on the plot. Default is 12.
+-**label_interval** (int, optional): Interval for displaying labels around the rose, which can help in reducing label clutter. Default is 1.
+-**color_ramp** (str, optional): Color map used for the plot. Default is "viridis".
+-**tick_label_size** (int, optional): Font size for the tick labels. Default is 12.
+-**tick_label_color** (str, optional): Color for the tick labels. Default is 'black'.
+-**tick_font_name** (str, optional): Font name for the tick labels. Default is 'Arial'.
+-**figsize** (tuple, optional): Dimensions of the plot, in inches. Default is (10, 8).
+-**colorbar_label** (str, optional): Label for the color bar. Default is "Intensity".
+-**colorbar_label_size** (int, optional): Font size for the color bar label. Default is 12.
+-**max_radius** (float, optional): Maximum radius for the plot, controlling how far out the data extends. Default is None, which auto-scales.
+-**save_path** (str, optional): File path where the plot will be saved, if desired.
+-**is_show** (bool, optional): Whether to display the plot. Default is True.
 
 _Code Example_
 
 ```python
 import pandas as pd
-import multidataprocessing as msp
+import multidataplotting as msp
 
 # Example wind data
 data = {
