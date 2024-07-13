@@ -57,7 +57,7 @@ _Parameters_
 _Code Example_
 
 ```python
-import multidataprocessing as msp
+import multidataplotting as msp
 
 # Example histogram data
 login_data = {
@@ -109,7 +109,7 @@ _Code Example_
 ```python
 import pandas as pd
 import numpy as np
-import multidataprocessing as msp
+import multidataplotting as msp
 
 # Sample data
 data = {
@@ -170,7 +170,7 @@ _Code Example_
 
 ```python
 import numpy as np
-import multidataprocessing as msp
+import multidataplotting as msp
 
 # Generate random age data for four groups
 group1 = np.random.normal(loc=30, scale=5, size=100)  # Mean age 30, SD 5
@@ -215,7 +215,7 @@ _Parameters_
 _Code Example_
 
 ```python
-import multidataprocessing as msp
+import multidataplotting as msp
 
 # Main results for the bar plot
 main_result = {'Jan': 200, 'Feb': 240, 'Mar': 300}
@@ -282,7 +282,7 @@ _Parameters_
 _Example Usage_
 
 ```python
-import multidataprocessing as msp
+import multidataplotting as msp
 import numpy as np
 
 # Sample data
