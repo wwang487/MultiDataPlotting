@@ -385,7 +385,7 @@ _Parameters_
 _Code Example_
 
 ```python
-import multidataprocessing as msp
+import multidataplotting as msp
 import pandas as pd
 
 # Example DataFrame with elevation data at different coordinates
@@ -534,7 +534,7 @@ Suppose you are analyzing wind data and need to visualize the distribution and i
 
 ```python
 import pandas as pd
-import multidataprocessing as msp
+import multidataplotting as msp
 data = pd.DataFrame({
     'direction': np.random.randint(0, 360, 1000),
     'speed': np.random.rand(1000) * 100
