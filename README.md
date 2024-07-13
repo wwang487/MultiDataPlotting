@@ -279,7 +279,7 @@ _Parameters_
 - **convert_minute** (bool, optional): Whether to convert the x-tick labels to minutes. Default is True.
 - **hspace** (float, optional): The amount of height reserved for white space between subplots, expressed as a fraction of the average axis height. Default is 0.05.
 
-_Example Usage_
+_Code Example_
 
 ```python
 import multidataplotting as msp
