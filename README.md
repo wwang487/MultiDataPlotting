@@ -35,24 +35,24 @@ This function is particularly useful in scenarios such as analyzing user activit
 
 _Parameters_
 
-**histogram** (dict): Dictionary with datetime keys (either strings or objects) and frequency counts as values.
-**color** (str, optional): Color of the histogram bars. Default is 'blue'.
-**edgecolor** (str, optional): Color of the bar edges. Default is 'black'.
-**fig_size** (tuple, optional): Size of the figure in inches. Default is (10, 6).
-**tick_fontname** (str, optional): Font name for the tick labels. Default is 'Arial'.
-**tick_fontsize** (int, optional): Font size for the tick labels. Default is 12.
-**title_fontsize** (int, optional): Font size for the title of the plot. Default is 14.
-**label_fontsize** (int, optional): Font size for the axis labels. Default is 14.
-**y_range** (list, optional): List specifying the y-axis limits as [min, max]. If not set, the axis scales automatically.
-**line_color** (str, optional): Color of the mean line, if applicable. Default is 'red'.
-**show_all_xticklabels** (bool, optional): Flag to indicate whether to show all x-tick labels. Default is True.
-**x_ticklabel_interval** (int, optional): Interval between x-tick labels, useful for densely packed x-axes. Default is 30.
-**x_ticklabel_format** (str, optional): Format of the x-tick labels, can be 'HH' for hours and minutes, or 'YYYY-MM-DD' for dates. Default is 'HH'.
-**is_legend** (bool, optional): Indicates whether to display a legend. Default is False.
-**save_path** (str, optional): File path where the plot will be saved, if desired. If not provided, the plot is not saved.
-**is_show** (bool, optional): Whether to display the plot on the screen. Default is False.
-**is_save** (bool, optional): Whether to save the plot to a file. Default is True.
-**transparent_bg** (bool, optional): Whether the background of the saved figure should be transparent. Default is True.
+- **histogram** (dict): Dictionary with datetime keys (either strings or objects) and frequency counts as values.
+- **color** (str, optional): Color of the histogram bars. Default is 'blue'.
+- **edgecolor** (str, optional): Color of the bar edges. Default is 'black'.
+- **fig_size** (tuple, optional): Size of the figure in inches. Default is (10, 6).
+- **tick_fontname** (str, optional): Font name for the tick labels. Default is 'Arial'.
+- **tick_fontsize** (int, optional): Font size for the tick labels. Default is 12.
+- **title_fontsize** (int, optional): Font size for the title of the plot. Default is 14.
+- **label_fontsize** (int, optional): Font size for the axis labels. Default is 14.
+- **y_range** (list, optional): List specifying the y-axis limits as [min, max]. If not set, the axis scales automatically.
+- **line_color** (str, optional): Color of the mean line, if applicable. Default is 'red'.
+- **show_all_xticklabels** (bool, optional): Flag to indicate whether to show all x-tick labels. Default is True.
+- **x_ticklabel_interval** (int, optional): Interval between x-tick labels, useful for densely packed x-axes. Default is 30.
+- **x_ticklabel_format** (str, optional): Format of the x-tick labels, can be 'HH' for hours and minutes, or 'YYYY-MM-DD' for dates. Default is 'HH'.
+- **is_legend** (bool, optional): Indicates whether to display a legend. Default is False.
+- **save_path** (str, optional): File path where the plot will be saved, if desired. If not provided, the plot is not saved.
+- **is_show** (bool, optional): Whether to display the plot on the screen. Default is False.
+- **is_save** (bool, optional): Whether to save the plot to a file. Default is True.
+- **transparent_bg** (bool, optional): Whether the background of the saved figure should be transparent. Default is True.
 
 _Code Example_
 
@@ -510,23 +510,23 @@ This function plots a rose (or wind) contour map with options for customization 
 
 **Parameters**
 
-- **input_data (pd.DataFrame)**: The DataFrame containing the directional data.
-- **key_1 (str)**: The column name for directional data.
-- **key_2 (str)**: The column name for the value data.
-- **title (str)**: Title of the plot.
-- **label_size (int)**: Font size for labels.
-- **color_ramp (str)**: Color ramp for the plot.
-- **figsize (tuple)**: Size of the figure.
-- **num_levels (int)**: Number of contour levels.
-- **max_radius (float)**: Maximum radius of the plot.
-- **density_threshold (float)**: Density threshold for boundary line.
-- **z_label (str)**: Label for the colorbar.
-- **boundary_line_color (str)**: Color for the boundary line.
-- **boundary_line_thickness (float)**: Thickness of the boundary line.
-- **is_percent (bool)**: Whether to show the colorbar as a percentage.
-- **tick_spacing (int)**: Spacing between ticks on the colorbar.
-- **save_path (str)**: Path to save the plot.
-- **is_show (bool)**: Whether to display the plot.
+- **input_data** (pd.DataFrame): The DataFrame containing the directional data.
+- **key_1** (str): The column name for directional data.
+- **key_2** (str): The column name for the value data.
+- **title** (str): Title of the plot.
+- **label_size** (int): Font size for labels.
+- **color_ramp** (str): Color ramp for the plot.
+- **figsize** (tuple): Size of the figure.
+- **num_levels** (int): Number of contour levels.
+- **max_radius** (float): Maximum radius of the plot.
+- **density_threshold** (float): Density threshold for boundary line.
+- **z_label** (str): Label for the colorbar.
+- **boundary_line_color** (str): Color for the boundary line.
+- **boundary_line_thickness** (float): Thickness of the boundary line.
+- **is_percent** (bool): Whether to show the colorbar as a percentage.
+- **tick_spacing** (int): Spacing between ticks on the colorbar.
+- **save_path** (str): Path to save the plot.
+- **is_show** (bool): Whether to display the plot.
 
 **Example Usage**
 
