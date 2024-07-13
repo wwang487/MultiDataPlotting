@@ -84,25 +84,25 @@ This function is invaluable for comparing trends across multiple datasets, enabl
 
 _Parameters_
 
-**df** (pandas.DataFrame): The DataFrame containing the data to plot.
-**x** (int): Index of the column in the DataFrame to use as the x-axis.
-**ys** (list of int): Indices of columns to plot on the y-axis.
-**line_styles** (dict, optional): Dictionary specifying line styles for each y-column plotted, with keys as column indices and values as style strings. Default is solid lines for all.
-**line_widths** (dict, optional): Dictionary specifying line widths for each plotted y-column, with keys as column indices and values as numeric widths. Default is 2 for all lines.
-**line_colors** (dict, optional): Dictionary specifying colors for each plotted y-column, with keys as column indices and values as color names or hex codes. Default is 'blue' for all lines.
-**legends** (list, optional): List of legend labels corresponding to each y-column. If not provided, column names are used as labels.
-**marker_colors** (dict, optional): Dictionary specifying marker colors for each y-column, enhancing distinctiveness of each line.
-**figsize** (tuple, optional): Size of the figure in inches. Default is (10, 6).
-**x_tick_interval** (int, optional): Interval at which x-axis ticks should be placed. Default is 1.
-**markers** (dict, optional): Dictionary specifying marker styles for each y-column plotted, adding visual distinction to the lines.
-**y_label** (str, optional): Label for the y-axis. If not provided, defaults to a generic label.
-**show_grid** (bool, optional): Whether to display a grid in the background of the plot. Default is True.
-**font_name** (str, optional): Font family for all text elements in the plot. Default is 'Arial'.
-**font_size** (int, optional): Font size for all text elements in the plot. Default is 12.
-**save_path** (str, optional): Path to save the figure to a file. If not specified, the figure is not saved.
-**dpi** (int, optional): Resolution of the saved figure in dots per inch. Default is 600.
-**y_range** (list, optional): Specific limits for the y-axis as [min, max].
-**is_show** (bool, optional): Whether to display the plot on the screen. Default is True.
+- **df** (pandas.DataFrame): The DataFrame containing the data to plot.
+- **x** (int): Index of the column in the DataFrame to use as the x-axis.
+- **ys** (list of int): Indices of columns to plot on the y-axis.
+- **line_styles** (dict, optional): Dictionary specifying line styles for each y-column plotted, with keys as column indices and values as style strings. Default is solid lines for all.
+- **line_widths** (dict, optional): Dictionary specifying line widths for each plotted y-column, with keys as column indices and values as numeric widths. Default is 2 for all lines.
+- **line_colors** (dict, optional): Dictionary specifying colors for each plotted y-column, with keys as column indices and values as color names or hex codes. Default is 'blue' for all lines.
+- **legends** (list, optional): List of legend labels corresponding to each y-column. If not provided, column names are used as labels.
+- **marker_colors** (dict, optional): Dictionary specifying marker colors for each y-column, enhancing distinctiveness of each line.
+- **figsize** (tuple, optional): Size of the figure in inches. Default is (10, 6).
+- **x_tick_interval** (int, optional): Interval at which x-axis ticks should be placed. Default is 1.
+- **markers** (dict, optional): Dictionary specifying marker styles for each y-column plotted, adding visual distinction to the lines.
+- **y_label** (str, optional): Label for the y-axis. If not provided, defaults to a generic label.
+- **show_grid** (bool, optional): Whether to display a grid in the background of the plot. Default is True.
+- **font_name** (str, optional): Font family for all text elements in the plot. Default is 'Arial'.
+- **font_size** (int, optional): Font size for all text elements in the plot. Default is 12.
+- **save_path** (str, optional): Path to save the figure to a file. If not specified, the figure is not saved.
+- **dpi** (int, optional): Resolution of the saved figure in dots per inch. Default is 600.
+- **y_range** (list, optional): Specific limits for the y-axis as [min, max].
+- **is_show** (bool, optional): Whether to display the plot on the screen. Default is True.
 
 _Code Example_
 
