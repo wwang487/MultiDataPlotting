@@ -317,6 +317,8 @@ This function transforms raw data into a visually intuitive heatmap, allowing fo
 _Parameters_
 
 - **pair_freq** (dict): Dictionary with keys as tuple pairs of x and y coordinates (e.g., (x, y)) and values as their frequencies or intensities.
+- **x_bin_ticks**(list, optional): a list of numbers, must locate within data range, if input is a dictionary, this is required, optional only if your input is a dataframe
+- **y_bin_ticks**(list, optional): a list of numbers, must locate within data range, if input is a dictionary, this is required, optional only if your input is a dataframe
 - **fig_size** (tuple, optional): The dimensions of the figure, in inches. Default is (10, 8).
 - **title** (str, optional): The title of the heatmap. Default is 'Cross Relationship Heatmap'.
 - **title_fontsize** (int, optional): Font size for the title. Default is 16.
