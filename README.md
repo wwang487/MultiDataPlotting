@@ -44,7 +44,6 @@ _Parameters_
 - **title_fontsize** (int, optional): Font size for the title of the plot. Default is 14.
 - **label_fontsize** (int, optional): Font size for the axis labels. Default is 14.
 - **y_range** (list, optional): List specifying the y-axis limits as [min, max]. If not set, the axis scales automatically.
-- **line_color** (str, optional): Color of the mean line, if applicable. Default is 'red'.
 - **x_tick_interval_minutes**: (int,optional): the interval of the x ticks in minutes
 - **x_ticklabel_format** (str, optional): Format of the x-tick labels, can be 'HH' for hours and minutes, or 'YYYY-MM-DD' for dates. Default is 'HH'.
 - **is_legend** (bool, optional): Indicates whether to display a legend. Default is False.
@@ -70,6 +69,7 @@ login_data = {
 
 msp.plot_time_histogram(login_data, color='blue', edgecolor='black', is_show=True)
 ```
+![alt text](https://github.com/wwang487/MultiDataPlotting/blob/main/picture/timehist.png?raw=true)
 
 ### Plotting Polylines
 
