@@ -536,7 +536,7 @@ def plot_histograms(list_of_lists, titles, xlabels='', ylabels='', bins=10, colo
             
 def plot_polylines(df, x, ys, line_styles=None, line_widths=None, line_colors=None, legends=None, show_legend=True,
                    marker_colors=None, figsize=(10, 6), x_tick_interval=1, markers=None, y_label = None, label_sep = '_',
-                   show_grid=True, font_name='Arial', font_size=12, save_path=None, dpi=600, y_range = None):
+                   show_grid=True, font_name='Arial', font_size=12, save_path=None, dpi=600, y_range = None, is_show = True):
     """
     Plots multiple lines from a DataFrame using column indices for x and ys with customizable font settings
     and an option to save the figure.
@@ -559,6 +559,7 @@ def plot_polylines(df, x, ys, line_styles=None, line_widths=None, line_colors=No
     save_path (str): Path to save the figure. If None, the figure is not saved.
     dpi (int): The resolution in dots per inch of the saved figure.
     label_sep (str): Separator for the labels.
+    is_show (bool): Whether to display the plot.
     Returns:
     None
     
@@ -570,6 +571,16 @@ def plot_polylines(df, x, ys, line_styles=None, line_widths=None, line_colors=No
     plt.rcParams.update({'font.size': font_size, 'font.family': font_name})
 
     for y in ys:
+        if line_styles is None:
+            line_styles = {'-999':'-'}
+        if line_widths is None:
+            line_widths = {'-999':2}
+        if line_colors is None:
+            line_colors = {'-999':'blue'}
+        if marker_colors is None:
+            marker_colors = {'-999':'blue'}
+        if markers is None:
+            markers = {'-999':''}
         plt.plot(df.iloc[:, x], df.iloc[:, y],
                  linestyle=line_styles.get(y, '-'),  # Default to solid line
                  linewidth=line_widths.get(y, 2),    # Default line width
@@ -579,6 +590,8 @@ def plot_polylines(df, x, ys, line_styles=None, line_widths=None, line_colors=No
 
     # Set x-ticks interval
     ax.xaxis.set_major_locator(plt.MaxNLocator(integer=True))
+    # only show the ticks of intervals
+    plt.xticks(np.arange(min(df.iloc[:, x]), max(df.iloc[:, x]) + 1, x_tick_interval))
     plt.xticks(rotation=0)
     plt.xlabel(__process_text_labels(df.columns[x], sep=label_sep))
     y_label = "Percent (%)" if y_label is None else y_label
@@ -600,7 +613,8 @@ def plot_polylines(df, x, ys, line_styles=None, line_widths=None, line_colors=No
     if save_path:
         plt.savefig(save_path, dpi=dpi)
         print(f"Figure saved to {save_path} at {dpi} dpi.")
-    plt.show()
+    if is_show:
+        plt.show()
     
 def plot_time_histogram(histogram, color='blue', edgecolor='black', fig_size=(10, 6),
                         tick_fontname='Arial', tick_fontsize=12, title_fontsize=14, 
