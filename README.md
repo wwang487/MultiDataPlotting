@@ -182,6 +182,7 @@ ylabels = 'Frequency (%)'
 # Plotting histograms
 mdp.plot_histograms(list_of_lists, titles=titles, xlabels = None, ylabels = ylabels, is_show=True, hspace = 0.2, color = '#edf8b1')
 ```
+![alt text](https://github.com/wwang487/MultiDataPlotting/blob/main/picture/hists.png?raw=true)
 
 ### Drawing Categorical Bar and Curve Plots
 
@@ -218,12 +219,12 @@ _Code Example_
 import multidataplotting as mdp
 
 # Main results for the bar plot
-main_result = {'Jan': 200, 'Feb': 240, 'Mar': 300}
+main_result = {'1993-01-01': [200, 10], '1993-01-03': [10, 240], '1993-01-05': [300, 100], '1993-01-06': [100, 120]}
 
 # Additional data for curve plots
 other_data_list = [
-    {'Jan': 150, 'Feb': 180, 'Mar': 210},  # Product A
-    {'Jan': 100, 'Feb': 200, 'Mar': 230}   # Product B
+    {'1993-01-01': 150, '1993-01-02': 180, '1993-01-04': 210, '1993-01-07': 160},  # Product A
+    {'1993-01-01': 100, '1993-01-03': 200, '1993-01-05': 230}   # Product B
 ]
 
 # Plotting the combined bar and curve plots
@@ -234,9 +235,13 @@ mdp.draw_cat_bar_curveplots(
     line_color='black',
     figsize=(12, 8),
     tick_fontsize=12,
-    is_show=True
+    is_show=True,
+    cat_labels=['A', 'A+'],
+    xlabels = ['', '', 'Date'],
+    ylabels = ['Data 1', 'Data 2', 'Data 3']
 )
 ```
+![alt text](https://github.com/wwang487/MultiDataPlotting/blob/main/picture/cat_curve.png?raw=true)
 
 ### Plotting Bar Plots
 
