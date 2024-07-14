@@ -509,8 +509,7 @@ def plot_histograms(list_of_lists, titles, xlabels='', ylabels='', bins=10, colo
         
         if titles[i]:
             axs[i].set_title(__process_text_labels(titles[i],sep=label_sep), fontsize=title_fontsize, fontname=tick_fontname)
-        
-        print(i)
+
         if xlabels[i]:
             axs[i].set_xlabel(__process_text_labels(xlabels[i], sep=label_sep), fontsize=label_fontsize, fontname=tick_fontname)
         else:
