@@ -45,8 +45,7 @@ _Parameters_
 - **label_fontsize** (int, optional): Font size for the axis labels. Default is 14.
 - **y_range** (list, optional): List specifying the y-axis limits as [min, max]. If not set, the axis scales automatically.
 - **line_color** (str, optional): Color of the mean line, if applicable. Default is 'red'.
-- **show_all_xticklabels** (bool, optional): Flag to indicate whether to show all x-tick labels. Default is True.
-- **x_ticklabel_interval** (int, optional): Interval between x-tick labels, useful for densely packed x-axes. Default is 30.
+- **x_tick_interval_minutes**: (int,optional): the interval of the x ticks in minutes
 - **x_ticklabel_format** (str, optional): Format of the x-tick labels, can be 'HH' for hours and minutes, or 'YYYY-MM-DD' for dates. Default is 'HH'.
 - **is_legend** (bool, optional): Indicates whether to display a legend. Default is False.
 - **save_path** (str, optional): File path where the plot will be saved, if desired. If not provided, the plot is not saved.
