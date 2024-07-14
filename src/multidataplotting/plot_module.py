@@ -316,8 +316,8 @@ def plot_bar_plots(list_of_lists, tuple_range_list, titles = '', ylabels='', bar
         else:
             print("Please provide a valid path to save the figure.")
 
-def draw_cat_bar_curveplots(main_result, other_data_list, bar_colors=None, bar_thickness=0.8, bar_edge_color='black', line_color='black', 
-                       y_range=None, figsize=(10, 6), line_thickness=1, tick_fontsize=10, tick_fontname='sans-serif', x_tick_interval=1, is_show=False, 
+def draw_cat_bar_curveplots(main_result, other_data_list, bar_colors=None, bar_thickness=0.8, bar_edge_color='black', line_color='black', cat_labels = None,
+                       y_range=None, figsize=(10, 6), xlabels = None, ylabels = None, line_thickness=1, tick_fontsize=10, tick_fontname='sans-serif', x_tick_interval=1, is_show=False, 
                        is_save=True, save_path=''):
     '''
     This function is used to draw bar plots with multiple curve plots with a line plot for each dataset.
@@ -329,6 +329,9 @@ def draw_cat_bar_curveplots(main_result, other_data_list, bar_colors=None, bar_t
     bar_thickness: float, the thickness of the bars
     bar_edge_color: str, the edge color of the bars
     line_color: str, the color of the line plots
+    cat_labels: list, the labels for each category
+    xlabels: list, the labels for the x-axis
+    ylabels: list, the labels for the y-axis
     y_range: list, the y range for each subplot
     figsize: tuple, the size of the figure
     line_thickness: float or list, the thickness of the line plots
@@ -381,7 +384,10 @@ def draw_cat_bar_curveplots(main_result, other_data_list, bar_colors=None, bar_t
         tick.set_fontname(tick_fontname)
     if y_range:
         axes[0].set_ylim(y_range[0])
-    axes[0].legend()
+    if cat_labels == None:
+        axes[0].legend()
+    else:
+        axes[0].legend(cat_labels)
 
     # Plot each additional dataset as a line plot
     for idx, series in enumerate(all_series, start=1):
@@ -402,7 +408,14 @@ def draw_cat_bar_curveplots(main_result, other_data_list, bar_colors=None, bar_t
                     axes[idx].plot(series.index, series.values, color=line_color, linewidth=line_thickness[idx - 1])
                 else:
                     axes[idx].scatter(series.index, series.values, color=line_color, s=1)
-
+    if not xlabels:
+        xlabels = [''] * (1 + len(other_data_list))
+    if not ylabels:
+        ylabels = [''] * (1 + len(other_data_list))
+    for i, ax in enumerate(axes):
+        ax.set_xlabel(xlabels[i])
+        ax.set_ylabel(ylabels[i])
+        
     # Set date format on x-axis and set tick interval for all subplots
     axes[-1].xaxis.set_major_locator(mdates.DayLocator(interval=x_tick_interval))
     axes[-1].xaxis.set_major_formatter(mdates.DateFormatter('%m-%d'))
