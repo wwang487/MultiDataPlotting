@@ -605,9 +605,32 @@ def plot_polylines(df, x, ys, line_styles=None, line_widths=None, line_colors=No
 def plot_time_histogram(histogram, color='blue', edgecolor='black', fig_size=(10, 6),
                         tick_fontname='Arial', tick_fontsize=12, title_fontsize=14, 
                         label_fontsize=14, y_range=None, line_color='red', 
-                        show_all_xticklabels=True, x_ticklabel_interval=30, 
-                        x_ticklabel_format='HH:MM', is_legend=False, save_path='', 
-                        is_show=False, is_save=True, transparent_bg=True):
+                        x_tick_interval_minutes=5, x_ticklabel_format='HH:MM', 
+                        is_legend=False, save_path='', is_show=True, 
+                        is_save=False, transparent_bg=True):
+    '''
+    This function is used to plot a histogram of time ranges.
+    
+    Parameters:
+    histogram: dict, the histogram of time ranges
+    color: str, the color of the bars
+    edgecolor: str, the edge color of the bars
+    fig_size: tuple, the size of the figure
+    tick_fontname: str, the font name of the ticks
+    tick_fontsize: int, the font size of the ticks
+    title_fontsize: int, the font size of the titles
+    label_fontsize: int, the font size of the labels
+    y_range: list, the y range
+    line_color: str, the color of the mean line
+    x_tick_interval_minutes: int, the interval of the x ticks in minutes
+    x_ticklabel_format: str, the format of the x tick labels
+    is_legend: bool, whether to show the legend
+    save_path: str, the path to save the figure
+    is_show: bool, whether to show the figure
+    is_save: bool, whether to save the figure
+    transparent_bg: bool, whether to set the background to be transparent
+    
+    '''
     
     fig, ax = plt.subplots(figsize=fig_size)
     
