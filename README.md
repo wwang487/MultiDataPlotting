@@ -108,17 +108,16 @@ import pandas as pd
 import numpy as np
 import multidataplotting as msp
 
-# Sample data
 data = {
-    'Month': pd.date_range(start='2023-01-01', periods=12, freq='M'),
+    'X': list(range(12)),
     'Product1': np.random.randint(1000, 5000, size=12),
     'Product2': np.random.randint(1000, 5000, size=12)
 }
-df = pd.DataFrame(data).set_index('Month')
 
-# Plotting the data
-msp.plot_polylines(df, x=0, ys=[1, 2], line_colors={1: 'red', 2: 'green'}, markers={1: 'o', 2: 'x'}, is_show=True)
+data = pd.DataFrame(data)
+mdp.plot_polylines(data, x=0, ys=[1, 2], line_colors={1: 'red', 2: 'green'}, x_tick_interval = 2, markers={1: 'o', 2: 'x'})
 ```
+![alt text](https://github.com/wwang487/MultiDataPlotting/blob/main/picture/polyline.png?raw=true)
 
 ### Plotting Histograms
 
