@@ -291,8 +291,8 @@ import multidataplotting as mdp
 import numpy as np
 
 # Sample data
-team_performance = [np.random.randint(50, 100, size=4) for _ in range(3)]
-range_tuples = [(1, 3), (4, 6), (7, 9), (10, 12)]  # Quarterly ranges
+team_performance = [[20*np.random.random() for i in range(100)] for _ in range(3)]
+range_tuples = [(1), (1, 3), (3,4), (4, 6), (6,7), (7, 9), (9, 12), (12, 15), (15, 18), (18)]  # Quarterly ranges
 
 # Plotting the bar plots
 mdp.plot_bar_plots(
@@ -302,9 +302,13 @@ mdp.plot_bar_plots(
     ylabels="Score",
     bar_color='green',
     fig_size=(12, 8),
-    is_show=True
+    is_scaled=False,
+    is_show=True,
+    convert_minute=False,
 )
 ```
+
+![alt text](https://github.com/wwang487/MultiDataPlotting/blob/main/picture/barplot.png?raw=true)
 
 ### Plotting 2D Heatmaps
 
