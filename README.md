@@ -316,7 +316,7 @@ This function transforms raw data into a visually intuitive heatmap, allowing fo
 
 _Parameters_
 
-- **pair_freq** (dict): Dictionary with keys as tuple pairs of x and y coordinates (e.g., (x, y)) and values as their frequencies or intensities.
+- **pair_freq** (dict): Dictionary with keys as tuple pairs of x and y coordinates (e.g., (x, y)) and values as their frequencies or intensities. Or, a dataframe with two columns.
 - **x_bin_ticks**(list, optional): a list of numbers, must locate within data range, if input is a dictionary, this is required, optional only if your input is a dataframe
 - **y_bin_ticks**(list, optional): a list of numbers, must locate within data range, if input is a dictionary, this is required, optional only if your input is a dataframe
 - **fig_size** (tuple, optional): The dimensions of the figure, in inches. Default is (10, 8).
@@ -344,15 +344,19 @@ import multidataplotting as mdp
 
 # Example data: coordinates with frequencies
 data = {
-    (0, 0): 10,
-    (0, 1): 20,
-    (1, 0): 30,
-    (1, 1): 40
+    (0, 0): 100, (0, 2): 70,
+    (0, 1): 150, (1, 2): 205,
+    (1, 0): 200, (2, 1): 160,
+    (1, 1): 250, (2, 0): 95,
 }
-
+x_bin_ticks = [0, 1, 2]
+y_bin_ticks = [0, 1, 2]
 # Plotting the heatmap
-mdp.plot_2D_heatmap(pair_freq=data, title="Event Frequency Distribution", xlabel="X Coordinate", ylabel="Y Coordinate", is_show=True)
+plot_2D_heatmap(pair_freq=data, x_bin_ticks=x_bin_ticks, y_bin_ticks=y_bin_ticks,title="Event Frequency Distribution", 
+                xlabel="X", ylabel="Y", is_show=True, is_annotate=True)
 ```
+
+![alt text](https://github.com/wwang487/MultiDataPlotting/blob/main/picture/heatmap.png?raw=true)
 
 ### Plotting Contour Maps
 
