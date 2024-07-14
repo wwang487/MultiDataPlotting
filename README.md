@@ -22,7 +22,7 @@ pip install MultiDataPlotting
 To use the package, you can import it into your Python scripts as follows:
 
 ```python
-import multidataprocessing as msp
+import multidataprocessing as mdp
 ```
 
 ### Plotting Time Histograms
@@ -55,7 +55,7 @@ _Parameters_
 _Code Example_
 
 ```python
-import multidataplotting as msp
+import multidataplotting as mdp
 
 # Example histogram data
 # Example usage with datetime conversion
@@ -67,7 +67,7 @@ login_data = {
     '00:29:00 - 00:33:00': 175,
 }
 
-msp.plot_time_histogram(login_data, color='blue', edgecolor='black', is_show=True)
+mdp.plot_time_histogram(login_data, color='blue', edgecolor='black', is_show=True)
 ```
 ![alt text](https://github.com/wwang487/MultiDataPlotting/blob/main/picture/timehist.png?raw=true)
 
@@ -106,7 +106,7 @@ _Code Example_
 ```python
 import pandas as pd
 import numpy as np
-import multidataplotting as msp
+import multidataplotting as mdp
 
 data = {
     'X': list(range(12)),
@@ -166,7 +166,7 @@ _Code Example_
 
 ```python
 import numpy as np
-import multidataplotting as msp
+import multidataplotting as mdp
 
 # Generate random age data for four groups
 group1 = np.random.normal(loc=30, scale=5, size=100)  # Mean age 30, SD 5
@@ -177,9 +177,10 @@ list_of_lists = [group1, group2, group3, group4]
 
 # Titles for each histogram
 titles = ["Group 1: 20s", "Group 2: 30s", "Group 3: 40s", "Group 4: 50s"]
-
+xlabels = ['A', 'B', 'C', 'D']
+ylabels = 'Frequency (%)'
 # Plotting histograms
-msp.plot_histograms(list_of_lists, titles=titles, is_show=True)
+mdp.plot_histograms(list_of_lists, titles=titles, xlabels = None, ylabels = ylabels, is_show=True, hspace = 0.2, color = '#edf8b1')
 ```
 
 ### Drawing Categorical Bar and Curve Plots
@@ -211,7 +212,7 @@ _Parameters_
 _Code Example_
 
 ```python
-import multidataplotting as msp
+import multidataplotting as mdp
 
 # Main results for the bar plot
 main_result = {'Jan': 200, 'Feb': 240, 'Mar': 300}
@@ -223,7 +224,7 @@ other_data_list = [
 ]
 
 # Plotting the combined bar and curve plots
-msp.draw_cat_bar_curveplots(
+mdp.draw_cat_bar_curveplots(
     main_result,
     other_data_list,
     bar_colors=['blue', 'green', 'red'],
@@ -278,7 +279,7 @@ _Parameters_
 _Code Example_
 
 ```python
-import multidataplotting as msp
+import multidataplotting as mdp
 import numpy as np
 
 # Sample data
@@ -286,7 +287,7 @@ team_performance = [np.random.randint(50, 100, size=4) for _ in range(3)]
 range_tuples = [(1, 3), (4, 6), (7, 9), (10, 12)]  # Quarterly ranges
 
 # Plotting the bar plots
-msp.plot_bar_plots(
+mdp.plot_bar_plots(
     list_of_lists=team_performance,
     tuple_range_list=range_tuples,
     titles=["Team A", "Team B", "Team C"],
@@ -329,7 +330,7 @@ _Parameters_
 _Code Example_
 
 ```python
-import multidataplotting as msp
+import multidataplotting as mdp
 
 # Example data: coordinates with frequencies
 data = {
@@ -340,7 +341,7 @@ data = {
 }
 
 # Plotting the heatmap
-msp.plot_2D_heatmap(pair_freq=data, title="Event Frequency Distribution", xlabel="X Coordinate", ylabel="Y Coordinate", is_show=True)
+mdp.plot_2D_heatmap(pair_freq=data, title="Event Frequency Distribution", xlabel="X Coordinate", ylabel="Y Coordinate", is_show=True)
 ```
 
 ### Plotting Contour Maps
@@ -381,7 +382,7 @@ _Parameters_
 _Code Example_
 
 ```python
-import multidataplotting as msp
+import multidataplotting as mdp
 import pandas as pd
 
 # Example DataFrame with elevation data at different coordinates
@@ -392,7 +393,7 @@ data = pd.DataFrame({
 })
 
 # Plotting the contour map
-msp.plot_contour_map(data, title="Elevation Contour Map", xlabel="Longitude", ylabel="Latitude", colorbar_label="Elevation (m)", is_show=True)
+mdp.plot_contour_map(data, title="Elevation Contour Map", xlabel="Longitude", ylabel="Latitude", colorbar_label="Elevation (m)", is_show=True)
 
 ```
 
@@ -432,7 +433,7 @@ _Parameters_
 _Code Example_
 
 ```python
-import multidataplotting as msp
+import multidataplotting as mdp
 
 # Example data: Sales volume for different regions and product categories
 data = {
@@ -447,7 +448,7 @@ x_categories = ["Reg 1", "Reg 2"]
 y_categories = ["Prod A", "Prod B"]
 
 # Plotting the 3D stacked bar chart
-msp.plot_3d_stacked_bar(data, x_bin_ticks=x_categories, y_bin_ticks=y_categories, \
+mdp.plot_3d_stacked_bar(data, x_bin_ticks=x_categories, y_bin_ticks=y_categories, \
     elevation = 65, azimuth = 120, ytick_rotation=60,
         title="Annual Sales Volume", xlabel="Region", ylabel="Product Category", zlabel="Sales Volume", is_show=True)
 ```
@@ -486,7 +487,7 @@ _Code Example_
 
 ```python
 import pandas as pd
-import multidataplotting as msp
+import multidataplotting as mdp
 
 # Example wind data
 data = {
@@ -496,7 +497,7 @@ data = {
 df = pd.DataFrame(data)
 
 # Plotting the wind rose
-msp.plot_rose_map(df, key_1='Direction', key_2='Speed', interval=30, title="Wind Rose Diagram", color_ramp='plasma', is_show=True)
+mdp.plot_rose_map(df, key_1='Direction', key_2='Speed', interval=30, title="Wind Rose Diagram", color_ramp='plasma', is_show=True)
 ```
 ![alt text](https://github.com/wwang487/MultiDataPlotting/blob/main/picture/rosemap.png?raw=true)
 
@@ -534,12 +535,12 @@ Suppose you are analyzing wind data and need to visualize the distribution and i
 
 ```python
 import pandas as pd
-import multidataplotting as msp
+import multidataplotting as mdp
 data = pd.DataFrame({
     'direction': np.random.randint(0, 360, 1000),
     'speed': np.random.rand(1000) * 100
 })
-msp.plot_rose_contour_map(data, 'direction', 'speed', color_ramp='plasma', num_levels=10, density_threshold=0.001,
+mdp.plot_rose_contour_map(data, 'direction', 'speed', color_ramp='plasma', num_levels=10, density_threshold=0.001,
                       boundary_line_color='red', boundary_line_thickness=3, is_percent = True)
 ```
 ![alt text](https://github.com/wwang487/MultiDataPlotting/blob/main/picture/rosecontourmap.png?raw=true)
