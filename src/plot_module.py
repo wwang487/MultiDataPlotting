@@ -604,7 +604,7 @@ def plot_polylines(df, x, ys, line_styles=None, line_widths=None, line_colors=No
     
 def plot_time_histogram(histogram, color='blue', edgecolor='black', fig_size=(10, 6),
                         tick_fontname='Arial', tick_fontsize=12, title_fontsize=14, 
-                        label_fontsize=14, y_range=None, line_color='red', 
+                        label_fontsize=14, y_range=None, 
                         x_tick_interval_minutes=5, x_ticklabel_format='HH:MM', 
                         is_legend=False, save_path='', is_show=True, 
                         is_save=False, transparent_bg=True):
@@ -621,7 +621,6 @@ def plot_time_histogram(histogram, color='blue', edgecolor='black', fig_size=(10
     title_fontsize: int, the font size of the titles
     label_fontsize: int, the font size of the labels
     y_range: list, the y range
-    line_color: str, the color of the mean line
     x_tick_interval_minutes: int, the interval of the x ticks in minutes
     x_ticklabel_format: str, the format of the x tick labels
     is_legend: bool, whether to show the legend
@@ -655,7 +654,7 @@ def plot_time_histogram(histogram, color='blue', edgecolor='black', fig_size=(10
     if y_range:
         ax.set_ylim(y_range)
 
-    ax.xaxis.set_major_formatter(mdates.DateFormatter('%H:%M'))
+    ax.xaxis.set_major_formatter(mdates.DateFormatter(x_ticklabel_format))
     ax.xaxis.set_major_locator(mdates.MinuteLocator(interval=x_tick_interval_minutes))
     
     ax.tick_params(axis='both', labelsize=tick_fontsize, labelcolor='black')
