@@ -482,7 +482,14 @@ def plot_histograms(list_of_lists, titles, xlabels='', ylabels='', bins=10, colo
         y_range = [0, max_frequency * 1.05]
     
     fig, axs = plt.subplots(n, 1, figsize=(w, h * n))
-
+    if xlabels == None:
+        xlabels = ['X'] * n
+    elif isinstance(xlabels, str):
+        xlabels = [xlabels] * n
+    if ylabels == None:
+        ylabels = ['Frequency (%)'] * n
+    elif isinstance(ylabels, str):
+        ylabels = [ylabels] * n
     for i, data in enumerate(list_of_lists):
         if is_scaled:
             data = np.array(data) / scale_factor
@@ -501,8 +508,9 @@ def plot_histograms(list_of_lists, titles, xlabels='', ylabels='', bins=10, colo
             axs[i].axvline(mean_value, color=line_color, linestyle=line_style, linewidth=line_width, label=f'Mean: {mean_value:.2f} {unit}')
         
         if titles[i]:
-            axs[i].set_title(__process_text_labels(titles[i],sep=label_sep, fontsize=title_fontsize, fontname=tick_fontname))
+            axs[i].set_title(__process_text_labels(titles[i],sep=label_sep), fontsize=title_fontsize, fontname=tick_fontname)
         
+        print(i)
         if xlabels[i]:
             axs[i].set_xlabel(__process_text_labels(xlabels[i], sep=label_sep), fontsize=label_fontsize, fontname=tick_fontname)
         else:
