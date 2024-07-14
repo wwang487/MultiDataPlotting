@@ -440,19 +440,22 @@ import multidataplotting as msp
 
 # Example data: Sales volume for different regions and product categories
 data = {
-    (0, 0): 100,
-    (0, 1): 150,
-    (1, 0): 200,
-    (1, 1): 250
+    (0, 0): 100, (0, 2): 70,
+    (0, 1): 150, (1, 2): 205,
+    (1, 0): 200, (2, 1): 160,
+    (1, 1): 250, (2, 0): 95,
 }
 
 # Defining the categories for the axes
-x_categories = ["Region 1", "Region 2"]
-y_categories = ["Product A", "Product B"]
+x_categories = ["Reg 1", "Reg 2"]
+y_categories = ["Prod A", "Prod B"]
 
 # Plotting the 3D stacked bar chart
-msp.plot_3d_stacked_bar(data, x_bin_ticks=x_categories, y_bin_ticks=y_categories, title="Annual Sales Volume", xlabel="Region", ylabel="Product Category", zlabel="Sales Volume", is_show=True)
+msp.plot_3d_stacked_bar(data, x_bin_ticks=x_categories, y_bin_ticks=y_categories, \
+    elevation = 65, azimuth = 120, ytick_rotation=60,
+        title="Annual Sales Volume", xlabel="Region", ylabel="Product Category", zlabel="Sales Volume", is_show=True)
 ```
+![alt text](https://github.com/wwang487/MultiDataPlotting/blob/main/picture/3DStackbar.png?raw=true)
 
 ### Plotting Rose Map
 
@@ -499,6 +502,7 @@ df = pd.DataFrame(data)
 # Plotting the wind rose
 msp.plot_rose_map(df, key_1='Direction', key_2='Speed', interval=30, title="Wind Rose Diagram", color_ramp='plasma', is_show=True)
 ```
+![alt text](https://github.com/wwang487/MultiDataPlotting/blob/main/picture/rosemap.png?raw=true)
 
 ### Plotting Rose Contour Map for Directional Data
 
