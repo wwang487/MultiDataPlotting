@@ -401,10 +401,10 @@ data = {
     (1, 1): 250, (2, 0): 95,
 }
 
-
+# if using pandas
+# data = pd.DataFrame({'Points': [(0,0),(0,1), (0,2),(1,0),(1,1),(1,2),(2,1),(2,0)], 'Elevation': [100, 150, 70, 200, 250, 205, 160, 95]})
 # Plotting the contour map
 mdp.plot_contour_map(data, title="Elevation Contour Map", xlabel="Longitude", ylabel="Latitude", colorbar_label="Elevation (m)", is_show=True)
-
 ```
 ![alt text](https://github.com/wwang487/MultiDataPlotting/blob/main/picture/contour.png?raw=true)
 
