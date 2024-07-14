@@ -542,3 +542,4 @@ data = pd.DataFrame({
 msp.plot_rose_contour_map(data, 'direction', 'speed', color_ramp='plasma', num_levels=10, density_threshold=0.001,
                       boundary_line_color='red', boundary_line_thickness=3, is_percent = True)
 ```
+![alt text](https://github.com/wwang487/MultiDataPlotting/blob/main/picture/rosecontourmap.png?raw=true)
