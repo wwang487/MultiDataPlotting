@@ -8,7 +8,7 @@ setup(
     description="A package for plotting multiple datasets",
     long_description=open("README.md").read(),
     long_description_content_type="text/markdown",
-    url="http://github.com/yourusername/MultiDataPlotting",
+    url="http://github.com/wwang487/MultiDataPlotting",
     package_dir={"": "src"},
     packages=find_packages(where="src"),
     classifiers=[
