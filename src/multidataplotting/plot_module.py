@@ -849,8 +849,10 @@ def plot_contour_map(data, fig_size=(10, 8), title='Contour Map', title_fontsize
     elif isinstance(data, pd.DataFrame):
         if data.shape[1] != 2:
             raise ValueError("DataFrame must have exactly two columns for x and y values.")
-        points = data.iloc[:, :2].values
+        points = np.array([(key[0], key[1]) for key in data.iloc[:, 0].values])
         values = data.iloc[:, -1].values
+        print(points)
+        print(values)
     else:
         raise TypeError("Input data must be a dictionary or a pandas DataFrame.")
 
@@ -858,7 +860,7 @@ def plot_contour_map(data, fig_size=(10, 8), title='Contour Map', title_fontsize
     x = np.linspace(np.min(points[:, 0]), np.max(points[:, 0]), 100)
     y = np.linspace(np.min(points[:, 1]), np.max(points[:, 1]), 100)
     X, Y = np.meshgrid(x, y)
-
+    
     # Interpolate data
     Z = griddata(points, values, (X, Y), method='cubic')
 
