@@ -199,6 +199,9 @@ _Parameters_
 - **bar_thickness** (float, optional): Thickness of the bars. Default is 0.8.
 - **bar_edge_color** (str, optional): Color of the bar edges. Default is 'black'.
 - **line_color** (str, optional): Color for all line plots. Default is 'black'.
+- **cat_labels** (list, optional): the labels for each category
+- **xlabels** (list, optional): the labels for the x-axis
+- **ylabels** (list, optional): the labels for the y-axis
 - **y_range** (list, optional): The range for the y-axis as [min, max]. If not set, the axis scales automatically.
 - **figsize** (tuple, optional): Size of the figure, in inches. Default is (10, 6).
 - **line_thickness** (float or list, optional): Thickness of the lines for curve plots. Can be a single value or a list of values corresponding to each dataset.
