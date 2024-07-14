@@ -60,17 +60,15 @@ _Code Example_
 import multidataplotting as msp
 
 # Example histogram data
+# Example usage with datetime conversion
 login_data = {
-    '2023-01-01': 100,
-    '2023-01-02': 150,
-    '2023-01-03': 125,
-    '2023-01-04': 175,
-    '2023-01-05': 160,
-    '2023-01-06': 90,
-    '2023-01-07': 130
+    '00:00:00 - 00:03:00': 100,
+    '00:03:00 - 00:06:00': 150,
+    '00:07:00 - 00:12:00': 125,
+    '00:19:00 - 00:23:00': 175,
+    '00:29:00 - 00:33:00': 175,
 }
 
-# Plotting the time histogram
 msp.plot_time_histogram(login_data, color='blue', edgecolor='black', is_show=True)
 ```
 
