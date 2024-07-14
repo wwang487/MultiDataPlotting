@@ -393,17 +393,20 @@ _Code Example_
 import multidataplotting as mdp
 import pandas as pd
 
-# Example DataFrame with elevation data at different coordinates
-data = pd.DataFrame({
-    'x': [0, 0, 1, 1],
-    'y': [0, 1, 0, 1],
-    'elevation': [100, 150, 200, 250]
-})
+# Example Data
+data = {
+    (0, 0): 100, (0, 2): 70,
+    (0, 1): 150, (1, 2): 205,
+    (1, 0): 200, (2, 1): 160,
+    (1, 1): 250, (2, 0): 95,
+}
+
 
 # Plotting the contour map
 mdp.plot_contour_map(data, title="Elevation Contour Map", xlabel="Longitude", ylabel="Latitude", colorbar_label="Elevation (m)", is_show=True)
 
 ```
+![alt text](https://github.com/wwang487/MultiDataPlotting/blob/main/picture/contour.png?raw=true)
 
 ### Plotting 3-D Bar Plots
 
