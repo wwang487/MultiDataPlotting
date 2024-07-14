@@ -54,28 +54,51 @@ def __analyze_cross_relationship(data, key1, key2, key1_ticks = None, key2_ticks
     :return: A dictionary with keys as tuple pairs of values from key1 and key2, and values as their frequency.
     """
     pair_frequency = {}
-    
-    for entry in data:
-        # Extract the values associated with key1 and key2
-        value1 = entry.get(key1) / x_scale
-        value2 = entry.get(key2) / y_scale
-        
-        # Skip entries where either key is missing
-        if value1 is None or value2 is None:
-            continue
-        
-        # Create a tuple from the two values
-        if key1_ticks is None or key2_ticks is None:
-            key_pair = (value1, value2)
-        else:
-            key_pair = (__find_bin_ind(value1, key1_ticks), __find_bin_ind(value2, key2_ticks))
-        if key_pair[0] is None:
-            print(value1)
-        # Increment the count for this key pair in the dictionary
-        if key_pair in pair_frequency:
-            pair_frequency[key_pair] += 1
-        else:
-            pair_frequency[key_pair] = 1
+    if isinstance(data, pd.DataFrame):
+        for index, row in data.iterrows():
+            # Extract the values associated with key1 and key2
+            value1 = row.get(key1) / x_scale
+            value2 = row.get(key2) / y_scale
+            
+            # Skip entries where either key is missing
+            if value1 is None or value2 is None:
+                continue
+            
+            # Create a tuple from the two values
+            if key1_ticks is None or key2_ticks is None:
+                key_pair = (value1, value2)
+            else:
+                key_pair = (__find_bin_ind(value1, key1_ticks), __find_bin_ind(value2, key2_ticks))
+            if key_pair[0] is None:
+                print(value1)
+            # Increment the count for this key pair in the dictionary
+            if key_pair in pair_frequency:
+                pair_frequency[key_pair] += 1
+            else:
+                pair_frequency[key_pair] = 1
+    else:
+        for entry in data:
+            #print(entry)
+            # Extract the values associated with key1 and key2
+            value1 = entry.get(key1) / x_scale
+            value2 = entry.get(key2) / y_scale
+            
+            # Skip entries where either key is missing
+            if value1 is None or value2 is None:
+                continue
+            
+            # Create a tuple from the two values
+            if key1_ticks is None or key2_ticks is None:
+                key_pair = (value1, value2)
+            else:
+                key_pair = (__find_bin_ind(value1, key1_ticks), __find_bin_ind(value2, key2_ticks))
+            if key_pair[0] is None:
+                print(value1)
+            # Increment the count for this key pair in the dictionary
+            if key_pair in pair_frequency:
+                pair_frequency[key_pair] += 1
+            else:
+                pair_frequency[key_pair] = 1
 
     return pair_frequency
 
@@ -746,14 +769,20 @@ def plot_2D_heatmap(pair_freq, x_bin_ticks=None, y_bin_ticks=None, fig_size=(10,
     """
     if isinstance(pair_freq, pd.DataFrame):
         if x_bin_ticks is None:
-            x_bin_ticks = __generate_bin_ticks(pair_freq.iloc[:, 0], 10, mode='range')
+            x_vals = pair_freq.iloc[:, 0].values
+            x_bin_nums = 2 if max(x_vals) - min(x_vals) <= 1 else min(10, max(x_vals) - min(x_vals))
+            x_bin_ticks = __generate_bin_ticks(x_vals, x_bin_nums, mode='range')
         if y_bin_ticks is None:
-            y_bin_ticks = __generate_bin_ticks(pair_freq.iloc[:, 1], 10, mode='range')
+            y_vals = pair_freq.iloc[:, 0].values
+            y_bin_nums = 2 if max(y_vals) - min(y_vals) <= 1 else min(10, max(y_vals) - min(y_vals))
+            y_bin_ticks = __generate_bin_ticks(y_vals, y_bin_nums, mode='range')
         key1 = pair_freq.columns[0]
         key2 = pair_freq.columns[1]
+        
         pair_frequency = __analyze_cross_relationship(pair_freq, key1, key2, x_bin_ticks, y_bin_ticks)
     else:
         pair_frequency = copy.deepcopy(pair_freq)
+    
     index = list(range(0, len(x_bin_ticks) - 1))
     columns = list(range(0, len(y_bin_ticks) - 1))
     
@@ -782,10 +811,10 @@ def plot_2D_heatmap(pair_freq, x_bin_ticks=None, y_bin_ticks=None, fig_size=(10,
     plt.figure(figsize=fig_size)
     if vmin is None or vmax is None:
         heatmap = sns.heatmap(df, annot=is_annotate, fmt=".0f", cmap=cmap, linewidths=.5, 
-                          cbar_kws={'label': cbar_label, 'labelsize':tick_fontsize})
+                          cbar_kws={'label': cbar_label})
     else:
         heatmap = sns.heatmap(df, annot=is_annotate, fmt=".0f", cmap=cmap, linewidths=.5, vmin=vmin, vmax=vmax,
-                          cbar_kws={'label': cbar_label, 'labelsize':tick_fontsize})
+                          cbar_kws={'label': cbar_label})
     plt.title(__process_text_labels(title, sep=label_sep), fontsize=title_fontsize)
     plt.xlabel(__process_text_labels(xlabel, sep=label_sep), fontsize=label_fontsize)
     plt.ylabel(__process_text_labels(ylabel, sep=label_sep), fontsize=label_fontsize)
