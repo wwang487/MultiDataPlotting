@@ -547,11 +547,11 @@ mdp.plot_rose_map(df, key_1='Direction', key_2='Speed', interval=30, title="Wind
 
 The `plot_rose_contour_map` function creates a rose contour map to visualize directional data using contours with optional threshold-based boundary lines. This is particularly useful in meteorology, oceanography, and environmental sciences where wind, waves, or any directional data need to be visualized for analysis and decision-making.
 
-**Functionality**
+_Functionality_
 
 This function plots a rose (or wind) contour map with options for customization such as color ramps, boundary lines at specified density thresholds, and percentage labels. It supports various contour levels, providing flexibility for detailed and high-level data representation.
 
-**Parameters**
+_Parameters_
 
 - **input_data** (pd.DataFrame): The DataFrame containing the directional data.
 - **key_1** (str): The column name for directional data.
@@ -571,7 +571,7 @@ This function plots a rose (or wind) contour map with options for customization 
 - **save_path** (str): Path to save the plot.
 - **is_show** (bool): Whether to display the plot.
 
-**Example Usage**
+_Code Example_
 
 Suppose you are analyzing wind data and need to visualize the distribution and intensity of wind directions:
 
@@ -586,3 +586,42 @@ mdp.plot_rose_contour_map(data, 'direction', 'speed', color_ramp='plasma', num_l
                       boundary_line_color='red', boundary_line_thickness=3, is_percent = True)
 ```
 ![alt text](https://github.com/wwang487/MultiDataPlotting/blob/main/picture/rosecontourmap.png?raw=true)
+
+### Plotting Cumulative Distribution Functions
+The plot_cdfs function generates cumulative distribution function (CDF) plots for multiple datasets. It is designed for versatile statistical analysis, useful in fields such as finance, engineering, and scientific research, where understanding the distribution of data is crucial.
+
+_Functionality_
+
+This function can plot the CDFs of multiple datasets either on a single figure or across multiple subplots. It offers extensive customization options, including line styles, colors, markers, and more. Optional logarithmic scaling for the x-axis accommodates data that spans several orders of magnitude.
+
+_Parameters_
+
+- **data_lists** (List of lists): Each sublist contains numerical data for plotting.
+- **figsize** (tuple): Size of the figure.
+- **line_styles** (dict): Dictionary mapping dataset indices to line styles.
+- **line_widths** (dict): Dictionary mapping dataset indices to line widths.
+- **line_colors** (dict): Dictionary mapping dataset indices to line colors.
+- **legends** (list): Legend labels for each dataset.
+- **marker_colors** (dict): Dictionary mapping dataset indices to marker colors.
+- **x_tick_interval** (int): Interval between x-ticks on the axis.
+- **markers** (dict): Dictionary mapping dataset indices to marker types.
+- **show_grid** (bool): Whether to show grid lines.
+- **font_name** (str): Font name for all text elements.
+- **font_size** (int): Font size for all text elements.
+- **save_path** (str): Optional path to save the figure.
+- **dpi** (int): Resolution of the saved figure in dots per inch.
+- **is_same_figure** (bool): Whether to plot all CDFs in the same figure.
+- **is_log_x** (bool): Whether the x-axis should use a logarithmic scale.
+
+_Code Example_
+```python
+import numpy as np
+import multidataplotting as mdp
+data1 = np.random.normal(0, 1, 1000)
+data2 = np.random.exponential(1, 1000)
+mdp.plot_cdfs([data1, data2],line_styles={0: '-', 1: '--'},line_widths={0: 2, 1: 3},
+          line_colors={0: 'blue', 1: 'red'},legends=['Normal', 'Exponential'],
+          marker_colors={0: 'blue', 1: 'red'},markers={0: 'o', 1: 'x'},figsize=(12, 8),font_size=14,
+          show_grid=True,save_path='cdf_plots.png', dpi=300,is_same_figure=True,is_log_x=True)
+```
+![alt text](https://github.com/wwang487/MultiDataPlotting/blob/main/picture/CDFs.png?raw=true)
