@@ -1253,3 +1253,72 @@ def plot_rose_contour_map(input_data, key_1, key_2, title="Rose Contour Map", la
         plt.show()
     if save_path:
         plt.savefig(save_path, bbox_inches='tight', dpi=600)
+
+def plot_cdfs(data_lists, figsize=(10, 6), line_styles=None, line_widths=None,
+              line_colors=None, legends=None, marker_colors=None, x_tick_interval=10,
+              markers=None, show_grid=True, font_name='Arial', font_size=12, save_path=None,
+              dpi=100, is_same_figure=True, is_log_x=False):
+    """
+    Plot the CDF for each set of data in data_lists with extensive customization options,
+    including the option to plot all on the same figure or on individual subplots, and
+    setting the x-axis to logarithmic scale.
+
+    Parameters:
+    - data_lists: List of lists, each containing numerical data.
+    - figsize: Tuple indicating the figure size.
+    - line_styles: Dictionary mapping column indices to line styles.
+    - line_widths: Dictionary mapping column indices to line widths.
+    - line_colors: Dictionary mapping column indices to line colors.
+    - legends: List of legend labels.
+    - marker_colors: Dictionary mapping column indices to marker colors.
+    - x_tick_interval: Interval between x-ticks.
+    - markers: Dictionary mapping column indices to markers.
+    - show_grid: Whether to show grid lines.
+    - font_name: Font name for all text elements.
+    - font_size: Font size for all text elements.
+    - save_path: Path to save the figure. If None, the figure is not saved.
+    - dpi: The resolution in dots per inch of the saved figure.
+    - is_same_figure: Whether to plot all datasets in the same figure.
+    - is_log_x: Whether to use a logarithmic scale for the x-axis.
+    """
+    if is_same_figure:
+        fig, ax = plt.subplots(figsize=figsize)
+    else:
+        fig, axs = plt.subplots(len(data_lists), 1, figsize=figsize)
+    
+    plt.rc('font', family=font_name, size=font_size)
+
+    for i, data in enumerate(data_lists):
+        sorted_data = np.sort(data)
+        yvals = np.arange(1, len(sorted_data) + 1) / len(sorted_data)
+
+        style = line_styles.get(i, '-')
+        width = line_widths.get(i, 1)
+        color = line_colors.get(i, 'b')
+        marker = markers.get(i, None)
+        marker_color = marker_colors.get(i, color)
+        legend = legends[i] if legends and i < len(legends) else f"Data {i+1}"
+
+        current_ax = ax if is_same_figure else axs[i]
+        
+        if is_log_x:
+            current_ax.set_xscale('log')
+
+        current_ax.plot(sorted_data, yvals, linestyle=style, linewidth=width, color=color,
+                        marker=marker, markerfacecolor=marker_color, label=legend)
+        
+        if x_tick_interval and not is_log_x:
+            current_ax.set_xticks(np.arange(0, 1.1, 1 / x_tick_interval))
+        
+        if show_grid:
+            current_ax.grid(True)
+
+        current_ax.legend()
+
+    plt.suptitle("CDF Plots of Given Datasets")
+    plt.tight_layout(rect=[0, 0.03, 1, 0.95])
+
+    if save_path:
+        plt.savefig(save_path, dpi=dpi)
+    
+    plt.show()
