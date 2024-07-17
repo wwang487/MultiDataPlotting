@@ -8,11 +8,28 @@ from scipy.stats import kde
 from scipy.optimize import curve_fit
 from scipy.interpolate import griddata
 from matplotlib.colors import to_rgba
-from matplotlib.colors import Normalize, ListedColormap
+from matplotlib.colors import Normalize, ListedColormap, LinearSegmentedColormap
 from matplotlib.colorbar import ColorbarBase
 from matplotlib.cm import get_cmap
+import matplotlib.patches as patches
+from matplotlib.legend_handler import HandlerPatch
 from datetime import datetime, timedelta
 
+
+class __HandlerRect(HandlerPatch):
+    def create_artists(self, legend, orig_handle, xdescent, ydescent, width, height, fontsize, trans):
+        # Customize the size and location of the rectangle for the legend symbol
+        center = 0.5 * width - 0.5 * xdescent, 0.5 * ydescent
+        p = patches.Rectangle(xy=center, width=width * 0.6, height=height * 1.5)  # Custom size
+        self.update_prop(p, orig_handle, legend)
+        p.set_transform(trans)
+        return [p]
+
+def __create_transparent_cmap(cmap, alpha=0.5):
+    """Create a transparent version of the given colormap."""
+    colors = cmap(np.arange(cmap.N))
+    colors[:, -1] = alpha  # Set the alpha channel
+    return LinearSegmentedColormap.from_list(cmap.name + "_alpha", colors)
 def __get_bar_data(input_list, bin_tuple_list):
     # bin_tuple_list is a list of tuples, each tuple contains the start and end of a bin
     res = []
@@ -1322,3 +1339,139 @@ def plot_cdfs(data_lists, figsize=(10, 6), line_styles=None, line_widths=None,
         plt.savefig(save_path, dpi=dpi)
     
     plt.show()
+
+def plot_intensity_velocity_and_classes(intensity_data, velocity_list, classification_data, v_choice='component',
+                                                 primary_colormap='jet', edge_colormap='rainbow',
+                                                 edge_thickness=2, face_alpha=1.0, arrow_scale=0.1,
+                                                 face_label = None, edge_label = None, class_labels = None, is_legend = True,
+                                                 is_show = True, save_path = None,
+                                                 arrow_colors='black', arrow_styles='->', arrow_thicknesses=1, figsize=(10, 8)):
+    """
+    Plots a heatmap with edges, velocity arrows, and classification patterns.
+
+    Parameters:
+    - intensity_data (list of np.array): List containing up to two 2D numpy arrays with intensity values.
+    - velocity_list (list of np.array): List containing pairs of arrays representing velocity components.
+    - classification_data (list of np.array): List containing a single array with classification integers for each cell.
+    - v_choice (str): 'component' for Cartesian coordinates, 'theta' for polar coordinates (magnitude, direction).
+    - primary_colormap (str), edge_colormap (str): Colormap identifiers.
+    - edge_thickness (float): Thickness of the edges.
+    - face_alpha (float): Transparency of the cell faces.
+    - arrow_scale (float): Scaling factor for the arrows.
+    - face_label (str), edge_label (str): Labels for the colorbars.
+    - class_labels (list): List of class labels for the legend.
+    - is_legend (bool): Whether to display the legend.
+    - is_show (bool): Whether to display the plot.
+    - save_path (str): Path to save the plot.
+    - arrow_colors, arrow_styles, arrow_thicknesses: Properties for arrows.
+    - figsize (tuple): Figure size.
+    """
+    fig, ax = plt.subplots(figsize=figsize)
+    data = intensity_data[0]
+    n_rows, n_cols = data.shape
+
+    # Normalize the face colors
+    norm = Normalize(vmin=np.min(data), vmax=np.max(data))
+    face_cmap = get_cmap(primary_colormap)
+    face_colors = face_cmap(norm(data))
+
+    # Prepare patterns based on classification data
+    patterns = ['/', '\\', '|', '-', '+', 'x', 'o', 'O', '.', '*', '///', '\\\\', '|||', '---', 'xxx', 'ooo', 'OOO', '...', '***']
+    class_data = classification_data[0]
+    if class_labels ==  None:
+        pattern_handles = [patches.Patch(facecolor='white', edgecolor = 'black', hatch=pat, label=f'Class {i+1}') \
+            for i, pat in enumerate(patterns[:len(np.unique(class_data))])]
+    else:
+        pattern_handles = [patches.Patch(facecolor='white', edgecolor = 'black', hatch=pat, label=class_labels[i]) \
+            for i, pat in enumerate(patterns[:len(np.unique(class_data))])]
+    # Prepare edge colors if provided
+    if len(intensity_data) > 1:
+        edge_data = intensity_data[1]
+        edge_norm = Normalize(vmin=np.min(edge_data), vmax=np.max(edge_data))
+        edge_cmap = get_cmap(edge_colormap)
+        edge_colors = edge_cmap(edge_norm(edge_data))
+    else:
+        edge_data = None
+        
+    for i in range(n_rows):
+        for j in range(n_cols):
+            face_color = face_colors[i, j]
+            pattern = patterns[class_data[i, j] % len(patterns)]
+            if len(intensity_data) > 1:
+                edge_color = edge_colors[i, j]
+                # Two rectangles to manage separate face and edge coloring
+                rect0 = plt.Rectangle((j + 0.01, n_rows - i - 1 + 0.01), 0.99, 0.99, facecolor=face_color,
+                                      alpha=face_alpha)
+                ax.add_patch(rect0)
+                
+                pattern_rect = patches.Rectangle((j, n_rows - i - 1), 1, 1, hatch=pattern, fill=False,
+                                                edgecolor='black', linewidth=0)
+                ax.add_patch(pattern_rect)
+                
+                rect1 = plt.Rectangle((j + 0.05, n_rows - i - 1 + 0.05), 0.9, 0.9, facecolor='none',
+                                      edgecolor=edge_color, linewidth=edge_thickness)
+                ax.add_patch(rect1)
+                
+            else:
+                rect = plt.Rectangle((j + 0.01, n_rows - i - 1 + 0.01), 0.99, 0.99, facecolor=face_color,
+                                     edgecolor='black', linewidth=edge_thickness, alpha=face_alpha)
+                ax.add_patch(rect)
+                pattern_rect = patches.Rectangle((j, n_rows - i - 1), 1, 1, hatch=pattern, fill=False,
+                                                edgecolor='white' if np.mean(face_color) < 0.5 else 'black', linewidth=0)
+                ax.add_patch(pattern_rect)
+                
+                # Add pattern with transparency
+                # Add pattern with contrasting color
+            
+
+            # Center of the cell for placing the arrow
+            x_center, y_center = j + 0.5, n_rows - i - 0.5
+
+            # Process each pair of arrays in velocity_list
+            for k in range(0, len(velocity_list), 2):
+                if v_choice == 'component':
+                    dx, dy = velocity_list[k][i, j], velocity_list[k+1][i, j]
+                elif v_choice == 'theta':
+                    magnitude = velocity_list[k][i, j]
+                    direction = velocity_list[k+1][i, j]
+                    dx = magnitude * np.cos(direction)
+                    dy = magnitude * np.sin(direction)
+
+                # Get arrow properties
+                color = arrow_colors[k // 2] if isinstance(arrow_colors, list) else arrow_colors
+                style = arrow_styles[k // 2] if isinstance(arrow_styles, list) else arrow_styles
+                thickness = arrow_thicknesses[k // 2] if isinstance(arrow_thicknesses, list) else arrow_thicknesses
+
+                ax.arrow(x_center, y_center, dx * arrow_scale, dy * arrow_scale, color=color,
+                         head_width=0.1, head_length=0.15, linewidth=thickness, linestyle=style)
+    if is_legend:
+        ax.legend(handles=pattern_handles, title="Classification", handler_map={patches.Patch: __HandlerRect()}, loc='upper left', bbox_to_anchor=(0.98, 0.98))
+    # Colorbar for intensity
+     # Adding colorbar for face colors
+    
+    ax.axis('off')  # Turn off axis markers, labels, and grid
+    
+    if is_legend:
+        face_label = face_label if face_label is not None else 'Intensity'
+        edge_label = edge_label if edge_label is not None else 'Edge Intensity'
+        
+        # Adding colorbar for face colors
+        face_cbar_ax = fig.add_axes([0.9, 0.15, 0.015, 0.4])  # Adjust these values as needed
+        sm_face = plt.cm.ScalarMappable(cmap=__create_transparent_cmap(face_cmap, alpha=face_alpha), norm=norm)
+        sm_face.set_array([])
+        cbar_face = plt.colorbar(sm_face, cax=face_cbar_ax, orientation='vertical')
+        cbar_face.set_label(face_label, fontsize=10)  # Smaller label size
+        cbar_face.ax.tick_params(labelsize=10)  # Smaller tick size
+
+        # Adding colorbar for edge colors if applicable
+        if edge_data is not None:
+            edge_cbar_ax = fig.add_axes([0.97, 0.15, 0.015, 0.4])  # Adjust these values as needed
+            sm_edge = plt.cm.ScalarMappable(cmap=edge_cmap, norm=edge_norm)
+            sm_edge.set_array([])
+            cbar_edge = plt.colorbar(sm_edge, cax=edge_cbar_ax, orientation='vertical')
+            cbar_edge.set_label(edge_label, fontsize=10)  # Smaller label size
+            cbar_edge.ax.tick_params(labelsize=10)  # Smaller tick size
+    if is_show:
+        plt.show()
+    if save_path:
+        plt.savefig(save_path, dpi=600, bbox_inches='tight')
