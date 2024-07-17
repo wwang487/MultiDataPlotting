@@ -383,6 +383,55 @@ plot_2D_heatmap(pair_freq=data, title="Event Frequency Distribution",
 
 ![alt text](https://github.com/wwang487/MultiDataPlotting/blob/main/picture/heatmap2.png?raw=true)
 
+### Plotting High-Dimensional Heatmaps with Velocity Arrows and Classifications
+The `plot_intensity_velocity_and_classes` function creates detailed heatmaps that visualize intensity data with additional features such as velocity vectors, classification patterns, and optional edges. This is particularly useful in fields like geospatial analysis, fluid dynamics, and any area where it's critical to observe how different variables like speed and direction are distributed across a space.
+
+_Functionality_
+
+This function allows for the visualization of scalar fields (intensity data) while superimposing vector fields (velocity data) and categorical overlays (classification patterns). It supports customization of almost every visual aspect, including color maps for intensity and edges, transparency settings, and arrow dynamics. This makes it an invaluable tool for detailed spatial analysis and presentation-ready visualization.
+
+_Parameters_
+
+- **intensity_data** (list of np.array): Contains one or two 2D numpy arrays; the first array represents the intensity values for the heatmap, and the optional second array represents edge intensities.
+- **velocity_list** (list of np.array): Contains pairs of numpy arrays representing the components of velocity vectors, either in Cartesian (x and y components) or polar (magnitude and direction) forms.
+- **classification_data** (list of np.array): Contains a single numpy array with classification data for each cell, which will be represented as patterns on the heatmap.
+- **v_choice** (str): Specifies the format of velocity data ('component' for Cartesian or 'theta' for polar coordinates).
+- **primary_colormap, edge_colormap** (str): Colormap identifiers for the intensity and edge data, respectively.
+- **edge_thickness** (float): Thickness of the edges around heatmap cells.
+- **face_alpha** (float): Transparency for the face colors of heatmap cells.
+- **arrow_scale** (float): Scaling factor for the velocity arrows.
+- **arrow_colors, arrow_styles, arrow_thicknesses**: Properties for customizing the appearance of velocity arrows.
+- **figsize** (tuple): Dimensions of the figure in inches.
+- **face_label, edge_label** (str, optional): Labels for the colorbars of face and edge intensities.
+- **class_labels** (list, optional): Custom labels corresponding to each class represented by patterns.
+- **is_legend** (bool): Whether to display a legend for classification patterns.
+- **is_show** (bool): Whether to display the plot on the screen.
+- **save_path** (str, optional): Path to save the plot image file.
+- **is_save** (bool, optional): Whether to save the plot to a file.
+
+_Code Example_
+
+```python
+import numpy as np
+import multidataplotting as mdp
+intensity_data1 = np.random.rand(10, 10)  # Random 10x10 array for cell faces
+intensity_data2 = np.random.rand(10, 10)  # Random 10x10 array for cell edges
+classification_data = [np.random.randint(0, 4, (10, 10))]  # Random class integers
+
+velocity_x1 = np.random.rand(10, 10) - 0.5
+velocity_y1 = np.random.rand(10, 10) - 0.5
+velocity_x2 = np.random.rand(10, 10) + 0.5
+velocity_y2 = np.random.rand(10, 10) + 0.5
+
+mdp.plot_intensity_velocity_and_classes([intensity_data1, intensity_data2], [velocity_x1, velocity_y1, velocity_x2, velocity_y2],
+                                             classification_data,
+                                             v_choice='component', primary_colormap='hot', edge_colormap='viridis',
+                                             edge_thickness=5, face_alpha=0.5, arrow_scale=0.2,
+                                             arrow_colors=['gray', 'black'], arrow_styles=['-', '-'], arrow_thicknesses=[2, 1])
+```
+
+![alt text](https://github.com/wwang487/MultiDataPlotting/blob/main/picture/VIC.png?raw=true)
+
 ### Plotting Contour Maps
 
 The `plot_contour_map` function in the multidataprocessing package generates contour maps based on spatial data, suitable for visualizing gradients, potential fields, or any continuous variable across a two-dimensional area. This function is extremely useful in geophysical studies, meteorology, and landscape ecology to understand topographical, temperature, or pressure variations in a given region.
