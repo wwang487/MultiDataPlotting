@@ -407,7 +407,6 @@ _Parameters_
 - **is_legend** (bool): Whether to display a legend for classification patterns.
 - **is_show** (bool): Whether to display the plot on the screen.
 - **save_path** (str, optional): Path to save the plot image file.
-- **is_save** (bool, optional): Whether to save the plot to a file.
 
 _Code Example_
 
