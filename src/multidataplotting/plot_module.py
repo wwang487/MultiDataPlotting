@@ -1475,3 +1475,67 @@ def plot_intensity_velocity_and_classes(intensity_data, velocity_list, classific
         plt.show()
     if save_path:
         plt.savefig(save_path, dpi=600, bbox_inches='tight')
+        
+def plot_pos_neg_dots(positive, negative, years, marker_size=100, marker_type='o', alpha=1.0, tick_font_name='Arial', 
+                tick_font_size=12, positive_color='blue', negative_color='red', title='Example Dot Plot', 
+                xlabel='Year', ylabel='Value', y_limits=None, figsize=(10, 5), is_show=True, is_legend=False, 
+                positive_label='Positive', negative_label='Negative', save_path=None):
+    """
+    Plots positive and negative values on a dot plot with customizable properties including marker type and legend labels.
+
+    Args:
+    positive (array-like): Array of positive values.
+    negative (array-like): Array of negative values.
+    years (array-like): Array of years corresponding to the values.
+    marker_size (int, optional): Size of the markers. Defaults to 100.
+    marker_type (str, optional): Type of the marker. Defaults to 'o' (circle).
+    alpha (float, optional): Transparency of the markers. Defaults to 1.0.
+    tick_font_name (str, optional): Font name for the tick labels. Defaults to 'Arial'.
+    tick_font_size (int, optional): Font size for the tick labels. Defaults to 12.
+    positive_color (str, optional): Color for positive value markers. Defaults to 'blue'.
+    negative_color (str, optional): Color for negative value markers. Defaults to 'red'.
+    title (str, optional): Title of the plot. Defaults to 'Example Dot Plot'.
+    xlabel (str, optional): Label for the x-axis. Defaults to 'Year'.
+    ylabel (str, optional): Label for the y-axis. Defaults to 'Value'.
+    y_limits (tuple, optional): Tuple of (min, max) for y-axis limits. If None, defaults to [-25, 25].
+    figsize (tuple, optional): Figure size. Defaults to (10, 5).
+    is_show (bool, optional): Whether to show the plot. Defaults to True.
+    is_legend (bool, optional): Whether to display a legend. Defaults to False.
+    positive_label (str, optional): Legend label for positive values. Defaults to 'Positive'.
+    negative_label (str, optional): Legend label for negative values. Defaults to 'Negative'.
+    save_path (str, optional): Path to save the plot image file. If None, the plot is not saved. Defaults to None.
+    """
+    fig, ax = plt.subplots(figsize=figsize)
+
+    # Plot positive values
+    for i, val in enumerate(positive):
+        y_positions = np.linspace(0, val - 1, val)
+        ax.scatter([years[i]] * val, y_positions, color=positive_color, s=marker_size, marker=marker_type, 
+                   alpha=alpha, label=positive_label if i == 0 and is_legend else "")
+
+    # Plot negative values
+    for i, val in enumerate(negative):
+        y_positions = np.linspace(0, abs(val) - 1, abs(val))
+        ax.scatter([years[i]] * abs(val), -y_positions, color=negative_color, s=marker_size, marker=marker_type, 
+                   alpha=alpha, label=negative_label if i == 0 and is_legend else "")
+
+    ax.set_title(title)
+    ax.set_xlabel(xlabel)
+    ax.set_ylabel(ylabel)
+    ax.set_ylim(y_limits if y_limits else [-25, 25])
+
+    # Setting tick font properties
+    for label in ax.get_xticklabels() + ax.get_yticklabels():
+        label.set_fontname(tick_font_name)
+        label.set_fontsize(tick_font_size)
+
+    if is_legend:
+        ax.legend()
+
+    if save_path:
+        plt.savefig(save_path)
+
+    if is_show:
+        plt.show()
+    else:
+        plt.close()
