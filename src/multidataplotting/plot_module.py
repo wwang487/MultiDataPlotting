@@ -14,6 +14,12 @@ from matplotlib.cm import get_cmap
 import matplotlib.patches as patches
 from matplotlib.legend_handler import HandlerPatch
 from datetime import datetime, timedelta
+from sklearn.cluster import KMeans, AgglomerativeClustering, DBSCAN, SpectralClustering
+from sklearn.mixture import GaussianMixture
+from sklearn.preprocessing import StandardScaler
+from scipy.spatial import ConvexHull
+from scipy.interpolate import interp1d
+from matplotlib.patches import Polygon
 
 
 class __HandlerRect(HandlerPatch):
@@ -1535,6 +1541,128 @@ def plot_pos_neg_dots(positive, negative, years, marker_size=100, marker_type='o
     if save_path:
         plt.savefig(save_path)
 
+    if is_show:
+        plt.show()
+    else:
+        plt.close()
+        
+def plot_clustered_data(df, columns, x_index, y_index, n_clusters=3, method='KMeans',
+                        marker_size=50, marker_colors=None, marker_type='o',
+                        figsize=(10, 5), tick_font_size=12, tick_font_name='Arial',
+                        xlabel='X-axis', ylabel='Y-axis', label_font_size=14,
+                        is_legend=True, cluster_names=None, is_show=True, save_path=None,
+                        is_boundary=False, boundary_color='black', boundary_linewidth=2, boundary_alpha=0.5):
+    """
+    Plots clustered data from a DataFrame using specified columns and clustering parameters, with optional smooth boundaries.
+
+    Args:
+    df (pandas.DataFrame): The DataFrame containing the data.
+    columns (list): List of column indices or names to include in the clustering.
+    x_index (int or str): Index or name of the column to use for the x-axis.
+    y_index (int or str): Index or name of the column to use for the y-axis.
+    n_clusters (int, optional): Number of clusters for the clustering algorithm (not applicable to DBSCAN). Default is 3.
+    method (str, optional): Clustering method; 'KMeans', 'Agglomerative', 'DBSCAN', 'Spectral', or 'GaussianMixture'. Default is 'KMeans'.
+    marker_size (int, optional): Size of the markers in the plot. Default is 50.
+    marker_colors (list or dict, optional): Colors for the markers, can be a list or dict assigning colors per cluster. If None, defaults to 'viridis' colormap.
+    marker_type (str, optional): Type of marker (e.g., 'o', 'x', '^'). Default is 'o'.
+    figsize (tuple, optional): Size of the figure. Default is (10, 5).
+    tick_font_size (int, optional): Font size for tick labels. Default is 12.
+    tick_font_name (str, optional): Font name for tick labels. Default is 'Arial'.
+    xlabel (str, optional): Label for the x-axis. Default is 'X-axis'.
+    ylabel (str, optional): Label for the y-axis. Default is 'Y-axis'.
+    label_font_size (int, optional): Font size for axis labels. Default is 14.
+    is_legend (bool, optional): Whether to show legend. Default is True.
+    cluster_names (list, optional): Custom names for each cluster in the legend. If None, default names are used.
+    is_show (bool, optional): Whether to show the plot. Default is True.
+    save_path (str, optional): Path to save the plot if specified.
+    is_boundary (bool, optional): Whether to draw smooth convex hull boundary around each cluster. Default is False.
+    boundary_color (str, optional): Color of the boundary line. Default is 'black'.
+    boundary_linewidth (int, optional): Line width of the boundary. Default is 2.
+    boundary_alpha (float, optional): Alpha (transparency) of the boundary line. Default is 0.5.
+
+    Returns:
+    None
+    """
+    # Ensure the column indices are correct
+    if isinstance(columns[0], str):
+        data = df[columns].copy()
+    else:
+        data = df.iloc[:, columns].copy()
+        
+    if isinstance(x_index, str):
+        x_data = df[x_index]
+    else:
+        x_data = df.iloc[:, x_index]
+
+    if isinstance(y_index, str):
+        y_data = df[y_index]
+    else:
+        y_data = df.iloc[:, y_index]
+    
+    # Normalize the data
+    scaler = StandardScaler()
+    data_scaled = scaler.fit_transform(data)
+
+    # Clustering
+    if method == 'KMeans':
+        model = KMeans(n_clusters=n_clusters)
+    elif method == 'Agglomerative':
+        model = AgglomerativeClustering(n_clusters=n_clusters)
+    elif method == 'DBSCAN':
+        model = DBSCAN()
+    elif method == 'Spectral':
+        model = SpectralClustering(n_clusters=n_clusters)
+    elif method == 'GaussianMixture':
+        model = GaussianMixture(n_components=n_clusters)
+    else:
+        raise ValueError("Unsupported clustering method. Choose from 'KMeans', 'Agglomerative', 'DBSCAN', 'Spectral', or 'GaussianMixture'.")
+
+    # Fit model
+    if method == 'GaussianMixture':
+        model.fit(data_scaled)
+        labels = model.predict(data_scaled)
+    else:
+        labels = model.fit_predict(data_scaled)
+    
+    # Plotting
+    fig, ax = plt.subplots(figsize=figsize)
+    unique_labels = np.unique(labels)
+    
+    if marker_colors is None:
+        colors = plt.cm.viridis(np.linspace(0, 1, len(unique_labels)))
+        marker_colors = {label: color for label, color in zip(unique_labels, colors)}
+    elif isinstance(marker_colors, list):
+        marker_colors = {label: color for label, color in zip(unique_labels, marker_colors)}
+    
+    for label in unique_labels:
+        idx = labels == label
+        cluster_label = cluster_names[label] if cluster_names and len(cluster_names) > label else f'Cluster {label}'
+        points = ax.scatter(x_data[idx], y_data[idx], c=[marker_colors[label]] * np.sum(idx), s=marker_size, label=cluster_label, marker=marker_type)
+
+        if is_boundary and np.sum(idx) > 2:
+            hull = ConvexHull(np.column_stack((x_data[idx], y_data[idx])))
+            # Get the convex hull vertices
+            hull_points = np.column_stack((x_data[idx], y_data[idx]))[hull.vertices]
+            # Close the loop
+            hull_points = np.append(hull_points, [hull_points[0]], axis=0)
+            # Interpolate to smooth
+            t = np.arange(hull_points.shape[0])
+            ti = np.linspace(t[0], t[-1], 10 * t.size)  # Interpolation factor of 10
+            xi = interp1d(t, hull_points[:, 0], kind='cubic')(ti)
+            yi = interp1d(t, hull_points[:, 1], kind='cubic')(ti)
+            ax.plot(xi, yi, color=boundary_color, linewidth=boundary_linewidth, alpha=boundary_alpha)
+
+    ax.set_xlabel(xlabel, fontsize=label_font_size, fontname=tick_font_name)
+    ax.set_ylabel(ylabel, fontsize=label_font_size, fontname=tick_font_name)
+    plt.xticks(fontsize=tick_font_size, fontname=tick_font_name)
+    plt.yticks(fontsize=tick_font_size, fontname=tick_font_name)
+    
+    if is_legend:
+        ax.legend(title="Clusters")
+    
+    if save_path:
+        plt.savefig(save_path)
+    
     if is_show:
         plt.show()
     else:

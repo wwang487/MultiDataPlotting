@@ -6,3 +6,4 @@ pandas
 seaborn
 scipy
 datetime
+scikit-learn
