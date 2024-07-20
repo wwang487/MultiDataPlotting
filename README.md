@@ -673,3 +673,46 @@ mdp.plot_cdfs([data1, data2],line_styles={0: '-', 1: '--'},line_widths={0: 2, 1:
           show_grid=True,save_path='cdf_plots.png', dpi=300,is_same_figure=True,is_log_x=True)
 ```
 ![alt text](https://github.com/wwang487/MultiDataPlotting/blob/main/picture/CDFs.png?raw=true)
+
+### Plotting Positive and Negative Dot Plots
+The plot_pos_neg_dot_plot function in the visualization toolkit is specifically designed to create scatter plots that visually distinguish between positive and negative data points over a set of years. This feature is particularly useful in fields like finance, environmental science, and public health, where it is crucial to track and compare upward and downward trends over time.
+
+_Functionality_
+
+This function is ideal for illustrating trends where data points are categorized into positive and negative groups across time. It can be used to visualize earnings vs. losses, growth vs. decline, or any other dataset where such distinctions are meaningful. The clear visualization aids in quick assessment and comparative analysis of data trends.
+
+_Parameters_
+
+- **positive** (array-like): Array of positive values.
+- **negative** (array-like): Array of negative values.
+- **years** (array-like): Array of years corresponding to the values.
+- **marker_size** (int, optional): Size of the markers. Default is 100.
+- **marker_type** (str, optional): Type of the markers (e.g., 'o' for circles, '*' for stars). Default is 'o'.
+- **alpha** (float, optional): Transparency of the markers. Default is 1.0.
+- **tick_font_name** (str, optional): Font name for the tick labels. Default is 'Arial'.
+- **tick_font_size** (int, optional): Font size for the tick labels. Default is 12.
+- **positive_color** (str, optional): Color for positive value markers. Default is 'blue'.
+- **negative_color** (str, optional): Color for negative value markers. Default is 'red'.
+- **title** (str, optional): Title of the plot. Default is 'Example Dot Plot'.
+- **xlabel** (str, optional): Label for the x-axis. Default is 'Year'.
+- **ylabel** (str, optional): Label for the y-axis. Default is 'Value'.
+- **y_limits** (tuple, optional): Minimum and maximum limits for the y-axis. If None, defaults to [-25, 25].
+- **figsize** (tuple, optional): Size of the figure in inches. Default is (10, 5).
+- **is_show** (bool, optional): Whether to display the plot. Default is True.
+- **is_legend** (bool, optional): Whether to display a legend. Default is False.
+- **positive_label** (str, optional): Legend label for positive values. Default is 'Positive'.
+- **negative_label** (str, optional): Legend label for negative values. Default is 'Negative'.
+- **save_path** (str, optional): Path to save the plot image file. If None, the plot is not saved.
+
+_Code Example_
+
+```python
+import numpy as np
+import multidataplotting as mdp
+positive = np.random.randint(0, 20, 100)
+negative = np.random.randint(0, 20, 100)
+years = np.arange(100)  # Example years
+mdp.plot_pos_neg_dots(positive, negative, years, marker_type='o', positive_color='green', negative_color='orange', alpha=0.5,
+            positive_label='Gain', negative_label='Loss', is_legend=True, save_path='custom_plot.png')
+```
+![alt text](https://github.com/wwang487/MultiDataPlotting/blob/main/picture/PosNegDots.png?raw=true)
