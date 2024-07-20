@@ -25,6 +25,60 @@ To use the package, you can import it into your Python scripts as follows:
 import multidataprocessing as mdp
 ```
 
+### Plotting Clustered Data with Boundaries
+The `plot_clustered_data` function in the advanced data visualization toolkit allows for the visual representation of data clusters from a pandas DataFrame. This function is highly versatile, supporting multiple clustering methods and customizable plot aesthetics, including the option to draw smoothed boundaries around clusters. It is particularly useful in fields such as market segmentation, bioinformatics, environmental analysis, and any other area where data clustering provides insight.
+
+_Functionality_
+This function provides a detailed clustering and visualization of multidimensional data. Users can select specific columns for clustering and choose different axes for visualization. It supports various clustering algorithms, and it can visually delineate cluster boundaries, enhancing the interpretability of cluster separation and density. This makes it an invaluable tool for comprehensive data analysis and presentation.
+
+_Parameters_
+- **df** (pandas.DataFrame): The DataFrame containing the data.
+- **columns** (list): Column indices or names to include in the clustering.
+- **x_index** (int or str): Column index or name for the x-axis of the plot.
+- **y_index** (int or str): Column index or name for the y-axis of the plot.
+- **n_clusters** (int, optional): Number of clusters for certain algorithms. Default is 3.
+- **method** (str, optional): Clustering method; options include 'KMeans', 'Agglomerative', 'DBSCAN', 'Spectral', or 'GaussianMixture'. Default is 'KMeans'.
+- **marker_size** (int, optional): Size of the markers in the plot. Default is 50.
+- **marker_colors** (list or dict, optional): Colors for the markers, specified as a list or dictionary mapping clusters to colors. Defaults to the 'viridis' colormap.
+- **marker_type** (str, optional): Shape of the markers, such as 'o' (circle), 'x' (cross). Default is 'o'.
+- **figsize** (tuple, optional): Dimensions of the figure in inches. Default is (10, 5).
+- **tick_font_size** (int, optional): Font size for tick labels. Default is 12.
+- **tick_font_name** (str, optional): Font family for tick labels. Default is 'Arial'.
+- **xlabel** (str, optional): Label for the x-axis. Default is 'X-axis'.
+- **ylabel** (str, optional): Label for the y-axis. Default is 'Y-axis'.
+- **label_font_size** (int, optional): Font size for axis labels. Default is 14.
+- **is_legend** (bool, optional): Whether to display a legend for the clusters. Default is True.
+- **cluster_names** (list, optional): Custom names for each cluster in the legend. Defaults to generic names like "Cluster 0".
+- **is_show** (bool, optional): Whether to display the plot on screen. Default is True.
+- **save_path** (str, optional): File path to save the plot image, if desired.
+- **is_boundary** (bool, optional): Whether to draw smooth boundaries around each cluster using a convex hull. Default is False.
+- **boundary_color** (str, optional): Color of the boundary lines. Default is 'black'.
+- **boundary_linewidth** (int, optional): Width of the boundary lines. Default is 2.
+- **boundary_alpha** (float, optional): Transparency of the boundary lines. Default is 0.5.
+
+_Code Example_
+
+```python
+import pandas as pd
+import numpy as np
+import multidataplotting as mdp
+np.random.seed(4444)  # For reproducible results
+data = {
+    'Feature1': np.random.normal(loc=0, scale=1, size=100),  # Normal distribution centered at 0
+    'Feature2': np.random.normal(loc=5, scale=2, size=100),  # Normal distribution centered at 5
+    'Feature3': np.random.normal(loc=10, scale=3, size=100)  # Normal distribution centered at 10
+}
+
+# Create DataFrame
+df = pd.DataFrame(data)
+# Example usage:
+# Assuming 'df' is your DataFrame and it contains columns that you want to cluster
+mdp.plot_clustered_data(df, ['Feature1', 'Feature2', 'Feature3'], 'Feature1', 'Feature2',
+                    method='KMeans', marker_type='^', cluster_names=['Type A', 'Type B', 'Type C'], is_legend=True, is_boundary=True)
+```
+
+![alt text](https://github.com/wwang487/MultiDataPlotting/blob/main/picture/clusters.png?raw=true)
+
 ### Plotting Time Histograms
 
 The `plot_time_histogram` function creates histograms based on time data, ideal for visualizing event frequencies over specific intervals. This method helps in identifying trends and patterns by illustrating how event occurrences are distributed across different time points.
