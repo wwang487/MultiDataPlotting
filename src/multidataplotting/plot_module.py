@@ -220,6 +220,73 @@ def __round_to_nearest(number, power):
     factor = 10 ** power
     return round(number / factor) * factor
 
+def plot_beeswarm(categories, values, optimizer_value=None, desired_value=None, fig_size=(12, 8), swarm_color='gray', swarm_size=2,
+                  swarm_transparency=None, median_color='black', median_edge_color='none', median_size=30,
+                  line_color='black', line_thickness=2, optimizer_color='black', optimizer_style='--', optimizer_thickness=1.5,
+                  desired_color='blue', desired_style='-', desired_thickness=1.5, title='Subcatchment Area Distribution by Site',
+                  xlabel_name='Category', ylabel_name='Subcatchment Area (km²)', xlabel_size=12, ylabel_size=12,
+                  xlabel_font='Arial', ylabel_font='Arial', tick_font_name='Arial', tick_font_size=10, xtick_rotation=0,
+                  y_range=None, is_show=True, save_path=None, optimizer_label='Optimizer Value',
+                  desired_label='Desired Value'):
+    """
+    Plots a beeswarm plot with medians, interquartile ranges (IQR), and reference lines.
+
+    :param categories: List of category labels (e.g., different sites or conditions).
+    :param values: List of arrays, each containing values corresponding to a category.
+    :param optimizer_bandwidth: The optimizer bandwidth to plot as a horizontal dashed line.
+    :param desired_value: The desired value to plot as a horizontal solid line.
+    """
+    # Initialize the plot
+    plt.figure(figsize=fig_size)
+    
+    # Create the beeswarm plot
+    sns.swarmplot(data=values, size=swarm_size, color=swarm_color, edgecolor=median_edge_color, alpha=swarm_transparency)
+    
+    # Calculate and plot medians and IQRs
+    for i, v in enumerate(values):
+        median = np.median(v)
+        quartile1 = np.percentile(v, 25)
+        quartile3 = np.percentile(v, 75)
+        
+        # Plot median
+        plt.scatter(i, median, color=median_color, s=median_size, zorder=3)
+        
+        # Plot vertical bar for the IQR
+        plt.vlines(i, quartile1, quartile3, color=line_color, linestyle='-', lw=line_thickness)
+    
+    # Add optimizer bandwidth line if provided
+    if optimizer_value is not None:
+        plt.axhline(y=optimizer_value, color=optimizer_color, linestyle=optimizer_style, linewidth=optimizer_thickness, label=optimizer_label)
+    
+    # Add desired value line if provided
+    if desired_value is not None:
+        plt.axhline(y=desired_value, color=desired_color, linestyle=desired_style, linewidth=desired_thickness, label=desired_label)
+    
+    # Setting labels and titles
+    plt.xticks(ticks=np.arange(len(categories)), labels=categories, rotation=xtick_rotation, fontsize=tick_font_size, fontname=tick_font_name)
+    plt.xlabel(xlabel_name, color='black', fontsize=xlabel_size, fontname=xlabel_font)
+    plt.ylabel(ylabel_name, color='black', fontsize=ylabel_size, fontname=ylabel_font)
+    plt.title(title)
+    
+    if y_range:
+        plt.ylim(y_range)
+    else:
+        min_val, max_val = min([min(v) for v in values]), max([max(v) for v in values])
+        delta = max_val - min_val
+        plt.ylim(min_val - 0.1 * delta, max_val + 0.15 * delta)
+    
+    # Display legend only if any line is plotted
+    if optimizer_value is not None or desired_value is not None:
+        plt.legend(loc='upper right', frameon=True, facecolor='white', edgecolor='black', fontsize=10)
+    
+    if save_path:
+        plt.savefig(save_path)
+    
+    if is_show:
+        plt.tight_layout()
+        plt.show()
+
+
 def plot_bar_plots(list_of_lists, tuple_range_list, titles = '', ylabels='', bar_color='blue', bar_edgecolor='black', fig_size=(10, 6), tick_fontname='Arial',
                     tick_fontsize=12, title_fontsize=14, label_fontsize=14, line_color='red', show_all_xticklabels=True, bar_width = 1,
                     line_style='--', line_width=2, is_legend=False, unit='m', is_fixed_y_range=True, y_range=[0, 20], is_mean_value = False,
