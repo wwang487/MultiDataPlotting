@@ -79,6 +79,44 @@ mdp.plot_clustered_data(df, ['Feature1', 'Feature2', 'Feature3'], 'Feature1', 'F
 
 ![alt text](https://github.com/wwang487/MultiDataPlotting/blob/main/picture/clusters.png?raw=true)
 
+### Heatmap Plotting on Geographic Maps
+
+The `plot_heatmap_on_geomap` function facilitates the visualization of spatial data distributions by rendering heatmaps on geographic maps. It supports two mapping backends, Basemap and OpenStreetMap (OSM), offering flexibility in the appearance and detail of the underlying geographic context. This function is ideal for environmental studies, meteorology, urban planning, and other disciplines requiring geographic data visualization.
+
+_Functionality_
+
+This function overlays heatmap data onto a geographic map, allowing for precise visualization adjustments. It supports various customization options, including transparency thresholds, colormap choices, and tick formatting. The integration of Basemap and OpenStreetMap ensures broad applicability for different visualization needs.
+
+_Parameters_
+
+- **data** (numpy.ndarray): The 2D array of data points to be visualized as a heatmap.
+- **top_left_lat, top_left_lon** (float): The latitude and longitude of the top-left corner of the map.
+- **bottom_right_lat, bottom_right_lon** (float): The latitude and longitude of the bottom-right corner of the map.
+- **threshold** (float): The data value threshold below which points will be transparent.
+- **cmap** (str, optional): Colormap for the heatmap. Default is 'jet'.
+- **map_choice** (str, optional): Backend map provider ('base' for Basemap, 'osm' for OpenStreetMap). Default is 'base'.
+- **zoom** (int, optional): Zoom level for the map when using OSM. Default is 10.
+- **is_show** (bool, optional): Whether to display the plot. Default is True.
+- **save_path** (str, optional): Path to save the figure. If not specified, the figure is not saved.
+- **title** (str, optional): Title of the plot. Default is 'Heatmap Overlay on Geomap'.
+- **colorbar_label** (str, optional): Label for the colorbar. Default is 'Data Intensity'.
+- **fig_size** (tuple, optional): Figure dimensions in inches. Default is (8, 6).
+- **x_tick_interval, y_tick_interval** (float, optional): Interval between ticks on the x and y axes.
+- **tick_format** (str, optional): Format string for tick labels. Default is "{:.2f}".
+
+_Code Example_
+
+```python
+import numpy as np
+import multidataplotting as mdp
+
+data = np.random.rand(100, 100)
+mdp.plot_heatmap_on_geomap(data, 48.0, -123.0, 45.0, -120.0, threshold=0.75, map_choice='osm', x_tick_interval=1, y_tick_interval=1, tick_format="{:.2f}")
+
+```
+
+![alt text](https://github.com/wwang487/MultiDataPlotting/blob/main/picture/heatgeomap.png?raw=true)
+
 ### Plotting Time Histograms
 
 The `plot_time_histogram` function creates histograms based on time data, ideal for visualizing event frequencies over specific intervals. This method helps in identifying trends and patterns by illustrating how event occurrences are distributed across different time points.
