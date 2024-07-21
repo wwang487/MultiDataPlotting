@@ -25,6 +25,65 @@ To use the package, you can import it into your Python scripts as follows:
 import multidataprocessing as mdp
 ```
 
+### Plotting Beeswarm with Reference Lines
+
+The `plot_beeswarm` function in our advanced data visualization toolkit offers a comprehensive method for displaying beeswarm plots that highlight medians and interquartile ranges (IQRs), along with optional horizontal reference lines for key values such as optimizer or desired outcomes. This function is ideal for statistical analysis across various categories or conditions in fields like environmental science, economics, and health sciences.
+
+_Functionality_
+
+This function facilitates the visualization of value distributions across different categories with additional context provided by horizontal reference lines, which can be set according to the user's specific needs (e.g., target values, thresholds). It helps in understanding data spread, central tendency, and compliance with desired or optimal values.
+
+_Parameters_
+- **categories** (list): Category labels for the x-axis.
+- **values** (list of arrays): Data points for each category.
+- **optimizer_value** (float, optional): The optimizer value to plot as a horizontal dashed line. Default is `None`.
+- **desired_value** (float, optional): The desired target value to plot as a horizontal solid line. Default is `None`.
+- **fig_size** (tuple, optional): Dimensions of the figure in inches. Default is `(12, 8)`.
+- **swarm_color** (str, optional): Color of the swarm points. Default is 'gray'.
+- **swarm_size** (int, optional): Size of the swarm points. Default is 2.
+- **swarm_transparency** (float, optional): Transparency of swarm points. Default is `None`.
+- **median_color** (str, optional): Color of the median points. Default is 'black'.
+- **median_edge_color** (str, optional): Edge color of the median points. Default is 'none'.
+- **median_size** (int, optional): Size of the median points. Default is 30.
+- **line_color** (str, optional): Color of the IQR lines and desired value line. Default is 'black'.
+- **line_thickness** (int, optional): Thickness of the IQR and desired value lines. Default is 2.
+- **optimizer_color** (str, optional): Color of the optimizer line. Default is 'black'.
+- **optimizer_style** (str, optional): Style of the optimizer line. Default is '--'.
+- **optimizer_thickness** (int, optional): Thickness of the optimizer line. Default is 1.5.
+- **desired_color** (str, optional): Color of the desired value line. Default is 'blue'.
+- **desired_style** (str, optional): Style of the desired value line. Default is '-'.
+- **desired_thickness** (int, optional): Thickness of the desired value line. Default is 1.5.
+- **title** (str, optional): Title of the plot. Default is 'Subcatchment Area Distribution by Site'.
+- **xlabel_name** (str, optional): Label for the x-axis. Default is 'Category'.
+- **ylabel_name** (str, optional): Label for the y-axis. Default is 'Subcatchment Area (km²)'.
+- **xlabel_size** (int, optional): Font size for the x-axis label. Default is 12.
+- **ylabel_size** (int, optional): Font size for the y-axis label. Default is 12.
+- **xlabel_font** (str, optional): Font family for the x-axis label. Default is 'Arial'.
+- **ylabel_font** (str, optional): Font family for the y-axis label. Default is 'Arial'.
+- **tick_font_name** (str, optional): Font family for tick labels. Default is 'Arial'.
+- **tick_font_size** (int, optional): Font size for tick labels. Default is 10.
+- **xtick_rotation** (int, optional): Rotation angle of x-axis tick labels. Default is 0.
+- **y_range** (tuple, optional): Y-axis range for the plot. Default is `None`.
+- **is_show** (bool, optional): Whether to display the plot on screen. Default is True.
+- **save_path** (str, optional): File path to save the plot image, if desired.
+
+_Code Example_
+
+```python
+import numpy as np
+import pandas as pd
+import multidataplotting as mdp
+
+categories = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N']  # Example categories
+values = [np.random.rand(150) * 1.0 + 0.5 for _ in categories]  # Random data generation for illustration
+optimizer_value = 1.2  # Example value for optimizer bandwidth
+desired_value = 1.0  # Example value for desired value
+
+mdp.plot_beeswarm(categories, values, optimizer_value = optimizer_value , desired_value=desired_value)
+```
+
+![alt text](https://github.com/wwang487/MultiDataPlotting/blob/main/picture/beeswarm.png?raw=true)
+
 ### Plotting Clustered Data with Boundaries
 The `plot_clustered_data` function in the advanced data visualization toolkit allows for the visual representation of data clusters from a pandas DataFrame. This function is highly versatile, supporting multiple clustering methods and customizable plot aesthetics, including the option to draw smoothed boundaries around clusters. It is particularly useful in fields such as market segmentation, bioinformatics, environmental analysis, and any other area where data clustering provides insight.
 
