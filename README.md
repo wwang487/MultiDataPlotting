@@ -29,6 +29,7 @@ import multidataprocessing as mdp
 The `plot_clustered_data` function in the advanced data visualization toolkit allows for the visual representation of data clusters from a pandas DataFrame. This function is highly versatile, supporting multiple clustering methods and customizable plot aesthetics, including the option to draw smoothed boundaries around clusters. It is particularly useful in fields such as market segmentation, bioinformatics, environmental analysis, and any other area where data clustering provides insight.
 
 _Functionality_
+
 This function provides a detailed clustering and visualization of multidimensional data. Users can select specific columns for clustering and choose different axes for visualization. It supports various clustering algorithms, and it can visually delineate cluster boundaries, enhancing the interpretability of cluster separation and density. This makes it an invaluable tool for comprehensive data analysis and presentation.
 
 _Parameters_
