@@ -7,3 +7,5 @@ seaborn
 scipy
 datetime
 scikit-learn
+mpl_toolkits
+contextily
