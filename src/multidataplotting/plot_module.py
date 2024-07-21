@@ -1792,3 +1792,76 @@ def plot_heatmap_on_geomap(data, top_left_lat, top_left_lon, bottom_right_lat, b
         plt.show()
     if save_path:
         plt.savefig(save_path, dpi=600, bbox_inches='tight')
+        
+def plot_quadrant_data(data, x_threshold, y_threshold, category_names=None, xlabel='Centroid offset (mm)', ylabel='Edge height difference (mm)',
+                       title='Classification of Data Relative to Threshold Lines', xlabel_size=12, ylabel_size=12, title_size=14,
+                       marker_color='viridis', marker_size=100, x_tick_interval=None, y_tick_interval=None,
+                       tick_font='Arial', tick_font_size=10, is_show=True, is_legend=True, save_path=None):
+    """
+    Plots the classified data with different colors for each category, with customizable visual features.
+    
+    :param data: DataFrame with 'x', 'y' columns.
+    :param x_threshold: Threshold value for the x-axis.
+    :param y_threshold: Threshold value for the y-axis.
+    :param category_names: Custom names for the categories.
+    :param xlabel: Label for the x-axis.
+    :param ylabel: Label for the y-axis.
+    :param title: Title of the plot.
+    :param xlabel_size, ylabel_size, title_size: Font sizes for the axis labels and title.
+    :param marker_color: Base color map or list of colors for the markers.
+    :param marker_size: Size of the markers.
+    :param x_tick_interval, y_tick_interval: Custom interval for the x and y ticks.
+    :param tick_font, tick_font_size: Font and size for the tick labels.
+    :param is_show: If True, display the plot.
+    :param is_legend: If True, display the legend.
+    :param save_path: If provided, save the plot to this path.
+    """
+    conditions = [
+        (data['x'] < x_threshold) & (data['y'] > y_threshold),
+        (data['x'] > x_threshold) & (data['y'] > y_threshold),
+        (data['x'] < x_threshold) & (data['y'] < y_threshold),
+        (data['x'] > x_threshold) & (data['y'] < y_threshold),
+        (data['x'] == x_threshold) | (data['y'] == y_threshold)
+    ]
+    if category_names is None:
+        category_names = ['Above Left', 'Above Right', 'Below Left', 'Below Right', 'On Line']
+    data['Category'] = np.select(conditions, category_names, default='On Line')
+    
+    fig, ax = plt.subplots(figsize=(10, 8))
+    categories = np.unique(data['Category'])
+    
+    if isinstance(marker_color, str):
+        colors = plt.cm.get_cmap(marker_color)(np.linspace(0, 1, len(categories)))
+    else:
+        colors = marker_color
+    
+    for category, color in zip(categories, colors):
+        subset = data[data['Category'] == category]
+        ax.scatter(subset['x'], subset['y'], s=marker_size, c=[color], label=category)
+    
+    # Draw threshold lines
+    x_min, x_max = data['x'].min(), data['x'].max()
+    y_min, y_max = data['y'].min(), data['y'].max()
+    x_delta, y_delta = x_max - x_min, y_max - y_min
+    ax.axhline(y=y_threshold, color='gray', linestyle='--')
+    ax.axvline(x=x_threshold, color='gray', linestyle='--')
+    ax.set_xlim(x_min - 0.1 * x_delta, x_max + 0.1 * x_delta)
+    ax.set_ylim(y_min - 0.1 * y_delta, y_max + 0.1 * y_delta)
+    ax.set_xlabel(xlabel, fontsize=xlabel_size)
+    ax.set_ylabel(ylabel, fontsize=ylabel_size)
+    ax.set_title(title, fontsize=title_size)
+
+    if x_tick_interval is not None:
+        ax.xaxis.set_major_locator(plt.MultipleLocator(x_tick_interval))
+    if y_tick_interval is not None:
+        ax.yaxis.set_major_locator(plt.MultipleLocator(y_tick_interval))
+
+    plt.xticks(fontsize=tick_font_size, fontname=tick_font)
+    plt.yticks(fontsize=tick_font_size, fontname=tick_font)
+
+    if is_legend:
+        ax.legend(title='Category')
+    if save_path:
+        plt.savefig(save_path, dpi=600)
+    if is_show:
+        plt.show()
