@@ -177,6 +177,57 @@ mdp.plot_heatmap_on_geomap(data, 48.0, -123.0, 45.0, -120.0, threshold=0.75, map
 
 ![alt text](https://github.com/wwang487/MultiDataPlotting/blob/main/picture/heatgeomap.png?raw=true)
 
+
+### Plotting Data by Quadrants
+
+The `plot_quadrant_data` function in our toolkit provides a robust method for displaying data points categorized by defined thresholds on both the x and y axes. This function is ideal for applications in fields such as finance, meteorology, and health sciences where data is often analyzed by its position relative to critical thresholds.
+
+_Functionality_
+
+This function categorizes and visualizes data points into quadrants based on user-specified x and y threshold values. It supports customization of various plot aspects including category names, marker aesthetics, and plot labels, enhancing the interpretability and visual appeal of the output.
+
+_Parameters_
+- **data** (pandas.DataFrame): The DataFrame must contain 'x' and 'y' columns.
+- **x_threshold** (float): Threshold value for categorizing data along the x-axis.
+- **y_threshold** (float): Threshold value for categorizing data along the y-axis.
+- **category_names** (list, optional): Custom names for each category; default categories are 'Above Left', 'Above Right', 'Below Left', 'Below Right', 'On Line'.
+- **xlabel** (str, optional): Label for the x-axis. Default is 'Centroid offset (mm)'.
+- **ylabel** (str, optional): Label for the y-axis. Default is 'Edge height difference (mm)'.
+- **title** (str, optional): Title of the plot. Default is 'Classification of Data Relative to Threshold Lines'.
+- **xlabel_size**, **ylabel_size**, **title_size** (int, optional): Font sizes for the x-axis label, y-axis label, and title.
+- **marker_color** (str or list, optional): Color map or list of colors for the markers. Default is 'viridis'.
+- **marker_size** (int, optional): Size of the markers. Default is 100.
+- **x_tick_interval**, **y_tick_interval** (float, optional): Custom intervals for x and y axis ticks.
+- **tick_font** (str, optional): Font family for tick labels. Default is 'Arial'.
+- **tick_font_size** (int, optional): Font size for tick labels. Default is 10.
+- **is_show** (bool, optional): If True, display the plot on screen. Default is True.
+- **is_legend** (bool, optional): If True, display a legend for the categories. Default is True.
+- **save_path** (str, optional): File path to save the plot image, if desired.
+
+_Code Example_
+
+```python
+import pandas as pd
+import numpy as np
+import multidataplotting as mdp
+
+# Example data
+np.random.seed(0)
+data = pd.DataFrame({
+    'x': np.random.normal(0, 50, 300),
+    'y': np.random.normal(0, 5, 300)
+})
+
+# Define thresholds
+x_threshold = 0  # Example threshold for x-axis
+y_threshold = 0  # Example threshold for y-axis
+
+# Classify the data
+mdp.plot_quadrant_data(data, x_threshold, y_threshold)
+```
+
+![alt text](https://github.com/wwang487/MultiDataPlotting/blob/main/picture/quadrant.png?raw=true)
+
 ### Plotting Time Histograms
 
 The `plot_time_histogram` function creates histograms based on time data, ideal for visualizing event frequencies over specific intervals. This method helps in identifying trends and patterns by illustrating how event occurrences are distributed across different time points.
