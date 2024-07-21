@@ -20,7 +20,8 @@ from sklearn.preprocessing import StandardScaler
 from scipy.spatial import ConvexHull
 from scipy.interpolate import interp1d
 from matplotlib.patches import Polygon
-
+from mpl_toolkits.basemap import Basemap
+import contextily as ctx
 
 class __HandlerRect(HandlerPatch):
     def create_artists(self, legend, orig_handle, xdescent, ydescent, width, height, fontsize, trans):
@@ -1667,3 +1668,60 @@ def plot_clustered_data(df, columns, x_index, y_index, n_clusters=3, method='KMe
         plt.show()
     else:
         plt.close()
+        
+def plot_heatmap_on_geomap(data, top_left_lat, top_left_lon, bottom_right_lat, bottom_right_lon, 
+                           threshold, cmap='jet', map_choice='base', zoom=10, is_show=True, save_path=None,
+                           title = None, colorbar_label = None,
+                           fig_size=(8, 6), x_tick_interval=None, y_tick_interval=None, tick_format="{:.2f}"):
+    """
+    Plots a heatmap on a geographic map with customizable tick labels.
+    """
+    # Set up figure and axes
+    fig, ax = plt.subplots(figsize=fig_size)
+
+    # Generate grid of coordinates
+    lons = np.linspace(top_left_lon, bottom_right_lon, data.shape[1])
+    lats = np.linspace(top_left_lat, bottom_right_lat, data.shape[0])
+    x, y = np.meshgrid(lons, lats)
+
+    # Apply transparency threshold
+    alpha = np.ones_like(data)
+    alpha[data <= threshold] = 0
+
+    # Map plotting
+    if map_choice == 'base':
+        m = Basemap(projection='merc', llcrnrlat=bottom_right_lat, urcrnrlat=top_left_lat,
+                    llcrnrlon=top_left_lon, urcrnrlon=bottom_right_lon, resolution='i', ax=ax)
+        x, y = m(lons, lats)
+        heatmap = m.pcolormesh(x, y, data, shading='auto', cmap=cmap, alpha=alpha)
+        m.drawcoastlines()
+        m.drawcountries()
+
+        # Custom format function
+        def custom_fmt(value):
+            return tick_format.format(value)
+
+        # Draw meridians and parallels with custom labels
+        if x_tick_interval:
+            m.drawmeridians(np.arange(round(top_left_lon), round(bottom_right_lon), x_tick_interval), labels=[0,0,0,1], fmt=custom_fmt)
+        if y_tick_interval:
+            m.drawparallels(np.arange(round(bottom_right_lat), round(top_left_lat), y_tick_interval), labels=[1,0,0,0], fmt=custom_fmt)
+
+    elif map_choice == 'osm':
+        heatmap = ax.pcolormesh(x, y, data, cmap=cmap, alpha=alpha, shading='auto')
+        ctx.add_basemap(ax, crs="EPSG:4326", source=ctx.providers.OpenStreetMap.Mapnik, zoom=zoom)
+        ax.set_xlim([top_left_lon, bottom_right_lon])
+        ax.set_ylim([top_left_lat, bottom_right_lat])
+    
+    colorbar_label = colorbar_label if colorbar_label is not None else 'Data Intensity'
+    title = title if title is not None else 'Heatmap Overlay on Geomap'
+
+    # Add color bar and title
+    plt.colorbar(heatmap, label=colorbar_label)
+    plt.title(title)
+
+    # Display or save
+    if is_show:
+        plt.show()
+    if save_path:
+        plt.savefig(save_path, dpi=600, bbox_inches='tight')
