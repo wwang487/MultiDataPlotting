@@ -22,6 +22,7 @@ from scipy.interpolate import interp1d
 from matplotlib.patches import Polygon
 from mpl_toolkits.basemap import Basemap
 import contextily as ctx
+from matplotlib.lines import Line2D
 
 class __HandlerRect(HandlerPatch):
     def create_artists(self, legend, orig_handle, xdescent, ydescent, width, height, fontsize, trans):
@@ -2041,6 +2042,99 @@ def plot_bins_with_cdf(data, cat_key_name='city', val_key_name='profit', cum_key
         plt.savefig(save_path)
 
     # Display or hide the plot based on is_show
+    if is_show:
+        plt.show()
+    else:
+        plt.close()
+        
+def plot_surface_with_residuals(x_data, y_data, z_data,
+                         xlabel='X', ylabel='Y', zlabel='Z',
+                         x_tick_interval=None, y_tick_interval=None, z_tick_interval=None,
+                         tick_fontsize=10,
+                         line_color='orange', line_thickness=2,
+                         dot_color='red', dot_size=5,
+                         surface_cmap='viridis', alpha=0.5,
+                         is_legend=True, legend_loc='upper right',
+                         is_show=True, save_path=None):
+    """
+    Fits a polynomial surface to the given x_data, y_data, z_data, and plots the surface with residuals.
+    
+    :param x_data, y_data, z_data: Coordinates of the data points.
+    :param xlabel, ylabel, zlabel: Labels for the axes.
+    :param x_tick_interval, y_tick_interval, z_tick_interval: Interval for the ticks on the x, y, and z axes.
+    :param tick_fontsize: Font size for the tick labels.
+    :param line_color, dot_color: Colors for the lines and dots.
+    :param line_thickness, dot_size: Thickness of lines and size of dots.
+    :param surface_cmap: Color map for the surface plot.
+    :param alpha: Transparency of the surface plot.
+    :param is_legend: Boolean to toggle legend display.
+    :param legend_loc: Location of the legend.
+    :param is_show: Boolean to toggle display of the plot.
+    :param save_path: Path to save the plot image.
+    """
+    def __polynomial_surface(xy, a, b, c, d, e, f):
+        x, y = xy
+        return a + b*x + c*y + d*x**2 + e*y**2 + f*x*y
+    
+    # Prepare data for fitting
+    xy_data = np.vstack((x_data, y_data))
+    
+    # Fit the model to the data
+    popt, pcov = curve_fit(__polynomial_surface, xy_data, z_data, maxfev=10000)
+    
+    # Generate data for the surface plot
+    x_range = np.linspace(min(x_data), max(x_data), 30)
+    y_range = np.linspace(min(y_data), max(y_data), 30)
+    x_grid, y_grid = np.meshgrid(x_range, y_range)
+    z_grid = __polynomial_surface(np.vstack((x_grid.ravel(), y_grid.ravel())), *popt).reshape(x_grid.shape)
+    
+    # Plotting
+    fig = plt.figure()
+    ax = fig.add_subplot(111, projection='3d')
+    
+    # Plot the surface
+    ax.plot_surface(x_grid, y_grid, z_grid, cmap=surface_cmap, alpha=alpha)
+    
+    # Plot the data points
+    ax.scatter(x_data, y_data, z_data, color=dot_color, s=dot_size)
+    
+    # Calculate and plot residuals
+    z_pred = __polynomial_surface(xy_data, *popt)
+    residuals = z_data - z_pred
+    for (xi, yi, zi, ri) in zip(x_data, y_data, z_data, residuals):
+        ax.plot([xi, xi], [yi, yi], [zi, zi - ri], color=line_color, linewidth=line_thickness)
+
+    # Set labels
+    ax.set_xlabel(xlabel)
+    ax.set_ylabel(ylabel)
+    ax.set_zlabel(zlabel)
+    
+    # Set tick intervals if specified
+    if x_tick_interval:
+        ax.xaxis.set_major_locator(plt.MultipleLocator(x_tick_interval))
+    if y_tick_interval:
+        ax.yaxis.set_major_locator(plt.MultipleLocator(y_tick_interval))
+    if z_tick_interval:
+        ax.zaxis.set_major_locator(plt.MultipleLocator(z_tick_interval))
+
+    ax.tick_params(axis='both', which='major', labelsize=tick_fontsize)
+    
+    # Create custom legend handles
+    custom_lines = [Line2D([0], [0], color=dot_color, marker='o', linestyle='None', markersize=np.sqrt(dot_size)),
+                    Line2D([0], [0], color=line_color, lw=line_thickness)]
+    
+    # Add legend
+    if is_legend:
+        ax.legend(custom_lines, ['Data Points', 'Residuals'], loc=legend_loc)
+    
+    # Layout
+    plt.tight_layout()
+
+    # Optionally save the plot
+    if save_path:
+        plt.savefig(save_path)
+
+    # Display or hide the plot
     if is_show:
         plt.show()
     else:
