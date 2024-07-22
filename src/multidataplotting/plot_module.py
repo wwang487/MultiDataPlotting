@@ -1948,3 +1948,100 @@ def plot_ridgelines(data, categories, x_label, title, cmap=None, tick_interval=N
         plt.show()
     else:
         plt.close()
+
+def plot_bins_with_cdf(data, cat_key_name='city', val_key_name='profit', cum_key_name=None, flip_axes=False,
+                       bar_color='blue', line_color='orange', marker_type='o', marker_face_color='white', marker_size=10,
+                       title='Outlets Profit Analysis', title_size=16, title_font='Arial',
+                       xlabel='Profit ($)', ylabel='Cumulative Percentage (%)', label_font='Arial', label_size=14,
+                       tick_font='Arial', tick_size=12, legend_loc='upper center', fig_size=(10, 8), is_legend=True, is_show=True, save_path=None):
+    """
+    Creates a bar chart with an overlaid line chart for bins and CDFs, mainly used for profit analysis, with adjusted axes and line extension.
+
+    :param data: DataFrame or list of dictionaries with specified category and value keys.
+    :param cat_key_name: Key for categorical data in DataFrame or dict.
+    :param val_key_name: Key for value data in DataFrame or dict.
+    :param cum_key_name: Key for cumulative data in DataFrame or dict, if pre-calculated.
+    :param flip_axes: Boolean, flips the axes for horizontal view.
+    :param bar_color, line_color: Colors for the bar and line plots.
+    :param marker_type, marker_face_color, marker_size: Customizations for markers in the line plot.
+    :param title, title_size, title_font: Customizations for the plot title.
+    :param xlabel, ylabel, label_font, label_size: Customizations for the axes labels.
+    :param tick_font, tick_size: Font customizations for ticks.
+    :param legend_loc: Location of the legend.
+    :param fig_size: Figure size.
+    :param is_legend: Toggle display of legend.
+    :param is_show: Toggle display of the plot.
+    :param save_path: Path to save the plot image, if specified.
+    """
+    if isinstance(data, list):
+        data = pd.DataFrame(data)
+
+    plt.rcParams['figure.facecolor'] = 'white'
+    plt.rcParams['axes.facecolor'] = 'white'
+    fig, ax1 = plt.subplots(figsize=fig_size)
+
+    bar_positions = np.arange(len(data[cat_key_name]))  # positions for the bars
+
+    if flip_axes:
+        ax1.barh(bar_positions, data[val_key_name], color=bar_color, label='Profit')
+        ax1.set_yticks(bar_positions)
+        ax1.set_yticklabels(data[cat_key_name], fontsize=tick_size, fontname=tick_font)
+        ax1.set_xlabel(xlabel, fontsize=label_size, fontname=label_font)
+        ax2 = ax1.twiny()
+        ax2.set_xlim(0, 105)  # Align zero positions of two axes
+    else:
+        ax1.bar(bar_positions, data[val_key_name], color=bar_color, label='Profit')
+        ax1.set_xticks(bar_positions)
+        ax1.set_xticklabels(data[cat_key_name], rotation=45, ha='right', fontsize=tick_size, fontname=tick_font)
+        ax1.set_ylabel(xlabel, fontsize=label_size, fontname=label_font)
+        ax2 = ax1.twinx()
+        ax2.set_ylim(0, 105)  # Ensure y-axis for cumulative starts at 0
+
+    extended_positions = np.append(bar_positions, bar_positions[-1] + 1)  # Extend line for visual improvement
+
+    if cum_key_name is not None:
+        extended_cumulative = np.append(data[cum_key_name], data[cum_key_name].iloc[-1])
+    else:
+        # Calculate cumulative percentage if not provided
+        extended_cumulative = [sum(data[val_key_name][:i+1]) / sum(data[val_key_name]) * 100 for i in range(len(data[val_key_name]))]
+        extended_cumulative.append(extended_cumulative[-1])
+
+    # Plot the extended line for cumulative data
+    if flip_axes:
+        ax2.plot(extended_cumulative[-2:], extended_positions[-2:]- 0.5, '-', color=line_color, markerfacecolor=marker_face_color,
+                 markersize=marker_size, label='Cumulative %')
+        ax2.plot(extended_cumulative[:-1], extended_positions[:-1] - 0.5, marker_type + '-', color=line_color, markerfacecolor=marker_face_color,
+                 markersize=marker_size, label='Cumulative %')
+        ax2.fill_betweenx(extended_positions - 0.5, 0, extended_cumulative, color=line_color, alpha=0.1)
+    else:
+        ax2.plot(extended_positions[-2:]- 0.5, extended_cumulative[-2:], '-', color=line_color, markerfacecolor=marker_face_color,
+                 markersize=marker_size, label='Cumulative %')
+        ax2.plot(extended_positions[:-1] - 0.5, extended_cumulative[:-1], marker_type + '-', color=line_color, markerfacecolor=marker_face_color,
+                 markersize=marker_size, label='Cumulative %')
+        ax2.fill_between(extended_positions - 0.5, 0, extended_cumulative, color=line_color, alpha=0.1)
+    
+    # if flip_Axes, we also need to change the order of y reversely
+    if flip_axes:
+       plt.gca().invert_yaxis()
+    
+    ax2.set_ylabel(ylabel, fontsize=label_size, fontname=label_font)
+
+    # Set title and layout
+    ax1.set_title(title, fontsize=title_size, fontname=title_font)
+    plt.tight_layout()
+    # print(ax2.get_legend_handles_labels())
+    # Add legend
+    if is_legend:
+        lines_1, labels_1 = ax1.get_legend_handles_labels()
+        lines_2, labels_2 = [ax2.get_legend_handles_labels()[0][1]], [ax2.get_legend_handles_labels()[1][1]]
+        ax2.legend(lines_1 + lines_2, labels_1 + labels_2, loc=legend_loc)
+
+    # Optionally save the plot
+    if save_path:
+        plt.savefig(save_path)
+
+    # Display or hide the plot based on is_show
+    if is_show:
+        plt.show()
+    else:
+        plt.close()
