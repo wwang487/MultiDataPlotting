@@ -555,6 +555,59 @@ mdp.plot_bar_plots(
 
 ![alt text](https://github.com/wwang487/MultiDataPlotting/blob/main/picture/barplot.png?raw=true)
 
+### Plot Bins with Cumulative Distribution Function (CDF)
+
+The `plot_bins_with_cdf` function provides a powerful way to visualize data distributions through a combined bar and line chart. This function is perfect for performing profit analysis across different categories, such as cities or outlets, and allows for an intuitive visual representation of both absolute and cumulative data.
+
+_Functionality_
+
+This function creates a dual-axis plot where one axis shows the raw data values (e.g., profits) as bars, and the other axis displays the cumulative distribution as a line chart with optional markers. The function supports both vertical and horizontal plot orientations, making it versatile for various reporting styles.
+
+_Parameters_
+- **data**: DataFrame or list of dictionaries containing the data. Each entry should have keys corresponding to the `cat_key_name` and `val_key_name`, and optionally `cum_key_name`.
+- **cat_key_name**: The name of the column or key that contains categorical data (default 'city').
+- **val_key_name**: The name of the column or key that contains value data (default 'profit').
+- **cum_key_name**: The name of the column or key for pre-calculated cumulative data, if available (optional).
+- **flip_axes**: Boolean flag to switch between vertical and horizontal plot orientations (default False).
+- **bar_color**, **line_color**: Colors used for the bar and line plots, respectively.
+- **marker_type**, **marker_face_color**, **marker_size**: Customizations for the markers in the line plot.
+- **title**, **title_size**, **title_font**: Customizations for the plot's title.
+- **xlabel**, **ylabel**, **label_font**, **label_size**: Labels for the x and y axes, and their styling.
+- **tick_font**, **tick_size**: Font customizations for axis tick labels.
+- **legend_loc**: Location of the legend on the plot.
+- **fig_size**: The size of the figure to create.
+- **is_legend**: Whether to display the legend (default True).
+- **is_show**: Whether to display the plot after creation (default True).
+- **save_path**: Optional path to save the plot image.
+
+_Code Example_
+
+```python
+import pandas as pd
+import numpy as np
+import multidataplotting as mdp
+
+# Example data
+data = [
+    {'city': 'Dallas', 'profit': 14400, 'cumulative': 15.44},
+    {'city': 'Philadelphia', 'profit': 13600, 'cumulative': 30.02},
+    {'city': 'Austin', 'profit': 13500, 'cumulative': 44.43},
+    {'city': 'San Diego', 'profit': 11500, 'cumulative': 57.25},
+    {'city': 'Chicago', 'profit': 9550, 'cumulative': 67.48},
+    {'city': 'San Jose', 'profit': 7650, 'cumulative': 75.64},
+    {'city': 'San Antonio', 'profit': 7130, 'cumulative': 82.26},
+    {'city': 'Phoenix', 'profit': 7020, 'cumulative': 90.77},
+    {'city': 'Los Angeles', 'profit': 4720, 'cumulative': 95.82},
+    {'city': 'Houston', 'profit': 3950, 'cumulative': 100.00}
+]
+
+# Plotting
+plot_bins_with_cdf(data, bar_color='#4daf4a', flip_axes=False)  # Change flip_axes to True for horizontal bars
+```
+
+![alt text](https://github.com/wwang487/MultiDataPlotting/blob/main/picture/bin_cdf.png?raw=true)
+
+
 ### Plotting 2D Heatmaps
 
 The `plot_2D_heatmap` function in the multidataprocessing package generates a two-dimensional heatmap from a dictionary of tuple pairs representing coordinate points and their respective frequency or intensity values. This visualization tool is especially useful for representing the density or intensity distribution across a two-dimensional space, making it applicable in areas like geographical data analysis, heat distribution, market density studies, and more.
