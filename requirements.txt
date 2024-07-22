@@ -8,3 +8,4 @@ scipy
 datetime
 scikit-learn
 contextily
+python-ternary
