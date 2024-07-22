@@ -2185,3 +2185,77 @@ def plot_ternary(data, labels, scale=100, tick_interval=10, color_map='viridis',
         plt.show()
     if save_path:
         plt.savefig(save_path, dpi=600, bbox_inches='tight')
+        
+def plot_radar_chart(data, figsize=(6, 6), tick_font_size=10, tick_font_name='Arial',
+                     title="Ice Cream Order Analysis", title_font_size=20, title_font_name='Arial',
+                     is_legend=True, is_show=True, save_path=None,
+                     color_choice='viridis', line_style='-', line_thickness=2,
+                     marker_size=5, marker_type='o', marker_color=None):
+    """
+    Creates a radar chart with dynamic styling options for lines and markers.
+
+    :param data: DataFrame with index as categories (e.g., months) and columns as data series (e.g., flavors).
+    :param figsize, tick_font_size, tick_font_name, title, etc.: Styling parameters for the plot.
+    :param color_choice: Color map name or list of colors.
+    :param line_style: Style of lines, single value or list.
+    :param line_thickness: Thickness of lines, single value or list.
+    :param marker_size: Size of markers, single value or list.
+    :param marker_type: Type of markers, single value or list.
+    :param marker_color: Color of markers, single value or list.
+    """
+    labels = data.index
+    num_vars = len(labels)
+
+    # Calculate angles for the radar chart
+    angles = np.linspace(0, 2 * np.pi, num_vars, endpoint=False).tolist()
+    angles += angles[:1]  # Close the radar plot by returning to the start
+
+    fig, ax = plt.subplots(figsize=figsize, subplot_kw=dict(polar=True))
+    ax.set_theta_offset(np.pi / 2)
+    ax.set_theta_direction(-1)
+
+    ax.set_xticks(angles[:-1])
+    ax.set_xticklabels(labels, fontsize=tick_font_size, fontname=tick_font_name)
+
+    plt.title(title, size=title_font_size, color='black', y=1.1, fontname=title_font_name)
+
+    # Handle dynamic color settings
+    if isinstance(color_choice, str):
+        cmap = plt.get_cmap(color_choice)
+        colors = [cmap(i / len(data.columns)) for i in range(len(data.columns))]
+    else:
+        colors = color_choice
+
+    # Determine if properties are lists or single values
+    def expand_property(prop, length):
+        if isinstance(prop, list):
+            if len(prop) != length:
+                raise ValueError(f"Length of '{prop}' must be the same as the number of data columns")
+            return prop
+        else:
+            return [prop] * length
+
+    # Expand properties for multiple categories
+    line_styles = expand_property(line_style, len(data.columns))
+    line_thicknesses = expand_property(line_thickness, len(data.columns))
+    marker_sizes = expand_property(marker_size, len(data.columns))
+    marker_types = expand_property(marker_type, len(data.columns))
+    marker_colors = expand_property(marker_color if marker_color else colors, len(data.columns))
+
+    # Plot each category with its specific style
+    for idx, (column, style, thickness, msize, mtype, mcolor) in enumerate(zip(data.columns, line_styles, line_thicknesses, marker_sizes, marker_types, marker_colors)):
+        values = data[column].tolist()
+        values += values[:1]  # Close the data loop
+        ax.plot(angles, values, mtype + style, linewidth=thickness, label=column, color=mcolor, markersize=msize)
+        ax.fill(angles, values, color=mcolor, alpha=0.25)
+
+    if is_legend:
+        plt.legend(loc='upper right', bbox_to_anchor=(1.1, 1.1))
+
+    if save_path:
+        plt.savefig(save_path, dpi=300, bbox_inches='tight')
+
+    if is_show:
+        plt.show()
+    else:
+        plt.close()
