@@ -1794,7 +1794,7 @@ def plot_heatmap_on_geomap(data, top_left_lat, top_left_lon, bottom_right_lat, b
         plt.savefig(save_path, dpi=600, bbox_inches='tight')
         
 def plot_quadrant_data(data, x_threshold, y_threshold, category_names=None, xlabel='Centroid offset (mm)', ylabel='Edge height difference (mm)',
-                       title='Classification of Data Relative to Threshold Lines', xlabel_size=12, ylabel_size=12, title_size=14,
+                       title='Classification of Data Relative to Threshold Lines', xlabel_size=12, ylabel_size=12, title_size=14, fig_size=(10, 8),
                        marker_color='viridis', marker_size=100, x_tick_interval=None, y_tick_interval=None,
                        tick_font='Arial', tick_font_size=10, is_show=True, is_legend=True, save_path=None):
     """
@@ -1803,6 +1803,7 @@ def plot_quadrant_data(data, x_threshold, y_threshold, category_names=None, xlab
     :param data: DataFrame with 'x', 'y' columns.
     :param x_threshold: Threshold value for the x-axis.
     :param y_threshold: Threshold value for the y-axis.
+    :param fig_size: Size of the figure.
     :param category_names: Custom names for the categories.
     :param xlabel: Label for the x-axis.
     :param ylabel: Label for the y-axis.
@@ -1827,7 +1828,7 @@ def plot_quadrant_data(data, x_threshold, y_threshold, category_names=None, xlab
         category_names = ['Above Left', 'Above Right', 'Below Left', 'Below Right', 'On Line']
     data['Category'] = np.select(conditions, category_names, default='On Line')
     
-    fig, ax = plt.subplots(figsize=(10, 8))
+    fig, ax = plt.subplots(figsize=fig_size)
     categories = np.unique(data['Category'])
     
     if isinstance(marker_color, str):
@@ -1865,3 +1866,85 @@ def plot_quadrant_data(data, x_threshold, y_threshold, category_names=None, xlab
         plt.savefig(save_path, dpi=600)
     if is_show:
         plt.show()
+        
+def plot_ridgelines(data, categories, x_label, title, cmap=None, tick_interval=None, tick_size=10, tick_font='Arial',
+                          category_size=14, category_font='Arial', title_size=16, save_path=None, is_show=True, is_legend=True, fig_size=(10, 6)):
+    """
+    Creates a ridgeline plot from the given data using updated bandwidth parameters.
+
+    :param data: Dictionary or DataFrame containing the data for each category.
+    :param categories: List of categories (e.g., months).
+    :param x_label: Label for the x-axis.
+    :param title: Title of the plot.
+    :param cmap: Color palette to use. If None, use a black and white scheme.
+    :param tick_interval: Interval for x-axis ticks. If None, use default.
+    :param tick_size: Font size for ticks.
+    :param tick_font: Font family for ticks.
+    :param category_size: Font size for category labels.
+    :param category_font: Font family for category labels.
+    :param title_size: Font size for the plot title.
+    :param save_path: Path to save the plot image, if any.
+    :param is_show: Whether to display the plot.
+    :param is_legend: Whether to display a legend.
+    :param fig_size: Size of the figure (width, height).
+    """
+    # If the data is a dictionary, convert it to a DataFrame
+    if isinstance(data, dict):
+        all_data = []
+        for category, values in data.items():
+            for value in values:
+                all_data.append({'Category': category, 'Value': value})
+        data = pd.DataFrame(all_data)
+    else:
+        data.columns = ['Category', 'Value']
+
+    # Set the style and palette
+    sns.set_theme(style="white", rc={"axes.facecolor": (0, 0, 0, 0), "font.size": tick_size, "font.family": tick_font})
+    if cmap is None:
+        pal = ['black' if i % 2 == 0 else 'gray' for i in range(len(categories))]
+    else:
+        pal = sns.color_palette(cmap, len(categories))
+
+    # Create the FacetGrid
+    g = sns.FacetGrid(data, row='Category', hue='Category', aspect=15, height=0.75, palette=pal)
+    
+    # Map the densities using the updated bw_adjust parameter
+    g.map(sns.kdeplot, 'Value', clip_on=False, shade=True, alpha=1, lw=1.5, bw_adjust=0.5)
+    g.map(sns.kdeplot, 'Value', clip_on=False, color="w", lw=2, bw_adjust=0.5)
+    g.map(plt.axhline, y=0, lw=2, clip_on=False)
+
+    # Define and use a simple function to label the plot in axes coordinates
+    def label(x, color, label):
+        ax = plt.gca()
+        ax.text(0, 0.2, label, fontweight="bold", color=color, fontsize=category_size, fontname=category_font,
+                ha="left", va="center", transform=ax.transAxes)
+
+    g.map(label, "Value")
+
+    # Set the subplots to overlap and adjust the x-label
+    g.figure.subplots_adjust(hspace=-0.25)
+    g.set_titles("")
+    g.set(yticks=[], ylabel="")
+    g.despine(bottom=True, left=True)
+    g.fig.set_size_inches(fig_size)
+    g.figure.suptitle(title, fontsize=title_size)
+    g.figure.subplots_adjust(top=0.95)
+    g.set_xlabels(x_label)
+
+    # Customize x-tick interval
+    if tick_interval is not None:
+        plt.gca().xaxis.set_major_locator(plt.MultipleLocator(tick_interval))
+
+    # Add legend
+    if is_legend:
+        g.add_legend()
+
+    # Save the plot
+    if save_path:
+        plt.savefig(save_path)
+
+    # Show or hide the plot
+    if is_show:
+        plt.show()
+    else:
+        plt.close()
