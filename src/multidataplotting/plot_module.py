@@ -24,6 +24,7 @@ from mpl_toolkits.basemap import Basemap
 import contextily as ctx
 from matplotlib.lines import Line2D
 import ternary
+import matplotlib.path as mpath
 
 class __HandlerRect(HandlerPatch):
     def create_artists(self, legend, orig_handle, xdescent, ydescent, width, height, fontsize, trans):
@@ -2259,3 +2260,83 @@ def plot_radar_chart(data, fig_size=(6, 6), tick_font_size=10, tick_font_name='A
         plt.show()
     else:
         plt.close()
+        
+def plot_heatmap_with_bound_and_curves(data, boundary_data, condition_lines, condition_labels,
+                                       fig_size=(10, 7), cmap='viridis', colorbar_label='Engine Performance (HP)',
+                                       boundary_color='red', boundary_linewidth=2, line_styles=None, line_colors=None,
+                                       line_widths=None, title="Baseline Torque Speed Map", title_size=16,
+                                       xlabel='Engine Speed (rpm)', ylabel='Torque (lb-ft)', label_font_size=12,
+                                       tick_font_size=10, is_legend=True, is_show=True, save_path=None):
+    """
+    Plots a contour plot for performance data limited by a boundary curve and overlays condition lines with annotations.
+    
+    :param data: DataFrame with columns 'x', 'y', 'z' for plotting.
+    :param boundary_data: DataFrame with 'x', 'y' defining the boundary.
+    :param condition_lines: List of DataFrames each containing 'x', 'y' for condition lines.
+    :param condition_labels: List of strings for labeling each condition line.
+    :param fig_size: Tuple of figure size.
+    :param cmap: Colormap for the heatmap.
+    :param colorbar_label: Label for the color bar.
+    :param boundary_color, boundary_linewidth: Style for the boundary line.
+    :param line_styles, line_colors, line_widths: Styles for each condition line.
+    :param title, title_size: Plot title and font size.
+    :param xlabel, ylabel, label_font_size: Axis labels and font size.
+    :param tick_font_size: Font size for the tick labels.
+    :param is_legend: Whether to display the legend.
+    :param is_show: If True, show the plot, otherwise save it.
+    :param save_path: If provided, save the plot to this path.
+    """
+    fig, ax = plt.subplots(figsize=fig_size)
+
+    # Define grid and interpolate z values
+    x = np.linspace(min(data['x']), max(data['x']), 100)
+    y = np.linspace(min(data['y']), max(data['y']), 100)
+    X, Y = np.meshgrid(x, y)
+    Z = griddata((data['x'], data['y']), data['z'], (X, Y), method='linear')
+
+    # Generate contour plot
+    contour = ax.contourf(X, Y, Z, levels=15, cmap=cmap, alpha=0.6, vmin=min(data['z']), vmax=max(data['z']))
+    cbar = fig.colorbar(contour)
+    cbar.set_label(colorbar_label, fontsize = label_font_size)
+
+    # Plot boundary
+    ax.plot(boundary_data['x'], boundary_data['y'], color=boundary_color, linewidth=boundary_linewidth, label='Boundary')
+    boundary_data['x'] = boundary_data['x'].tolist() + [max(data['x']), min(data['x'])]
+    boundary_data['y'] = boundary_data['y'].tolist() + [min(data['y']), min(data['y'])]
+    # Clip the contour inside the boundary
+    path = mpath.Path(list(zip(boundary_data['x'], boundary_data['y'])))
+    patch = patches.PathPatch(path, visible=False)
+    ax.add_patch(patch)
+    for collection in contour.collections:
+        collection.set_clip_path(patch)
+
+    # Ensure that lists for line properties are set up correctly
+    if line_styles is None:
+        line_styles = ['-'] * len(condition_lines)
+    if line_colors is None:
+        line_colors = ['black'] * len(condition_lines)
+    if line_widths is None:
+        line_widths = [2] * len(condition_lines)
+        
+    for line, label, style, color, width in zip(condition_lines, condition_labels, line_styles, line_colors, line_widths):
+        ax.plot(line['x'], line['y'], style, color=color, linewidth=width)
+        point_index = round(len(line['x']) * 0.95)  # Position for annotation
+        ax.annotate(label, xy=(line['x'][point_index], line['y'][point_index]), xytext=(10, 5),
+                    textcoords='offset points', ha='center', va='bottom', fontsize=9, color=color, weight='bold')
+
+    # Set labels and title
+    ax.set_xlabel(xlabel, fontsize=label_font_size)
+    ax.set_ylabel(ylabel, fontsize=label_font_size)
+    ax.set_title(title, size=title_size)
+    ax.set_xticklabels(ax.get_xticks(), fontsize=tick_font_size)
+    ax.set_yticklabels(ax.get_yticks(), fontsize=tick_font_size)
+    cbar.ax.tick_params(labelsize=tick_font_size)
+    # Display the legend if enabled
+    if is_legend:
+        ax.legend()
+
+    # Show or save the plot based on user preference
+    if is_show:
+        plt.show()
+    if save_path:
+        plt.savefig(save_path, dpi=600, bbox_inches='tight')
