@@ -602,7 +602,7 @@ data = [
 ]
 
 # Plotting
-plot_bins_with_cdf(data, bar_color='#4daf4a', flip_axes=False)  # Change flip_axes to True for horizontal bars
+mdp.plot_bins_with_cdf(data, bar_color='#4daf4a', flip_axes=False)  # Change flip_axes to True for horizontal bars
 ```
 
 ![alt text](https://github.com/wwang487/MultiDataPlotting/blob/main/picture/bin_cdf.png?raw=true)
@@ -654,7 +654,7 @@ data = {
 x_bin_ticks = [0, 1, 2]
 y_bin_ticks = [0, 1, 2]
 # Plotting the heatmap
-plot_2D_heatmap(pair_freq=data, x_bin_ticks=x_bin_ticks, y_bin_ticks=y_bin_ticks,title="Event Frequency Distribution", 
+mdp.plot_2D_heatmap(pair_freq=data, x_bin_ticks=x_bin_ticks, y_bin_ticks=y_bin_ticks,title="Event Frequency Distribution", 
                 xlabel="X", ylabel="Y", is_show=True, is_annotate=True)
 ```
 
