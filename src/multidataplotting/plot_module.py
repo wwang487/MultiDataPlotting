@@ -23,6 +23,7 @@ from matplotlib.patches import Polygon
 from mpl_toolkits.basemap import Basemap
 import contextily as ctx
 from matplotlib.lines import Line2D
+import ternary
 
 class __HandlerRect(HandlerPatch):
     def create_artists(self, legend, orig_handle, xdescent, ydescent, width, height, fontsize, trans):
@@ -2139,3 +2140,48 @@ def plot_surface_with_residuals(x_data, y_data, z_data,
         plt.show()
     else:
         plt.close()
+
+def plot_ternary(data, labels, scale=100, tick_interval=10, color_map='viridis', 
+                 title = "Spruce Composition Analysis", title_font_size = 10,
+                 fig_size = (10, 8), label_font_size = 10, label_offset = 0.10, 
+                 tick_font_size = 10, tick_offset = 0.01, is_legend = True,
+                 is_show = True, save_path = None):
+    """
+    Plots a ternary diagram with adjusted tick label positions.
+    """
+    # Setup the plot
+    figure, tax = ternary.figure(scale=scale)
+    tax.set_title(title, fontsize=title_font_size)
+    figure.set_size_inches(fig_size[0], fig_size[1])
+    tax.boundary(linewidth=2.0)
+    tax.gridlines(multiple=10, color="black")
+
+    # Axis labels and title
+
+    tax.left_axis_label(labels[0], fontsize=label_font_size, offset=label_offset)
+    tax.right_axis_label(labels[1], fontsize=label_font_size, offset=label_offset)
+    tax.bottom_axis_label(labels[2], fontsize=label_font_size, offset=label_offset)
+
+    # Dynamic colors for points
+    points = {}
+    for (a, b, c, label) in data:
+        if label not in points:
+            points[label] = []
+        points[label].append((a * scale, b * scale, c * scale))
+    
+    cmap = plt.get_cmap(color_map)
+    unique_labels = set([label for (_, _, _, label) in data])
+    color_dict = {label: cmap(i / (len(unique_labels) - 1)) for i, label in enumerate(unique_labels)}
+
+    for label, pts in points.items():
+        tax.scatter(pts, label=label, color=color_dict[label], s=80, edgecolor='k')
+
+    # Manually setting ticks on the axes with adjusted offset to keep within bounds
+    tax.ticks(axis='lbr', linewidth=1, multiple=tick_interval, offset=tick_offset, fontsize=tick_font_size)
+    if is_legend:
+        tax.legend(prop={'size': 8}, loc='upper left')
+    tax.clear_matplotlib_ticks()  # Clear default ticks
+    if is_show:
+        plt.show()
+    if save_path:
+        plt.savefig(save_path, dpi=600, bbox_inches='tight')
