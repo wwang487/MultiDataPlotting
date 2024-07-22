@@ -101,7 +101,7 @@ _Parameters_
 - **marker_size** (int, optional): Size of the markers in the plot. Default is 50.
 - **marker_colors** (list or dict, optional): Colors for the markers, specified as a list or dictionary mapping clusters to colors. Defaults to the 'viridis' colormap.
 - **marker_type** (str, optional): Shape of the markers, such as 'o' (circle), 'x' (cross). Default is 'o'.
-- **figsize** (tuple, optional): Dimensions of the figure in inches. Default is (10, 5).
+- **fig_size** (tuple, optional): Dimensions of the figure in inches. Default is (10, 5).
 - **tick_font_size** (int, optional): Font size for tick labels. Default is 12.
 - **tick_font_name** (str, optional): Font family for tick labels. Default is 'Arial'.
 - **xlabel** (str, optional): Label for the x-axis. Default is 'X-axis'.
@@ -334,7 +334,7 @@ _Parameters_
 - **line_colors** (dict, optional): Dictionary specifying colors for each plotted y-column, with keys as column indices and values as color names or hex codes. Default is 'blue' for all lines.
 - **legends** (list, optional): List of legend labels corresponding to each y-column. If not provided, column names are used as labels.
 - **marker_colors** (dict, optional): Dictionary specifying marker colors for each y-column, enhancing distinctiveness of each line.
-- **figsize** (tuple, optional): Size of the figure in inches. Default is (10, 6).
+- **fig_size** (tuple, optional): Size of the figure in inches. Default is (10, 6).
 - **x_tick_interval** (int, optional): Interval at which x-axis ticks should be placed. Default is 1.
 - **markers** (dict, optional): Dictionary specifying marker styles for each y-column plotted, adding visual distinction to the lines.
 - **y_label** (str, optional): Label for the y-axis. If not provided, defaults to a generic label.
@@ -449,7 +449,7 @@ _Parameters_
 - **xlabels** (list, optional): the labels for the x-axis
 - **ylabels** (list, optional): the labels for the y-axis
 - **y_range** (list, optional): The range for the y-axis as [min, max]. If not set, the axis scales automatically.
-- **figsize** (tuple, optional): Size of the figure, in inches. Default is (10, 6).
+- **fig_size** (tuple, optional): Size of the figure, in inches. Default is (10, 6).
 - **line_thickness** (float or list, optional): Thickness of the lines for curve plots. Can be a single value or a list of values corresponding to each dataset.
 - **tick_fontsize** (int, optional): Font size for the tick labels. Default is 10.
 - **tick_fontname** (str, optional): Font name for the tick labels. Default is 'sans-serif'.
@@ -478,7 +478,7 @@ mdp.draw_cat_bar_curveplots(
     other_data_list,
     bar_colors=['blue', 'green', 'red'],
     line_color='black',
-    figsize=(12, 8),
+    fig_size=(12, 8),
     tick_fontsize=12,
     is_show=True,
     cat_labels=['A', 'A+'],
@@ -744,7 +744,7 @@ _Parameters_
 - **face_alpha** (float): Transparency for the face colors of heatmap cells.
 - **arrow_scale** (float): Scaling factor for the velocity arrows.
 - **arrow_colors, arrow_styles, arrow_thicknesses**: Properties for customizing the appearance of velocity arrows.
-- **figsize** (tuple): Dimensions of the figure in inches.
+- **fig_size** (tuple): Dimensions of the figure in inches.
 - **face_label, edge_label** (str, optional): Labels for the colorbars of face and edge intensities.
 - **class_labels** (list, optional): Custom labels corresponding to each class represented by patterns.
 - **is_legend** (bool): Whether to display a legend for classification patterns.
@@ -938,7 +938,7 @@ This function generates a radar chart from a provided DataFrame, with each colum
 _Parameters_
 
 - **data** (pd.DataFrame): The DataFrame containing the data to be plotted. Each column is treated as a separate series.
-- **figsize** (tuple, optional): Figure dimensions in inches.
+- **fig_size** (tuple, optional): Figure dimensions in inches.
 - **tick_font_size** (int, optional): Font size for tick labels.
 - **tick_font_name** (str, optional): Font name for tick labels.
 - **title** (str, optional): Title of the chart.
@@ -974,7 +974,7 @@ marker_types = ['o', '^', 's', 'p']  # Marker type for each series
 marker_colors = ['black', 'orange', 'cyan', 'yellow']  # Marker color for each series
 
 # Plot using lists for properties
-mdp.plot_radar_chart(data, figsize=(8, 8), tick_font_size=12, tick_font_name='Arial',
+mdp.plot_radar_chart(data, fig_size=(8, 8), tick_font_size=12, tick_font_name='Arial',
                  title="Seasonal Product Analysis", title_font_size=16, title_font_name='Arial',
                  is_legend=True, is_show=True, save_path=None,
                  color_choice=colors, line_style=line_styles,
@@ -1007,7 +1007,7 @@ _Parameters_
 - **tick_label_size** (int, optional): Font size for the tick labels. Default is 12.
 - **tick_label_color** (str, optional): Color for the tick labels. Default is 'black'.
 - **tick_font_name** (str, optional): Font name for the tick labels. Default is 'Arial'.
-- **figsize** (tuple, optional): Dimensions of the plot, in inches. Default is (10, 8).
+- **fig_size** (tuple, optional): Dimensions of the plot, in inches. Default is (10, 8).
 - **colorbar_label** (str, optional): Label for the color bar. Default is "Intensity".
 - **colorbar_label_size** (int, optional): Font size for the color bar label. Default is 12.
 - **max_radius** (float, optional): Maximum radius for the plot, controlling how far out the data extends. Default is None, which auto-scales.
@@ -1048,7 +1048,7 @@ _Parameters_
 - **title** (str): Title of the plot.
 - **label_size** (int): Font size for labels.
 - **color_ramp** (str): Color ramp for the plot.
-- **figsize** (tuple): Size of the figure.
+- **fig_size** (tuple): Size of the figure.
 - **num_levels** (int): Number of contour levels.
 - **max_radius** (float): Maximum radius of the plot.
 - **density_threshold** (float): Density threshold for boundary line.
@@ -1086,7 +1086,7 @@ This function can plot the CDFs of multiple datasets either on a single figure o
 _Parameters_
 
 - **data_lists** (List of lists): Each sublist contains numerical data for plotting.
-- **figsize** (tuple): Size of the figure.
+- **fig_size** (tuple): Size of the figure.
 - **line_styles** (dict): Dictionary mapping dataset indices to line styles.
 - **line_widths** (dict): Dictionary mapping dataset indices to line widths.
 - **line_colors** (dict): Dictionary mapping dataset indices to line colors.
@@ -1110,7 +1110,7 @@ data1 = np.random.normal(0, 1, 1000)
 data2 = np.random.exponential(1, 1000)
 mdp.plot_cdfs([data1, data2],line_styles={0: '-', 1: '--'},line_widths={0: 2, 1: 3},
           line_colors={0: 'blue', 1: 'red'},legends=['Normal', 'Exponential'],
-          marker_colors={0: 'blue', 1: 'red'},markers={0: 'o', 1: 'x'},figsize=(12, 8),font_size=14,
+          marker_colors={0: 'blue', 1: 'red'},markers={0: 'o', 1: 'x'},fig_size=(12, 8),font_size=14,
           show_grid=True,save_path='cdf_plots.png', dpi=300,is_same_figure=True,is_log_x=True)
 ```
 ![alt text](https://github.com/wwang487/MultiDataPlotting/blob/main/picture/CDFs.png?raw=true)
@@ -1138,7 +1138,7 @@ _Parameters_
 - **xlabel** (str, optional): Label for the x-axis. Default is 'Year'.
 - **ylabel** (str, optional): Label for the y-axis. Default is 'Value'.
 - **y_limits** (tuple, optional): Minimum and maximum limits for the y-axis. If None, defaults to [-25, 25].
-- **figsize** (tuple, optional): Size of the figure in inches. Default is (10, 5).
+- **fig_size** (tuple, optional): Size of the figure in inches. Default is (10, 5).
 - **is_show** (bool, optional): Whether to display the plot. Default is True.
 - **is_legend** (bool, optional): Whether to display a legend. Default is False.
 - **positive_label** (str, optional): Legend label for positive values. Default is 'Positive'.
