@@ -607,6 +607,51 @@ mdp.plot_bins_with_cdf(data, bar_color='#4daf4a', flip_axes=False)  # Change fli
 
 ![alt text](https://github.com/wwang487/MultiDataPlotting/blob/main/picture/bin_cdf.png?raw=true)
 
+### Ternary Plot Visualization
+
+The `plot_ternary` function in our data visualization toolkit is designed to create ternary diagrams, which are useful for displaying the proportions of three variables that sum to a constant. This tool is especially valuable in fields such as geochemistry, petrology, and materials science.
+
+_Functionality_
+
+This function generates a ternary diagram with customizable scaling, labels, and coloring. It supports dynamic adjustments to axis ticks, labels, and title settings, making it suitable for detailed scientific presentations and analyses.
+
+_Parameters_
+
+- **data** (list of tuples): Data to be plotted, where each tuple contains three proportions and a label (e.g., (A, B, C, 'Label')).
+- **labels** (list of str): Labels for the three axes of the ternary plot.
+- **scale** (int, optional): The scale for the ternary plot. Defaults to 100.
+- **tick_interval** (int, optional): Interval for the tick marks on each axis. Defaults to 10.
+- **color_map** (str, optional): Color map to use for differentiating data points. Defaults to 'viridis'.
+- **title** (str, optional): Title of the plot. Defaults to "Spruce Composition Analysis".
+- **title_font_size** (int, optional): Font size for the title. Defaults to 10.
+- **fig_size** (tuple, optional): Size of the figure in inches. Defaults to (10, 8).
+- **label_font_size** (int, optional): Font size for the axis labels. Defaults to 10.
+- **label_offset** (float, optional): Offset for the axis labels. Defaults to 0.10.
+- **tick_font_size** (int, optional): Font size for the tick labels. Defaults to 10.
+- **tick_offset** (float, optional): Offset for the tick labels. Defaults to 0.01.
+- **is_legend** (bool, optional): Whether to display a legend. Defaults to True.
+- **is_show** (bool, optional): Whether to display the plot. Defaults to True.
+- **save_path** (str, optional): Path to save the plot image, if specified.
+
+_Code Example_
+
+```python
+import multidataplotting as mdp
+
+example_data = [
+    (0.1, 0.2, 0.7, 'Sitka'),
+    (0.2, 0.7, 0.1, 'Engelmann'),
+    (0.4, 0.5, 0.1, 'White'),
+    (0.3, 0.3, 0.4, 'Sitka-White'),
+    (0.2, 0.3, 0.5, 'Engelmann-White')
+]
+labels = ["Sitka Spruce", "Engelmann Spruce", "White Spruce"]
+
+# Plot the ternary diagram with enhanced settings
+mdp.plot_ternary(example_data, labels, color_map='viridis', tick_interval=10)
+```
+
+![alt text](https://github.com/wwang487/MultiDataPlotting/blob/main/picture/triangle.png?raw=true)
 
 ### Plotting 2D Heatmaps
 
