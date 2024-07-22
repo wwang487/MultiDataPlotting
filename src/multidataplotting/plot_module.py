@@ -433,7 +433,7 @@ def plot_bar_plots(list_of_lists, tuple_range_list, titles = '', ylabels='', bar
             print("Please provide a valid path to save the figure.")
 
 def draw_cat_bar_curveplots(main_result, other_data_list, bar_colors=None, bar_thickness=0.8, bar_edge_color='black', line_color='black', cat_labels = None,
-                       y_range=None, figsize=(10, 6), xlabels = None, ylabels = None, line_thickness=1, tick_fontsize=10, tick_fontname='sans-serif', x_tick_interval=1, is_show=False, 
+                       y_range=None, fig_size=(10, 6), xlabels = None, ylabels = None, line_thickness=1, tick_fontsize=10, tick_fontname='sans-serif', x_tick_interval=1, is_show=False, 
                        is_save=True, save_path=''):
     '''
     This function is used to draw bar plots with multiple curve plots with a line plot for each dataset.
@@ -449,7 +449,7 @@ def draw_cat_bar_curveplots(main_result, other_data_list, bar_colors=None, bar_t
     xlabels: list, the labels for the x-axis
     ylabels: list, the labels for the y-axis
     y_range: list, the y range for each subplot
-    figsize: tuple, the size of the figure
+    fig_size: tuple, the size of the figure
     line_thickness: float or list, the thickness of the line plots
     tick_fontsize: int, the font size of the ticks
     tick_fontname: str, the font name of the ticks
@@ -476,7 +476,7 @@ def draw_cat_bar_curveplots(main_result, other_data_list, bar_colors=None, bar_t
     main_df = prepare_data(main_result)
     all_series = [prepare_data(data) for data in other_data_list]
 
-    fig, axes = plt.subplots(len(all_series) + 1, 1, figsize=figsize, sharex=True)
+    fig, axes = plt.subplots(len(all_series) + 1, 1, figsize=fig_size, sharex=True)
 
     # If bar_colors are not provided, use a default color list
     if bar_colors is None:
@@ -671,7 +671,7 @@ def plot_histograms(list_of_lists, titles, xlabels='', ylabels='', bins=10, colo
             print("Please provide a valid path to save the figure.")
             
 def plot_polylines(df, x, ys, line_styles=None, line_widths=None, line_colors=None, legends=None, show_legend=True,
-                   marker_colors=None, figsize=(10, 6), x_tick_interval=1, markers=None, y_label = None, label_sep = '_',
+                   marker_colors=None, fig_size=(10, 6), x_tick_interval=1, markers=None, y_label = None, label_sep = '_',
                    show_grid=True, font_name='Arial', font_size=12, save_path=None, dpi=600, y_range = None, is_show = True):
     """
     Plots multiple lines from a DataFrame using column indices for x and ys with customizable font settings
@@ -686,7 +686,7 @@ def plot_polylines(df, x, ys, line_styles=None, line_widths=None, line_colors=No
     line_colors (dict): Dictionary mapping column indices to line colors.
     legends (list): Optional list of legend labels.
     marker_colors (dict): Dictionary mapping column indices to marker colors.
-    figsize (tuple): Figure size.
+    fig_size (tuple): Figure size.
     x_tick_interval (int): Interval between x-ticks.
     markers (dict): Dictionary mapping column indices to markers.
     show_grid (bool): Whether to show grid.
@@ -700,7 +700,7 @@ def plot_polylines(df, x, ys, line_styles=None, line_widths=None, line_colors=No
     None
     
     """
-    plt.figure(figsize=figsize)
+    plt.figure(figsize=fig_size)
     ax = plt.gca()
 
     # Set global font properties
@@ -1151,7 +1151,7 @@ def plot_3d_stacked_bar(pair_freq, x_bin_ticks, y_bin_ticks, fig_size=(12, 10), 
 def plot_rose_map(input_data, key_1, key_2, interval=10, value_interval=None,
                   title="Rose Map", label_size=12, label_interval=1, color_ramp="viridis", 
                   tick_label_size = 12, tick_label_color = 'black', tick_font_name='Arial', 
-                  figsize=(10, 8), colorbar_label='Intensity',
+                  fig_size=(10, 8), colorbar_label='Intensity',
                   colorbar_label_size=12, max_radius = None, save_path='', is_show=True):
     """
     Plots a rose map for directional data with optional value binning.
@@ -1169,7 +1169,7 @@ def plot_rose_map(input_data, key_1, key_2, interval=10, value_interval=None,
     tick_label_size (int): The font size for the tick labels.
     tick_label_color (str): The color for the tick labels.
     tick_font_name (str): The font name for the tick labels.
-    figsize (tuple): The size of the figure.
+    fig_size (tuple): The size of the figure.
     colorbar_label (str): The label for the colorbar.
     colorbar_label_size (int): The font size for the colorbar label.
     max_radius (float): The maximum radius for the plot.
@@ -1195,7 +1195,7 @@ def plot_rose_map(input_data, key_1, key_2, interval=10, value_interval=None,
         grouped = input_data.groupby('binned_direction')[key_2].agg(['max', 'mean'])
         stats = grouped
 
-    fig, ax = plt.subplots(subplot_kw={'projection': 'polar'}, figsize=figsize)
+    fig, ax = plt.subplots(subplot_kw={'projection': 'polar'}, figsize=fig_size)
     cmap = get_cmap(color_ramp)
 
     # Plot each segment if value_interval is used
@@ -1238,7 +1238,7 @@ def plot_rose_map(input_data, key_1, key_2, interval=10, value_interval=None,
         plt.savefig(save_path, bbox_inches='tight', dpi = 600)
         
 def plot_rose_contour_map(input_data, key_1, key_2, title="Rose Contour Map", label_size=12, color_ramp="viridis",
-                          figsize=(10, 8), num_levels=10, max_radius=None, density_threshold=None, z_label = 'Density',
+                          fig_size=(10, 8), num_levels=10, max_radius=None, density_threshold=None, z_label = 'Density',
                           boundary_line_color='black', boundary_line_thickness=2, is_percent = True, tick_spacing = 2,
                           save_path='', is_show=True):
     """
@@ -1251,7 +1251,7 @@ def plot_rose_contour_map(input_data, key_1, key_2, title="Rose Contour Map", la
     title (str): The title of the plot.
     label_size (int): The font size for the labels.
     color_ramp (str): The color ramp to use for the plot.
-    figsize (tuple): The size of the figure.
+    fig_size (tuple): The size of the figure.
     num_levels (int): The number of contour levels to plot.
     max_radius (float): The maximum radius for the plot.
     density_threshold (float): The density threshold for the boundary line.
@@ -1267,7 +1267,7 @@ def plot_rose_contour_map(input_data, key_1, key_2, title="Rose Contour Map", la
     if key_1 not in input_data.columns or key_2 not in input_data.columns:
         raise ValueError(f"Columns {key_1} and {key_2} must exist in the DataFrame.")
 
-    fig, ax = plt.subplots(subplot_kw={'projection': 'polar'}, figsize=figsize)
+    fig, ax = plt.subplots(subplot_kw={'projection': 'polar'}, figsize=fig_size)
 
     # Convert directions to radians for plotting
     theta = np.radians(input_data[key_1])
@@ -1347,7 +1347,7 @@ def plot_rose_contour_map(input_data, key_1, key_2, title="Rose Contour Map", la
     if save_path:
         plt.savefig(save_path, bbox_inches='tight', dpi=600)
 
-def plot_cdfs(data_lists, figsize=(10, 6), line_styles=None, line_widths=None,
+def plot_cdfs(data_lists, fig_size=(10, 6), line_styles=None, line_widths=None,
               line_colors=None, legends=None, marker_colors=None, x_tick_interval=10,
               markers=None, show_grid=True, font_name='Arial', font_size=12, save_path=None,
               dpi=100, is_same_figure=True, is_log_x=False):
@@ -1358,7 +1358,7 @@ def plot_cdfs(data_lists, figsize=(10, 6), line_styles=None, line_widths=None,
 
     Parameters:
     - data_lists: List of lists, each containing numerical data.
-    - figsize: Tuple indicating the figure size.
+    - fig_size: Tuple indicating the figure size.
     - line_styles: Dictionary mapping column indices to line styles.
     - line_widths: Dictionary mapping column indices to line widths.
     - line_colors: Dictionary mapping column indices to line colors.
@@ -1375,9 +1375,9 @@ def plot_cdfs(data_lists, figsize=(10, 6), line_styles=None, line_widths=None,
     - is_log_x: Whether to use a logarithmic scale for the x-axis.
     """
     if is_same_figure:
-        fig, ax = plt.subplots(figsize=figsize)
+        fig, ax = plt.subplots(figsize=fig_size)
     else:
-        fig, axs = plt.subplots(len(data_lists), 1, figsize=figsize)
+        fig, axs = plt.subplots(len(data_lists), 1, figsize=fig_size)
     
     plt.rc('font', family=font_name, size=font_size)
 
@@ -1421,7 +1421,7 @@ def plot_intensity_velocity_and_classes(intensity_data, velocity_list, classific
                                                  edge_thickness=2, face_alpha=1.0, arrow_scale=0.1,
                                                  face_label = None, edge_label = None, class_labels = None, is_legend = True,
                                                  is_show = True, save_path = None,
-                                                 arrow_colors='black', arrow_styles='->', arrow_thicknesses=1, figsize=(10, 8)):
+                                                 arrow_colors='black', arrow_styles='->', arrow_thicknesses=1, fig_size=(10, 8)):
     """
     Plots a heatmap with edges, velocity arrows, and classification patterns.
 
@@ -1440,9 +1440,9 @@ def plot_intensity_velocity_and_classes(intensity_data, velocity_list, classific
     - is_show (bool): Whether to display the plot.
     - save_path (str): Path to save the plot.
     - arrow_colors, arrow_styles, arrow_thicknesses: Properties for arrows.
-    - figsize (tuple): Figure size.
+    - fig_size (tuple): Figure size.
     """
-    fig, ax = plt.subplots(figsize=figsize)
+    fig, ax = plt.subplots(figsize=fig_size)
     data = intensity_data[0]
     n_rows, n_cols = data.shape
 
@@ -1554,7 +1554,7 @@ def plot_intensity_velocity_and_classes(intensity_data, velocity_list, classific
         
 def plot_pos_neg_dots(positive, negative, years, marker_size=100, marker_type='o', alpha=1.0, tick_font_name='Arial', 
                 tick_font_size=12, positive_color='blue', negative_color='red', title='Example Dot Plot', 
-                xlabel='Year', ylabel='Value', y_limits=None, figsize=(10, 5), is_show=True, is_legend=False, 
+                xlabel='Year', ylabel='Value', y_limits=None, fig_size=(10, 5), is_show=True, is_legend=False, 
                 positive_label='Positive', negative_label='Negative', save_path=None):
     """
     Plots positive and negative values on a dot plot with customizable properties including marker type and legend labels.
@@ -1574,14 +1574,14 @@ def plot_pos_neg_dots(positive, negative, years, marker_size=100, marker_type='o
     xlabel (str, optional): Label for the x-axis. Defaults to 'Year'.
     ylabel (str, optional): Label for the y-axis. Defaults to 'Value'.
     y_limits (tuple, optional): Tuple of (min, max) for y-axis limits. If None, defaults to [-25, 25].
-    figsize (tuple, optional): Figure size. Defaults to (10, 5).
+    fig_size (tuple, optional): Figure size. Defaults to (10, 5).
     is_show (bool, optional): Whether to show the plot. Defaults to True.
     is_legend (bool, optional): Whether to display a legend. Defaults to False.
     positive_label (str, optional): Legend label for positive values. Defaults to 'Positive'.
     negative_label (str, optional): Legend label for negative values. Defaults to 'Negative'.
     save_path (str, optional): Path to save the plot image file. If None, the plot is not saved. Defaults to None.
     """
-    fig, ax = plt.subplots(figsize=figsize)
+    fig, ax = plt.subplots(figsize=fig_size)
 
     # Plot positive values
     for i, val in enumerate(positive):
@@ -1618,7 +1618,7 @@ def plot_pos_neg_dots(positive, negative, years, marker_size=100, marker_type='o
         
 def plot_clustered_data(df, columns, x_index, y_index, n_clusters=3, method='KMeans',
                         marker_size=50, marker_colors=None, marker_type='o',
-                        figsize=(10, 5), tick_font_size=12, tick_font_name='Arial',
+                        fig_size=(10, 5), tick_font_size=12, tick_font_name='Arial',
                         xlabel='X-axis', ylabel='Y-axis', label_font_size=14,
                         is_legend=True, cluster_names=None, is_show=True, save_path=None,
                         is_boundary=False, boundary_color='black', boundary_linewidth=2, boundary_alpha=0.5):
@@ -1635,7 +1635,7 @@ def plot_clustered_data(df, columns, x_index, y_index, n_clusters=3, method='KMe
     marker_size (int, optional): Size of the markers in the plot. Default is 50.
     marker_colors (list or dict, optional): Colors for the markers, can be a list or dict assigning colors per cluster. If None, defaults to 'viridis' colormap.
     marker_type (str, optional): Type of marker (e.g., 'o', 'x', '^'). Default is 'o'.
-    figsize (tuple, optional): Size of the figure. Default is (10, 5).
+    fig_size (tuple, optional): Size of the figure. Default is (10, 5).
     tick_font_size (int, optional): Font size for tick labels. Default is 12.
     tick_font_name (str, optional): Font name for tick labels. Default is 'Arial'.
     xlabel (str, optional): Label for the x-axis. Default is 'X-axis'.
@@ -1695,7 +1695,7 @@ def plot_clustered_data(df, columns, x_index, y_index, n_clusters=3, method='KMe
         labels = model.fit_predict(data_scaled)
     
     # Plotting
-    fig, ax = plt.subplots(figsize=figsize)
+    fig, ax = plt.subplots(figsize=fig_size)
     unique_labels = np.unique(labels)
     
     if marker_colors is None:
@@ -2186,7 +2186,7 @@ def plot_ternary(data, labels, scale=100, tick_interval=10, color_map='viridis',
     if save_path:
         plt.savefig(save_path, dpi=600, bbox_inches='tight')
         
-def plot_radar_chart(data, figsize=(6, 6), tick_font_size=10, tick_font_name='Arial',
+def plot_radar_chart(data, fig_size=(6, 6), tick_font_size=10, tick_font_name='Arial',
                      title="Ice Cream Order Analysis", title_font_size=20, title_font_name='Arial',
                      is_legend=True, is_show=True, save_path=None,
                      color_choice='viridis', line_style='-', line_thickness=2,
@@ -2195,7 +2195,7 @@ def plot_radar_chart(data, figsize=(6, 6), tick_font_size=10, tick_font_name='Ar
     Creates a radar chart with dynamic styling options for lines and markers.
 
     :param data: DataFrame with index as categories (e.g., months) and columns as data series (e.g., flavors).
-    :param figsize, tick_font_size, tick_font_name, title, etc.: Styling parameters for the plot.
+    :param fig_size, tick_font_size, tick_font_name, title, etc.: Styling parameters for the plot.
     :param color_choice: Color map name or list of colors.
     :param line_style: Style of lines, single value or list.
     :param line_thickness: Thickness of lines, single value or list.
@@ -2210,7 +2210,7 @@ def plot_radar_chart(data, figsize=(6, 6), tick_font_size=10, tick_font_name='Ar
     angles = np.linspace(0, 2 * np.pi, num_vars, endpoint=False).tolist()
     angles += angles[:1]  # Close the radar plot by returning to the start
 
-    fig, ax = plt.subplots(figsize=figsize, subplot_kw=dict(polar=True))
+    fig, ax = plt.subplots(figsize=fig_size, subplot_kw=dict(polar=True))
     ax.set_theta_offset(np.pi / 2)
     ax.set_theta_direction(-1)
 
