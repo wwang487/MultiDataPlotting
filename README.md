@@ -927,6 +927,64 @@ mdp.plot_surface_with_residuals(x_example, y_example, z_example, dot_color = 'bl
 
 ![alt text](https://github.com/wwang487/MultiDataPlotting/blob/main/picture/surface.png?raw=true)
 
+### Radar Chart Visualization
+
+The `plot_radar_chart` function in our data visualization toolkit enables the creation of radar (or spider) charts, which are excellent for displaying multivariate observations with an arbitrary number of variables. This type of visualization is particularly useful in fields like product management, marketing analysis, and other areas where performance metrics across different categories need to be compared visually.
+
+_Functionality_
+
+This function generates a radar chart from a provided DataFrame, with each column representing a different series and the DataFrame index used as category labels. The radar chart supports extensive customization for the visual elements such as color, line styles, and markers, allowing each series to be distinct or uniformly styled.
+
+_Parameters_
+
+- **data** (pd.DataFrame): The DataFrame containing the data to be plotted. Each column is treated as a separate series.
+- **figsize** (tuple, optional): Figure dimensions in inches.
+- **tick_font_size** (int, optional): Font size for tick labels.
+- **tick_font_name** (str, optional): Font name for tick labels.
+- **title** (str, optional): Title of the chart.
+- **title_font_size** (int, optional): Font size for the title.
+- **title_font_name** (str, optional): Font name for the title.
+- **is_legend** (bool, optional): Toggle to display the legend.
+- **is_show** (bool, optional): Toggle to immediately show the plot.
+- **save_path** (str, optional): If provided, the path where the plot will be saved.
+- **color_choice** (str or list, optional): Color map name or a list of colors for each series.
+- **line_style** (str or list, optional): Line style, can be a single style or a list to apply to each series.
+- **line_thickness** (float or list, optional): Line thickness, can be a single value or a list for each series.
+- **marker_size** (int or list, optional): Size of the markers, can be a single value or a list for each series.
+- **marker_type** (str or list, optional): Type of the markers, can be a single type or a list for each series.
+- **marker_color** (str or list, optional): Color of the markers, can be a single color or a list for each series.
+
+_Code Example_
+
+```python
+np.random.seed(0)
+data = pd.DataFrame({
+    'Spring': np.random.rand(5),
+    'Summer': np.random.rand(5),
+    'Autumn': np.random.rand(5),
+    'Winter': np.random.rand(5),
+}, index=['Taste', 'Cost', 'Sustainability', 'Nutrition', 'Convenience'])
+
+# Define individual properties for each category
+colors = ['red', 'green', 'blue', 'purple']  # Color for each series
+line_styles = ['-', '--', '-.', ':']  # Line style for each series
+line_thicknesses = [2, 2.5, 3, 3.5]  # Line thickness for each series
+marker_sizes = [8, 10, 12, 14]  # Marker size for each series
+marker_types = ['o', '^', 's', 'p']  # Marker type for each series
+marker_colors = ['black', 'orange', 'cyan', 'yellow']  # Marker color for each series
+
+# Plot using lists for properties
+mdp.plot_radar_chart(data, figsize=(8, 8), tick_font_size=12, tick_font_name='Arial',
+                 title="Seasonal Product Analysis", title_font_size=16, title_font_name='Arial',
+                 is_legend=True, is_show=True, save_path=None,
+                 color_choice=colors, line_style=line_styles,
+                 line_thickness=line_thicknesses,
+                 marker_size=marker_sizes, marker_type=marker_types,
+                 marker_color=marker_colors)
+```
+
+![alt text](https://github.com/wwang487/MultiDataPlotting/blob/main/picture/radar_chart.png?raw=true)
+
 ### Plotting Rose Map
 
 The `plot_rose_map` function in the multidataprocessing package creates a rose diagram (or wind rose), which is commonly used in meteorology to display the frequency of occurrence of events relative to multiple directions. This visualization is also highly effective in geography, environmental science, and any field requiring the analysis of directional data.
