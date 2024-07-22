@@ -190,6 +190,7 @@ _Parameters_
 - **data** (pandas.DataFrame): The DataFrame must contain 'x' and 'y' columns.
 - **x_threshold** (float): Threshold value for categorizing data along the x-axis.
 - **y_threshold** (float): Threshold value for categorizing data along the y-axis.
+- **fig_size** (tuple): Figure size; default is (10, 8)
 - **category_names** (list, optional): Custom names for each category; default categories are 'Above Left', 'Above Right', 'Below Left', 'Below Right', 'On Line'.
 - **xlabel** (str, optional): Label for the x-axis. Default is 'Centroid offset (mm)'.
 - **ylabel** (str, optional): Label for the y-axis. Default is 'Edge height difference (mm)'.
@@ -227,6 +228,47 @@ mdp.plot_quadrant_data(data, x_threshold, y_threshold)
 ```
 
 ![alt text](https://github.com/wwang487/MultiDataPlotting/blob/main/picture/quadrant.png?raw=true)
+
+### Plot Ridgelines
+
+The `plot_ridgelines` function is a specialized visualization tool designed for creating impactful ridgeline plots, which are ideal for displaying the distribution of data across different categories, such as time periods or groups. This function is versatile and can be tailored for various data analysis needs, especially useful in statistics, finance, environmental science, and more.
+
+_Functionality_
+
+This function generates ridgeline plots that help in visualizing changes or distributions over categories with a clear, artistic representation. The use of color gradients or monochrome palettes enhances the visual appeal and helps in distinguishing between categories effectively.
+
+_Parameters_
+- **data** (Dictionary or DataFrame): Contains the data for each category. If a dictionary, it will be converted into a DataFrame.
+- **categories** (list): A list of categories representing each dataset, like months or groups.
+- **x_label** (str): Label for the x-axis.
+- **title** (str): Title of the plot.
+- **cmap** (str, optional): Color palette to use. If None, a black and white scheme is employed.
+- **tick_interval** (float, optional): Specifies the interval between ticks on the x-axis. If None, the default is used.
+- **tick_size** (int): Font size for the x-axis ticks.
+- **tick_font** (str): Font family for the x-axis ticks.
+- **category_size** (int): Font size for category labels.
+- **category_font** (str): Font family for category labels.
+- **title_size** (int): Font size for the plot title.
+- **save_path** (str, optional): If provided, the plot will be saved to the specified path.
+- **is_show** (bool): If True, the plot will be displayed. If False, the plot will be closed after creation.
+- **is_legend** (bool): If True, a legend mapping colors to categories will be displayed.
+- **fig_size** (tuple): Dimensions of the figure (width, height).
+
+_Code Example_
+
+```python
+import pandas as pd
+import numpy as np
+import multidataplotting as mdp
+# Sample data creation
+np.random.seed(10)
+months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December']
+data = {month: np.random.normal(loc=20 + i, scale=5, size=100) for i, month in enumerate(months)}
+# Example usage
+mdp.plot_ridgelines(data, months, 'Mean Temperature [F]', 'Temperatures by Month', cmap='viridis', tick_interval=5)
+```
+
+![alt text](https://github.com/wwang487/MultiDataPlotting/blob/main/picture/ridge.png?raw=true)
 
 ### Plotting Time Histograms
 
