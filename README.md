@@ -726,6 +726,94 @@ plot_2D_heatmap(pair_freq=data, title="Event Frequency Distribution",
 
 ![alt text](https://github.com/wwang487/MultiDataPlotting/blob/main/picture/heatmap2.png?raw=true)
 
+### Contour Plot Visualization with Boundary and Condition Lines
+
+The `plot_heatmap_with_bound_and_curves` function is an advanced visualization tool in our toolkit that creates detailed contour plots. It is specifically designed for performance analysis, where understanding the relationship between multiple variables within specified boundaries and under various conditions is crucial.
+
+_Functionality_
+
+This function generates a contour plot from a set of data points, applies a boundary to limit the area of interest, and overlays multiple condition lines with annotations. It is ideal for engine performance maps, environmental variable distributions, or any other application requiring a nuanced visualization of data within constraints.
+
+_Parameters_
+
+- **data** (DataFrame): Contains the 'x', 'y', and 'z' coordinates for generating the contour plot.
+- **boundary_data** (DataFrame): Specifies the 'x' and 'y' points that define the boundary within which the data is visualized.
+- **condition_lines** (list of DataFrames): Each DataFrame contains 'x' and 'y' coordinates for a condition line to be drawn on the plot.
+- **condition_labels** (list of str): Labels for each condition line, placed near the end of each line.
+- **fig_size** (tuple): Dimensions of the figure.
+- **cmap** (str): Colormap for the contour plot.
+- **colorbar_label** (str): Label for the color bar indicating what the colors represent.
+- **boundary_color** (str), **boundary_linewidth** (int): Color and linewidth for the boundary.
+- **line_styles**, **line_colors**, **line_widths** (lists): Styles, colors, and widths for each condition line.
+- **title** (str), **title_size** (int): Title of the plot and its font size.
+- **xlabel**, **ylabel** (str), **label_font_size** (int): Labels and font size for the x and y axes.
+- **tick_font_size** (int): Font size for the tick labels on the axes.
+- **is_legend** (bool): Whether to display a legend showing labels.
+- **is_show** (bool): Whether to display the plot immediately.
+- **save_path** (str, optional): Path where the plot image will be saved, if specified.
+
+_Code Example_
+```python
+from scipy.interpolate import CubicSpline
+import multidataplotting as mdp
+
+# Generate sample engine data
+engine_data = {
+    'x': np.random.uniform(1000, 6000, 3000),
+    'y': np.random.uniform(20, 150, 3000),
+    'z': np.random.uniform(0, 1, 3000),  # Simulated performance data for demonstration
+}
+
+# Original boundary data points
+original_boundary_data = {
+    'x': np.array([1000, 1800, 2000, 2500, 4000, 4600, 6000]),
+    'y': np.array([100, 120, 110, 100, 95, 120, 90])
+}
+
+# Create a smoother boundary using cubic spline interpolation
+boundary_spline = CubicSpline(original_boundary_data['x'], original_boundary_data['y'], bc_type='natural')
+xnew_boundary = np.linspace(1000, 6000, 300)  # More points for smoothness
+ynew_boundary = boundary_spline(xnew_boundary)
+
+# Update boundary data for smooth plotting
+smooth_boundary_data = {
+    'x': xnew_boundary,
+    'y': ynew_boundary
+}
+
+smooth_boundary_data = {
+    'x': xnew_boundary,
+    'y': ynew_boundary
+}
+
+# Condition lines - polynomial fit for smoothness
+smooth_condition_lines = []
+condition_labels = ['100 HP', '75 HP']
+hp_starts = [90, 70]
+
+# Generating polynomial smoothed lines
+for y_start in hp_starts:
+    x_vals = np.linspace(1000, 6000, 100)
+    # give a poly + ln format for yvals
+    y_vals = y_start - 0.001 * x_vals ** 1.2 + 0.0001 * np.log(x_vals)
+    smooth_condition_lines.append({'x': x_vals, 'y': y_vals})
+
+mdp.plot_heatmap_with_bound_and_curves(
+        data=engine_data,
+        boundary_data=smooth_boundary_data,
+        condition_lines=smooth_condition_lines,
+        condition_labels=condition_labels,
+        fig_size=(10, 7),
+        title="Smooth Engine Performance Map",
+        xlabel='Engine Speed (rpm)',
+        ylabel='Torque (lb-ft)',
+        is_show=True
+    )
+
+```
+
+![alt text](https://github.com/wwang487/MultiDataPlotting/blob/main/picture/heatcurve.png?raw=true)
+
 ### Plotting High-Dimensional Heatmaps with Velocity Arrows and Classifications
 The `plot_intensity_velocity_and_classes` function creates detailed heatmaps that visualize intensity data with additional features such as velocity vectors, classification patterns, and optional edges. This is particularly useful in fields like geospatial analysis, fluid dynamics, and any area where it's critical to observe how different variables like speed and direction are distributed across a space.
 
