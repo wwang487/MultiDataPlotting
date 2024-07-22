@@ -842,6 +842,46 @@ mdp.plot_3d_stacked_bar(data, x_bin_ticks=x_categories, y_bin_ticks=y_categories
 ```
 ![alt text](https://github.com/wwang487/MultiDataPlotting/blob/main/picture/3DStackbar.png?raw=true)
 
+### Polynomial Surface Fit and Visualization
+
+The `plot_surface_with_residuals` function in our data visualization toolkit enables the fitting of a polynomial surface to three-dimensional data points and provides detailed visualization of the results. This tool is particularly useful for professionals in environmental science, geophysics, and engineering who need to analyze spatial distributions and surface patterns.
+
+#### Functionality
+
+This function fits a polynomial surface to provided 3D data points (x, y, z) and visualizes the surface along with the original data and calculated residuals. It offers high customization flexibility, allowing users to tailor plot elements such as color, transparency, markers, and lines to their specific needs.
+
+#### Parameters
+
+- **x_data**, **y_data**, **z_data** (arrays): The x, y, and z coordinates of the data points.
+- **xlabel**, **ylabel**, **zlabel** (str, optional): Labels for the x, y, and z axes. Defaults are 'X', 'Y', 'Z'.
+- **x_tick_interval**, **y_tick_interval**, **z_tick_interval** (float, optional): Specifies the intervals between ticks on the respective axes.
+- **tick_fontsize** (int, optional): Font size for the tick labels.
+- **line_color** (str, optional): Color of the lines used for residuals.
+- **line_thickness** (int, optional): Thickness of the residual lines.
+- **dot_color** (str, optional): Color of the data point markers.
+- **dot_size** (int, optional): Size of the data point markers.
+- **surface_cmap** (str, optional): Color map for the surface plot.
+- **alpha** (float, optional): Transparency of the surface plot.
+- **is_legend** (bool, optional): Toggle to display a legend on the plot.
+- **legend_loc** (str, optional): Location of the legend on the plot.
+- **is_show** (bool, optional): Toggle to display the plot immediately after generation.
+- **save_path** (str, optional): File path where the plot image will be saved, if specified.
+
+#### Code Example
+
+```python
+import numpy as np
+import multidataplotting as mdp
+
+np.random.seed(0)
+x_example = np.random.uniform(-5, 5, 50)
+y_example = np.random.uniform(-5, 5, 50)
+z_example = 3 + 1*x_example - 2*y_example + 1*x_example**2 - 1.5*y_example**2 + 0.5*x_example*y_example + np.random.normal(0, 10, 50)
+mdp.plot_surface_with_residuals(x_example, y_example, z_example, dot_color = 'black', line_color='gray', x_tick_interval=3)
+```
+
+![alt text](https://github.com/wwang487/MultiDataPlotting/blob/main/picture/surface.png?raw=true)
+
 ### Plotting Rose Map
 
 The `plot_rose_map` function in the multidataprocessing package creates a rose diagram (or wind rose), which is commonly used in meteorology to display the frequency of occurrence of events relative to multiple directions. This visualization is also highly effective in geography, environmental science, and any field requiring the analysis of directional data.
