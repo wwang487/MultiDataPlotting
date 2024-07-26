@@ -508,7 +508,7 @@ def draw_cat_bar_curveplots(main_result, other_data_list, bar_colors=None, bar_t
 
     # Plot each additional dataset as a line plot
     for idx, series in enumerate(all_series, start=1):
-        axes[idx].plot(series.index, series.values, color=line_color)
+        
         axes[idx].tick_params(axis='x', labelsize=tick_fontsize)
         axes[idx].tick_params(axis='y', labelsize=tick_fontsize)
         for tick in axes[idx].get_xticklabels():
@@ -525,6 +525,8 @@ def draw_cat_bar_curveplots(main_result, other_data_list, bar_colors=None, bar_t
                     axes[idx].plot(series.index, series.values, color=line_color, linewidth=line_thickness[idx - 1])
                 else:
                     axes[idx].scatter(series.index, series.values, color=line_color, s=1)
+        else:
+            axes[idx].plot(series.index, series.values, color=line_color)
     if not xlabels:
         xlabels = [''] * (1 + len(other_data_list))
     if not ylabels:
