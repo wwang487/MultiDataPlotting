@@ -1015,6 +1015,49 @@ mdp.plot_surface_with_residuals(x_example, y_example, z_example, dot_color = 'bl
 
 ![alt text](https://github.com/wwang487/MultiDataPlotting/blob/main/picture/surface.png?raw=true)
 
+### Timeline Plotting Function
+
+The `plot_timeline` function in our Python library is designed to create detailed, customizable timeline charts. This function is ideal for visualizing historical events, project timelines, or any sequential data where the timing and duration of events are crucial.
+
+_Functionality_
+
+This function generates a timeline chart from a list of time intervals, providing extensive customization options for labeling, color schemes, time resolutions, and more. It's suitable for a wide range of applications, from historical timelines to project management and planning.
+
+_Parameters_
+
+- **data** (list of tuples): Each tuple contains two elements, the start and end times of an event, formatted as strings or datetime objects.
+- **title** (str): Title of the chart. Default is "Historical Timeline".
+- **time_resolution** (str): Defines the granularity of the timeline, such as 'y' for years, 'm' for months, etc. Default is 'y'.
+- **label_format** (str or None): Optional. If a string is provided, labels are generated with this string as a prefix followed by an incrementing number. If None, no labels are applied.
+- **time_interval** (int): The interval between major ticks on the timeline, corresponding to the `time_resolution`. Default is 2.
+- **is_grid** (bool): If True, displays a grid on the timeline. Default is True.
+- **is_show** (bool): If True, shows the plot. If False, the plot is not displayed unless saved. Default is True.
+- **save_path** (str or None): If provided, the plot is saved to the specified path. Default is None.
+- **fig_size** (tuple): Figure dimensions in inches, as (width, height). Default is (15, 8).
+- **color_palette** (str): Name of the matplotlib colormap to use for coloring the timeline bars. Default is 'tab20'.
+- **label_color** (str): Color of the labels. Default is 'black'.
+- **label_font_size** (int): Font size of the labels. Default is 10.
+- **label_font_name** (str): Font name of the labels. Default is 'Arial'.
+
+_Code Example_
+
+```python
+import multidataplotting as mdp
+
+data = [
+    ("2021-01-01T00:00:00", "2021-12-31T23:59:59"),
+    ("2022-01-01T00:00:00", "2022-12-31T23:59:59"),
+    ("2020-05-01T00:00:00", "2023-12-31T23:59:59")
+]
+mdp.plot_timeline(data, title="Detailed Timeline", time_resolution='m', label_format="Period",
+              time_interval=3, is_grid=True, is_show=True, save_path='detailed_timeline.png', fig_size=(15, 8),
+              color_palette='tab20', label_color='black', label_font_size=12, label_font_name='Arial')
+
+
+```
+
+![alt text](https://github.com/wwang487/MultiDataPlotting/blob/main/picture/timeline.png?raw=true)
+
 ### Radar Chart Visualization
 
 The `plot_radar_chart` function in our data visualization toolkit enables the creation of radar (or spider) charts, which are excellent for displaying multivariate observations with an arbitrary number of variables. This type of visualization is particularly useful in fields like product management, marketing analysis, and other areas where performance metrics across different categories need to be compared visually.
