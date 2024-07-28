@@ -25,6 +25,11 @@ import contextily as ctx
 from matplotlib.lines import Line2D
 import ternary
 import matplotlib.path as mpath
+from matplotlib.dates import DateFormatter
+import pandas as pd
+from dateutil.parser import parse
+from dateutil.relativedelta import relativedelta
+from matplotlib import colormaps
 
 class __HandlerRect(HandlerPatch):
     def create_artists(self, legend, orig_handle, xdescent, ydescent, width, height, fontsize, trans):
@@ -34,6 +39,50 @@ class __HandlerRect(HandlerPatch):
         self.update_prop(p, orig_handle, legend)
         p.set_transform(trans)
         return [p]
+
+def __get_time_bounds(data):
+    """
+    Returns the earliest start time and the latest end time from a list of time intervals.
+    """
+    start_times = [parse(interval[0]) if isinstance(interval[0], str) else interval[0] for interval in data]
+    end_times = [parse(interval[1]) if isinstance(interval[1], str) else interval[1] for interval in data]
+    overall_start = min(start_times)
+    overall_end = max(end_times)
+    return overall_start, overall_end
+
+def __generate_tick_times(data, time_resolution='y', time_interval=1):
+    """
+    Generates a list of datetime objects for ticks based on the overall time range, interval, and resolution.
+    """
+    overall_start, overall_end = __get_time_bounds(data)
+    
+    # Define the correct frequency string and adjustment parameters for relativedelta
+    freq_map = {
+        'y': 'AS',  # Start of each year
+        'm': 'MS',  # Start of each month
+        'd': 'D',   # Each day
+        'H': 'H',   # Each hour
+        'M': 'T',   # Each minute
+        'S': 'S'    # Each second
+    }
+    # Translate time resolution to relativedelta compatible terms
+    delta_map = {
+        'y': 'years',
+        'm': 'months',
+        'd': 'days',
+        'H': 'hours',
+        'M': 'minutes',
+        'S': 'seconds'
+    }
+    freq_str = str(time_interval) + freq_map[time_resolution]
+    
+    # Extend the date range to improve plot appearance
+    adjustment_kwargs = {delta_map[time_resolution]: time_interval}
+    overall_start -= relativedelta(**adjustment_kwargs)
+    overall_end += relativedelta(**adjustment_kwargs)
+    
+    ticks = pd.date_range(start=overall_start, end=overall_end, freq=freq_str)
+    return ticks
 
 def __create_transparent_cmap(cmap, alpha=0.5):
     """Create a transparent version of the given colormap."""
@@ -2342,3 +2391,48 @@ def plot_heatmap_with_bound_and_curves(data, boundary_data, condition_lines, con
         plt.show()
     if save_path:
         plt.savefig(save_path, dpi=600, bbox_inches='tight')
+
+def plot_timeline(data, title="Historical Timeline", time_resolution='y', label_format=None,
+                  time_interval=2, is_grid=True, is_show=True, save_path=None, fig_size=(15, 8),
+                  color_palette='tab20', label_color='black', label_font_size=10, label_font_name='Arial'):
+    """
+    Plots a timeline chart with customizable labeling, time resolution, and other display options.
+    """
+    fig, ax = plt.subplots(figsize=fig_size)
+    
+    # Fetch the colormap without specifying the length
+    cmap = colormaps[color_palette]
+
+    # Parse only if necessary and sort by start time
+    data = sorted([(parse(start) if isinstance(start, str) else start,
+                    parse(end) if isinstance(end, str) else end) for start, end in data], key=lambda x: x[0], reverse=False)
+
+    # Generate and set ticks
+    ticks = __generate_tick_times(data, time_resolution, time_interval)
+    ax.set_xticks(ticks)
+    ax.xaxis.set_major_formatter(DateFormatter('%Y-%m' if time_resolution == 'm' else '%Y'))
+
+    # Plotting data
+    for i, (start, end) in enumerate(data):
+        width = end - start
+        color = cmap(i / len(data))  # Normalize color index over the range of data
+        ax.barh(y=i, width=width, left=start, height=0.4, color=color, align='center')
+        # Center text on each bar
+        ax.text(start + width / 2, i, label_format + f" {i+1}" if isinstance(label_format, str) else '', ha='center', va='center',
+                fontsize=label_font_size, color=label_color, fontname=label_font_name)
+
+    ax.set_xlabel("Time")
+    plt.title(title)
+    
+    if is_grid:
+        ax.grid(True, axis='x', linestyle='--', linewidth=0.5)
+    
+    ax.set_yticks([])  # Hide y-axis labels
+    ax.invert_yaxis()  # Reverse the order of the y-axis
+    plt.tight_layout()
+    
+    if save_path:
+        plt.savefig(save_path, dpi=300, bbox_inches='tight')
+    
+    if is_show:
+        plt.show()
