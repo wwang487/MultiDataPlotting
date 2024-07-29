@@ -25,7 +25,7 @@ import contextily as ctx
 from matplotlib.lines import Line2D
 import ternary
 import matplotlib.path as mpath
-from matplotlib.dates import DateFormatter
+from matplotlib.dates import DateFormatter, DayLocator
 import pandas as pd
 from dateutil.parser import parse
 from dateutil.relativedelta import relativedelta
@@ -2740,6 +2740,84 @@ def plot_movement_arrows(pre_data, post_data, labels, title='Movement Over Time'
 
     if save_path:
         plt.savefig(save_path, dpi=600)
+
+    if is_show:
+        plt.show()
+        
+def plot_rolling_series(data, rolling_period=30, title='Rolling Statistic Time Series', xlabel='Time', ylabel='Value',
+                        series_color='gray', max_color='red', min_color='blue', avg_color='black', alpha=0.3,
+                        fig_size=(15, 6), line_width=2, line_style='-', legend_labels=None,
+                        font_name='Arial', font_size=12, y_lim=None, y_tick_interval=None, x_tick_interval=None,
+                        is_grid=True, is_legend=True, is_label=False, save_path=None, is_show=True):
+    """
+    Plots a time series graph with rolling maximum, minimum, and average values over a specified period.
+
+    Parameters:
+    - data (pandas.Series): Time-series data.
+    - rolling_period (int): Window size for the rolling calculations.
+    - title (str): Title of the plot.
+    - xlabel (str), ylabel (str): Labels for the x-axis and y-axis.
+    - series_color, max_color, min_color, avg_color (str): Colors for the series and rolling stats.
+    - alpha (float): Transparency for the time series data plot.
+    - fig_size (tuple): Size of the figure.
+    - line_width (int): Width of the lines.
+    - line_style (str): Style of the lines (e.g., '-', '--', '-.', ':').
+    - legend_labels (dict): Custom labels for the legend.
+    - font_name (str): Font name for labels.
+    - font_size (int): Font size for labels and ticks.
+    - y_lim (tuple): Tuple of (min, max) for the y-axis.
+    - y_tick_interval (float): Interval between ticks on the y-axis.
+    - x_tick_interval (int): Interval in days between ticks on the x-axis.
+    - is_grid (bool): Whether to display a grid.
+    - is_legend (bool): Whether to display a legend.
+    - is_label (bool): Whether to label the lines.
+    - save_path (str): Path to save the plot image if specified.
+    - is_show (bool): Whether to display the plot.
+    """
+    plt.figure(figsize=fig_size)
+    ax = plt.gca()
+
+    # Plotting the original time series data
+    ax.plot(data.index, data, color=series_color, alpha=alpha, label=legend_labels.get('original', 'Original Data') if is_label else '',
+            linestyle=line_style, linewidth=line_width)
+
+    # Rolling calculations
+    rolling_max = data.rolling(window=rolling_period, min_periods=1).max()
+    rolling_min = data.rolling(window=rolling_period, min_periods=1).min()
+    rolling_avg = data.rolling(window=rolling_period, min_periods=1).mean()
+
+    # Plotting rolling statistics
+    ax.plot(data.index, rolling_max, color=max_color, label=legend_labels.get('max', 'Rolling Max') if is_label else '',
+            linestyle=line_style, linewidth=line_width)
+    ax.plot(data.index, rolling_min, color=min_color, label=legend_labels.get('min', 'Rolling Min') if is_label else '',
+            linestyle=line_style, linewidth=line_width)
+    ax.plot(data.index, rolling_avg, color=avg_color, label=legend_labels.get('avg', 'Rolling Average') if is_label else '',
+            linestyle=line_style, linewidth=line_width)
+
+    # Axes and grid
+    ax.set_title(title, fontsize=font_size, fontname=font_name)
+    ax.set_xlabel(xlabel, fontsize=font_size, fontname=font_name)
+    ax.set_ylabel(ylabel, fontsize=font_size, fontname=font_name)
+    if y_lim:
+        ax.set_ylim(y_lim)
+    if y_tick_interval:
+        ax.yaxis.set_major_locator(MultipleLocator(y_tick_interval))
+    if x_tick_interval:
+        ax.xaxis.set_major_locator(DayLocator(interval=x_tick_interval))  # Set day locator to x-axis
+        # ax.xaxis.set_major_formatter(DateFormatter('%Y-%m-%d'))  # Set the display format for dates
+
+    # Grid and legend
+    ax.grid(is_grid)
+    if is_legend:
+        ax.legend()
+
+    # Setting axis tick properties
+    for label in ax.get_xticklabels() + ax.get_yticklabels():
+        label.set_fontsize(font_size)
+        label.set_fontname(font_name)
+
+    if save_path:
+        plt.savefig(save_path)
 
     if is_show:
         plt.show()
