@@ -364,6 +364,50 @@ mdp.plot_polylines(data, x=0, ys=[1, 2], line_colors={1: 'red', 2: 'green'}, x_t
 ```
 ![alt text](https://github.com/wwang487/MultiDataPlotting/blob/main/picture/polyline.png?raw=true)
 
+### Two-Colored Time Series Plot
+
+The `plot_two_colored_time_series` function in our data visualization toolkit offers a distinctive way to visualize time series data by changing the color of the plot line based on a specified threshold value. This is particularly useful for highlighting segments of the data that exceed or fall below critical levels, such as temperature thresholds, stock price targets, or performance benchmarks.
+
+_Functionality_
+
+This function plots a time series where the line color changes above and below a predefined threshold. It intelligently divides segments that cross the threshold, ensuring that the transition between colors accurately represents the point at which the data crosses this boundary.
+
+_Parameters_
+- **data** (pandas Series): A pandas Series with a DateTime index and one column of values to plot.
+- **threshold** (float): The value at which the plot line color changes.
+- **title** (str): Title of the plot.
+- **xlabel**, **ylabel** (str): Labels for the x-axis and y-axis.
+- **color_above**, **color_below** (str): Colors for the line segments above and below the threshold, respectively.
+- **line_style** (str): Style of the plot line (e.g., '-', '--', '-.', ':').
+- **line_width** (float): Width of the plot line.
+- **threshold_color** (str): Color of the threshold line.
+- **threshold_style** (str): Style of the threshold line (e.g., '-', '--').
+- **threshold_width** (float): Thickness of the threshold line.
+- **fig_size** (tuple): Dimensions of the figure.
+- **x_tick_interval**, **y_tick_interval** (float): Interval between ticks on the x-axis and y-axis.
+- **tick_font_name**, **tick_font_size** (str, int): Font name and size for the tick labels.
+- **is_legend** (bool): Whether to display the legend.
+- **legend_text** (str): Text for the legend entries.
+- **save_path** (str, optional): File path to save the plot image, if desired.
+- **is_show** (bool, optional): Whether to display the plot. Defaults to True if not specified.
+
+_Example Usage_
+```python
+import pandas as pd
+import numpy as np
+import multidataplotting as mdp
+# Generating sample data
+dates = pd.date_range(start="2021-01-01", periods=100)
+values = np.random.normal(loc=52, scale=5, size=100)  # Generate random data
+data = pd.Series(values, index=dates)
+mdp.plot_two_colored_time_series(data, threshold=56, title="Temperature Over Time", xlabel="Time", ylabel="Temperature (°F)",
+                             x_tick_interval=10, y_tick_interval=2, tick_font_name='Arial', tick_font_size=10,
+                             color_above='red', color_below='black', line_style='-', line_width=1.5,
+                             threshold_color='gray', threshold_style=':', threshold_width=3)
+```
+
+![alt text](https://github.com/wwang487/MultiDataPlotting/blob/main/picture/two_color.png?raw=true)
+
 ### Scatter Plot with Threshold
 
 The `plot_scatter_with_threshold` function in our visualization library creates a scatter plot where points are colored differently based on their position relative to a specified threshold value. This function is ideal for highlighting distributions and differences in datasets relative to a critical value.
