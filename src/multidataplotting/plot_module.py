@@ -275,6 +275,17 @@ def __round_to_nearest(number, power):
     factor = 10 ** power
     return round(number / factor) * factor
 
+def __scale(ax, bottom, scale_lim, theta, width, scale_major):
+    t = np.linspace(theta-width/2, theta+width/2, 6)
+    for i in range(int(bottom), int(bottom+scale_lim+scale_major), scale_major):
+        ax.plot(t, [i]*6, linewidth=0.25, color='gray', alpha=0.8)
+
+def __scale_value(ax, bottom, theta, scale_lim, scale_major, tick_font_size = 5):
+    for i in range(int(bottom), int(bottom+scale_lim+scale_major), scale_major):
+        ax.text(theta, i, f'{i-bottom}',
+                fontsize=tick_font_size, alpha=0.8,
+                va='center',  ha='center')
+
 def plot_beeswarm(categories, values, optimizer_value=None, desired_value=None, fig_size=(12, 8), swarm_color='gray', swarm_size=2,
                   swarm_transparency=None, median_color='black', median_edge_color='none', median_size=30,
                   line_color='black', line_thickness=2, optimizer_color='black', optimizer_style='--', optimizer_thickness=1.5,
@@ -2821,3 +2832,70 @@ def plot_rolling_series(data, rolling_period=30, title='Rolling Statistic Time S
 
     if is_show:
         plt.show()
+
+def draw_grouped_polar_bars(groups, group_names, group_colors, label_names = None, fig_size = (8, 8), scale_lim = 100, scale_major = 20, \
+                           tick_font_size = 5, label_font_size = 5, save_path = None, is_show = True):
+    
+    fig = plt.figure(figsize=fig_size, dpi=300, facecolor='white')
+    ax = fig.add_subplot(projection='polar')
+    
+    ax.set_theta_zero_location("N")
+    ax.set_theta_direction(-1)
+    
+ 
+    radii = [0]
+    colors = ['blue']
+    for g, c in zip(groups, group_colors):
+        radii.extend(g)
+        colors.extend([c]*len(g))
+        radii.append(0)
+        colors.append('blue')
+    radii.pop()
+    colors.pop()
+    
+    N = len(radii)
+    
+    bottom = 40
+    theta = np.linspace(0.0, 2 * np.pi, N, endpoint=False)
+    width = 2 * np.pi / (N + 9)
+    
+    ax.bar(theta, radii, width=width, bottom=bottom, color=colors)
+    s_list, g_no = [], 0
+
+    for t, r in zip(theta, radii):
+        if r == 0:
+            s_list.append(t)
+            if t == 0:
+                __scale_value(ax, bottom, t, scale_lim, scale_major, tick_font_size=tick_font_size)
+            else:
+                __scale(ax, bottom, scale_lim, t, width, scale_major)
+        else:
+            t2 = np.rad2deg(t)
+            if label_names is not None:
+                ax.text(t, r + bottom + scale_major*0.5, label_names[g_no],
+                        fontsize=label_font_size, rotation=90-t2 if t < np.pi else 270-t2,
+                        rotation_mode='anchor', va='center', ha='left' if t < np.pi else 'right',
+                        color='black', clip_on=False)
+            if g_no == (len(label_names)-1):
+                g_no = 0
+            else:
+                g_no += 1
+    
+    
+    s_list.append(2 * np.pi)
+    
+    for i in range(len(s_list)-1):
+        t = np.linspace(s_list[i]+width, s_list[i+1]-width, 50)
+        ax.plot(t, [bottom-scale_major*0.4]*50, linewidth=0.5, color='black')
+        ax.text(s_list[i]+(s_list[i+1]-s_list[i])/2,
+                bottom-scale_major*1.05, group_names[i], va='center',
+                ha='center',fontsize=label_font_size)
+    
+    ax.set_rlim(0, bottom+scale_lim+scale_major)
+    ax.axis('off')
+    
+    if is_show:
+        plt.show()
+    
+    if save_path is not None:
+        plt.savefig(save_path, dpi=600)
