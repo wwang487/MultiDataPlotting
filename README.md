@@ -1289,6 +1289,54 @@ mdp.plot_radar_chart(data, fig_size=(8, 8), tick_font_size=12, tick_font_name='A
 
 ![alt text](https://github.com/wwang487/MultiDataPlotting/blob/main/picture/radar_chart.png?raw=true)
 
+### Draw Grouped Polar Bars
+
+The `draw_grouped_polar_bars` function in our visualization toolkit provides a sophisticated method for displaying grouped polar bar plots. This function is designed to plot data across different groups with an aesthetically pleasing circular layout, which is ideal for comparative analysis in fields like meteorology, biology, or market segmentation studies.
+
+_Functionality_
+
+This function is adept at illustrating complex datasets in a circular (polar) bar plot format. It enables the visualization of distinct groups with unique color codings, and supports adding optional labels for each bar, custom radial ticks, and group labels positioned strategically within the plot.
+
+_Parameters_
+
+- **groups** (list of np.array): A list where each array corresponds to a group's data points.
+- **group_names** (list of str): Labels for each group, displayed around the plot.
+- **group_colors** (list of str): Colors assigned to each group for distinction.
+- **label_names** (list of str, optional): Labels for each bar within the groups. Default is `None`.
+- **fig_size** (tuple, optional): Dimensions of the figure in inches. Default is `(8, 8)`.
+- **scale_lim** (int, optional): The limit for the radial scale marking. Default is `100`.
+- **scale_major** (int, optional): The major tick interval on the radial scale. Default is `20`.
+- **tick_font_size** (int, optional): Font size for the tick labels. Default is `5`.
+- **label_font_size** (int, optional): Font size for the bar labels. Default is `5`.
+- **save_path** (str, optional): Path to save the generated plot image. Default is `None`.
+- **is_show** (bool, optional): Whether to display the plot on screen. Default is `True`.
+
+_Code Example_
+
+```python
+
+import numpy as np
+import multidataplotting as mdp
+
+np.random.seed(123)
+group1 = 100 * np.random.rand(5)
+group2 = 100 * np.random.rand(5)
+group3 = 100 * np.random.rand(5)
+group4 = 100 * np.random.rand(5)
+group5 = 100 * np.random.rand(5)
+ 
+groups = [group1, group2, group3, group4, group5]
+group_names = list('ABCDE')
+group_colors = ['#d7191c','#fdae61','#ffffbf','#abd9e9','#2c7bb6']
+
+labels = ["MN","WI","MI","IA","IN"]
+    
+mdp.draw_grouped_polar_bars(groups, group_names, group_colors, label_names=labels) 
+
+```
+
+![alt text](https://github.com/wwang487/MultiDataPlotting/blob/main/picture/polarbar.png?raw=true)
+
 ### Plotting Rose Map
 
 The `plot_rose_map` function in the multidataprocessing package creates a rose diagram (or wind rose), which is commonly used in meteorology to display the frequency of occurrence of events relative to multiple directions. This visualization is also highly effective in geography, environmental science, and any field requiring the analysis of directional data.
