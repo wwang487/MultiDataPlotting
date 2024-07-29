@@ -918,6 +918,45 @@ mdp.plot_contour_map(data, title="Elevation Contour Map", xlabel="Longitude", yl
 ```
 ![alt text](https://github.com/wwang487/MultiDataPlotting/blob/main/picture/contour.png?raw=true)
 
+### Plot Density Contours
+
+The `plot_density_contours` function is designed to create visually appealing and informative density contour plots from two-dimensional data points. It is particularly useful for visualizing the distribution and density of dataset features in a spatial context. The function is versatile, with various customizable parameters to suit specific visualization needs.
+
+_Functionality_
+
+This function generates a contour plot that visualizes the density of scattered data points using kernel density estimation. It provides options to adjust the appearance of the plot, including colormap, contour levels, axis labels, and more. The plot can be displayed directly, saved to a file, or both, depending on user preferences.
+
+_Parameters_
+
+- **data** (list of tuples or 2D array): Input data where each tuple contains two elements representing coordinates (x, y).
+- **title** (str): Title of the plot. Default is 'Density Contour Plot'.
+- **xlabel**, **ylabel** (str): Labels for the x-axis and y-axis, respectively.
+- **point_color** (str), **point_size** (int): color and size of scatter points.
+- **x_tick_interval**, **y_tick_interval** (float): Specifies the intervals between ticks on the x-axis and y-axis.
+- **font_name** (str): Font name for all text in the plot. Default is 'Arial'.
+- **font_size** (int): Font size for all text elements in the plot. Default is 12.
+- **color_map** (str): Name of the matplotlib colormap used for coloring the plot. Default is 'viridis'.
+- **levels** (int): Number of contour levels to plot. Default is 15.
+- **convert_to_percent** (bool): If True, converts density values to percentages. Default is True.
+- **fig_size** (tuple): Dimensions of the figure in inches (width, height). Default is (10, 8).
+- **is_colorbar** (bool): Determines whether to display a color bar. Default is True.
+- **save_path** (str): Path where the plot will be saved if provided. Default is None, meaning the plot will not be saved.
+- **is_show** (bool): Determines whether to display the plot window. Default is True.
+
+_Code Example_
+
+```python
+import numpy as np
+import multidataplotting as mdp
+
+# Example usage
+data = [(np.random.normal(loc=60, scale=5), np.random.normal(loc=3, scale=1)) for _ in range(100)]
+plot_density_contours(data, title='Geysers Eruption Pattern', xlabel='Idle Time (min)', ylabel='Eruption Time (min)',
+                      x_tick_interval=5, y_tick_interval=0.5, color_map='plasma', levels=20, convert_to_percent=True,
+                      fig_size=(12, 9), is_colorbar=True, save_path='eruption_pattern.png', is_show=True)
+```
+![alt text](https://github.com/wwang487/MultiDataPlotting/blob/main/picture/den_contour.png?raw=true)
+
 ### Plotting 3-D Bar Plots
 
 The `plot_3d_stacked_bar` function in the multidataprocessing package creates a three-dimensional stacked bar plot, which is particularly effective for visualizing the distribution of multiple variables across two dimensions with an additional dimension represented by the height of the bars. This type of visualization is useful in finance, sales data analysis, resource allocation, and more, where comparisons across two categorical dimensions are necessary.
