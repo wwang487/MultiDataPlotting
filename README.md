@@ -1416,3 +1416,50 @@ mdp.plot_pos_neg_dots(positive, negative, years, marker_type='o', positive_color
             positive_label='Gain', negative_label='Loss', is_legend=True, save_path='custom_plot.png')
 ```
 ![alt text](https://github.com/wwang487/MultiDataPlotting/blob/main/picture/PosNegDots.png?raw=true)
+
+### Plot Movement Arrows
+
+The `plot_movement_arrows` function in the visualization package is designed to illustrate changes or movements between two datasets across different dimensions. This function is particularly useful in displaying dynamic changes in data, represented by arrows that indicate direction and magnitude of changes from one period or condition to another.
+
+_Functionality_
+
+This function plots initial data points from a starting dataset and draws arrows pointing towards the corresponding points in a subsequent dataset. It supports log-scaled axes for better visualization of data spanning several orders of magnitude.
+
+_Parameters_
+
+- **pre_data** (dict): Data points from the initial dataset. Each key should correspond to a label and map to a tuple `(x, y)`.
+- **post_data** (dict): Data points from the subsequent dataset. Format similar to `pre_data`.
+- **labels** (list of str): Labels that identify each data point. These labels are used for annotations and must correspond to keys in `pre_data` and `post_data`.
+- **title** (str): Title of the plot. Default is 'Movement Over Time'.
+- **xlabel**, **ylabel** (str): Labels for the x-axis and y-axis.
+- **x_delta**, **y_delta** (float): Margins added to x and y axes limits to ensure all data and annotations are visible.
+- **arrow_color** (str): Color of the arrows depicting movement.
+- **scale** (float): Scale factor for arrows to control their size and visibility.
+- **fig_size** (tuple): Dimensions of the figure.
+- **use_log_x**, **use_log_y** (bool): Flags to apply logarithmic scale on x or y axes.
+- **is_show** (bool): Flag to display the plot immediately.
+- **is_grid** (bool): Flag to display grid lines on the plot.
+- **save_path** (str): Path to save the figure. If provided, the plot is saved to this path.
+- **font_name** (str), **font_size** (int): Font settings for titles and labels.
+- **annotation_text_size** (int), **annotation_text_color** (str): Settings for annotation text properties.
+
+_Code Example_
+
+```python
+import multidataplotting as mdp
+
+data_1980 = {
+    'New York': (8e6, 5.5),
+    'San Francisco': (800000, 6.0),
+    'Chicago': (2.7e6, 5.0)
+}
+data_2015 = {
+    'New York': (8.5e6, 6.5),
+    'San Francisco': (900000, 7.5),
+    'Chicago': (2.7e6, 5.7)
+}
+labels = ['New York', 'San Francisco', 'Chicago']
+
+mdp.plot_movement_arrows(data_1980, data_2015, labels, x_delta = 200000, use_log_x=True)
+```
+![alt text](https://github.com/wwang487/MultiDataPlotting/blob/main/picture/moving_arrow.png?raw=true)
