@@ -30,6 +30,9 @@ import pandas as pd
 from dateutil.parser import parse
 from dateutil.relativedelta import relativedelta
 from matplotlib import colormaps
+from matplotlib.ticker import MultipleLocator
+from matplotlib.font_manager import FontProperties
+from matplotlib.cm import ScalarMappable
 
 class __HandlerRect(HandlerPatch):
     def create_artists(self, legend, orig_handle, xdescent, ydescent, width, height, fontsize, trans):
@@ -2516,3 +2519,160 @@ def plot_density_contours(data, title='Density Contour Plot', xlabel='Idle (min.
         plt.show()
     else:
         plt.close()
+        
+
+def plot_two_colored_time_series(data, threshold, title='Time Series Plot', xlabel='Time', ylabel='Value',
+                                 color_above='red', color_below='black', line_style='-', line_width=2,
+                                 threshold_color='gray', threshold_style='--', threshold_width=1,
+                                 fig_size=(15, 6), x_tick_interval=None, y_tick_interval=None,
+                                 tick_font_name='sans-serif', tick_font_size=12,
+                                 is_legend=True, legend_text='Threshold',
+                                 save_path=None, is_show=True):
+    """
+    Plots a time series where the line color changes above and below a certain threshold,
+    and segments that cross the threshold are divided into two parts with appropriate colors.
+    Line properties and threshold line properties can be customized.
+
+    Parameters:
+    - data (pandas Series): Series with a DateTime index and one column of values.
+    - threshold (float): The threshold value at which the line color changes.
+    - title (str): Title of the plot.
+    - xlabel (str), ylabel (str): Labels for the x-axis and y-axis.
+    - color_above (str), color_below (str): Colors for the segments above and below the threshold.
+    - line_style (str): Style of the line (e.g., '-', '--', '-.', ':').
+    - line_width (float): Width of the line.
+    - threshold_color (str): Color of the threshold line.
+    - threshold_style (str): Style of the threshold line (e.g., '-', '--', '-.', ':').
+    - threshold_width (float): Width of the threshold line.
+    - fig_size (tuple): Figure size.
+    - x_tick_interval (float): Interval between ticks on the x-axis.
+    - y_tick_interval (float): Interval between ticks on the y-axis.
+    - tick_font_name (str): Font name for the tick labels.
+    - tick_font_size (int): Font size for the tick labels.
+    - is_legend (bool): If True, displays a legend.
+    - legend_text (str): Text for the legend corresponding to the threshold line.
+    - save_path (str): If provided, saves the plot to this path.
+    - is_show (bool): If True, displays the plot.
+    """
+    fig, ax = plt.subplots(figsize=fig_size)
+    font = FontProperties(family=tick_font_name, size=tick_font_size)
+
+    last_index = data.index[0]
+    last_value = data.iloc[0]
+
+    for current_index, current_value in data.iloc[1:].items():
+        if (last_value < threshold and current_value >= threshold) or (last_value >= threshold and current_value < threshold):
+            ratio = (threshold - last_value) / (current_value - last_value)
+            threshold_time = last_index + (current_index - last_index) * ratio
+            ax.plot([last_index, threshold_time], [last_value, threshold], color=color_below if last_value < threshold else color_above, linestyle=line_style, linewidth=line_width)
+            ax.plot([threshold_time, current_index], [threshold, current_value], color=color_above if current_value >= threshold else color_below, linestyle=line_style, linewidth=line_width)
+        else:
+            ax.plot([last_index, current_index], [last_value, current_value], color=color_above if last_value >= threshold else color_below, linestyle=line_style, linewidth=line_width)
+        last_index = current_index
+        last_value = current_value
+
+    # Plotting the threshold line
+    threshold_line = ax.axhline(y=threshold, color=threshold_color, linestyle=threshold_style, linewidth=threshold_width)
+
+    ax.set_title(title)
+    ax.set_xlabel(xlabel)
+    ax.set_ylabel(ylabel)
+
+    # Set tick intervals and font properties if specified
+    if x_tick_interval:
+        ax.xaxis.set_major_locator(MultipleLocator(x_tick_interval))
+    if y_tick_interval:
+        ax.yaxis.set_major_locator(MultipleLocator(y_tick_interval))
+
+    for label in ax.get_xticklabels() + ax.get_yticklabels():
+        label.set_fontproperties(font)
+
+    # Handling the legend
+    if is_legend:
+        ax.legend([threshold_line], [legend_text], loc='best')
+
+    if save_path:
+        plt.savefig(save_path)
+
+    if is_show:
+        plt.show()
+
+def plot_scatter_with_threshold(data, threshold, title='Scatter Plot', xlabel='X', ylabel='Y', edge_color=None,
+                                base_color_above='Blues', base_color_below='Reds', fig_size=(15, 6), is_legend=False,
+                                legend_font_size=10, legend_font_name='sans-serif',
+                                label_font_size=12, label_font_name='sans-serif',
+                                line_color='gray', line_style='--', line_thickness=1,
+                                save_path=None, is_show=True):
+    """
+    Plots a scatter plot where the color saturation varies based on the distance from a threshold value and
+    uses different color maps for values above and below the threshold. The further from the threshold,
+    the more saturated the color.
+
+    Parameters:
+    - data (pandas DataFrame): DataFrame with 'x' and 'y' columns.
+    - threshold (float): Value at which the threshold line is drawn and colors are based on.
+    - title (str): Title of the plot.
+    - xlabel (str), ylabel (str): Labels for the x-axis and y-axis.
+    - base_color_above, base_color_below (str): Base color maps for points above and below the threshold.
+    - fig_size (tuple): Figure size.
+    - save_path (str): If provided, saves the plot to this path.
+    - is_show (bool): If True, displays the plot.
+    - label_font_size (int): Font size for the axis labels.
+    - label_font_name (str): Font name for the axis labels.
+    - legend_font_size (int): Font size for the legend.
+    - legend_font_name (str): Font name for the legend.
+    - line_color (str): Color of the threshold line.
+    - line_style (str): Style of the threshold line.
+    - line_thickness (float): Thickness of the threshold line.
+    """
+    fig, ax = plt.subplots(figsize=fig_size)
+    label_font = FontProperties(family=label_font_name, size=label_font_size)
+    legend_font = FontProperties(family=legend_font_name, size=legend_font_size)
+    
+    # Calculate distances from the threshold and normalize
+    distances = np.abs(data['y'] - threshold)
+    norm = Normalize(vmin=0, vmax=distances.max())
+    
+    # Prepare color maps
+    cmap_above = plt.get_cmap(base_color_above)
+    cmap_below = plt.get_cmap(base_color_below)
+
+    # Split data above and below the threshold
+    above_threshold = data['y'] >= threshold
+    below_threshold = data['y'] < threshold
+
+    # Plot scatter points with different color maps
+    scatter1 = ax.scatter(data['x'][above_threshold], data['y'][above_threshold], c=distances[above_threshold],
+                         cmap=cmap_above, norm=norm, edgecolor=edge_color, label='Above Threshold')
+    scatter2 = ax.scatter(data['x'][below_threshold], data['y'][below_threshold], c=distances[below_threshold],
+               cmap=cmap_below, norm=norm, edgecolor=edge_color, label='Below Threshold')
+    
+    # Draw the threshold line
+    ax.axhline(y=threshold, color=line_color, linestyle=line_style, linewidth=line_thickness)
+    # Custom color map for the colorbar
+    colors_above = cmap_above(np.linspace(0, 1, 256))
+    colors_below = cmap_below(np.linspace(0, 1, 256))
+    all_colors = np.vstack((colors_below[::-1], colors_above))
+    custom_cmap = LinearSegmentedColormap.from_list('custom_cmap', all_colors)
+    sm = ScalarMappable(cmap=custom_cmap, norm=norm)
+    sm.set_array([])
+    cbar = plt.colorbar(sm, ax=ax)
+    cbar.set_label('Distance from Threshold', fontproperties=label_font)
+
+    # Set labels, title, and fonts
+    ax.set_title(title, fontproperties=label_font)
+    ax.set_xlabel(xlabel, fontproperties=label_font)
+    ax.set_ylabel(ylabel, fontproperties=label_font)
+
+    # Set tick labels
+    ax.tick_params(axis='both', labelsize=label_font_size)
+
+    # Handling the legend
+    if is_legend:
+        ax.legend(prop=legend_font)
+
+    if save_path:
+        plt.savefig(save_path)
+
+    if is_show:
+        plt.show()
