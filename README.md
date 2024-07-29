@@ -364,6 +364,51 @@ mdp.plot_polylines(data, x=0, ys=[1, 2], line_colors={1: 'red', 2: 'green'}, x_t
 ```
 ![alt text](https://github.com/wwang487/MultiDataPlotting/blob/main/picture/polyline.png?raw=true)
 
+### plot_rolling_series Function Documentation
+
+The `plot_rolling_series` function is designed for visualizing time series data along with its rolling statistics such as rolling maximum, minimum, and average. This function allows for significant customization to suit various analytical and presentation needs.
+
+_Functionality_
+
+This function plots a given time series data with its rolling statistics to provide insights into trends, fluctuations, and overall behavior over a specified period. It includes options for visual customization and can be adapted for both simple exploratory analysis and detailed, polished presentations.
+
+_Parameters_
+
+- **data** (`pd.Series`): The time series data as a Pandas Series with a DateTime index.
+- **rolling_period** (`int`): The number of periods to use for calculating rolling statistics.
+- **title** (`str`): The title of the plot.
+- **xlabel**, **ylabel** (`str`): Labels for the X and Y axes.
+- **series_color**, **max_color**, **min_color**, **avg_color** (`str`): Colors for the original data series, rolling maximum, minimum, and average lines.
+- **alpha** (`float`): Opacity for the original series plot, where 1 is opaque and 0 is transparent.
+- **fig_size** (`tuple`): Dimensions of the figure (width, height).
+- **line_width** (`int`): The thickness of the plotted lines.
+- **line_style** (`str`): Style of the lines (e.g., '-', '--', '-.', ':').
+- **legend_labels** (`dict`): Labels for the plot legend, should include keys for 'original', 'max', 'min', and 'avg'.
+- **font_name** (`str`): Font family for all text elements in the plot.
+- **font_size** (`int`): Font size for all text elements in the plot.
+- **y_lim** (`tuple`): The limits for the Y-axis (min, max).
+- **y_tick_interval**, **x_tick_interval** (`int`): Interval between ticks on the Y-axis and X-axis respectively.
+- **is_grid** (`bool`): If True, displays a grid on the plot.
+- **is_legend** (`bool`): If True, displays a legend on the plot.
+- **is_label** (`bool`): If True, labels are displayed alongside lines.
+- **save_path** (`str`, optional): Path to save the figure file.
+- **is_show** (`bool`): If True, displays the plot.
+
+_Code Example_
+
+```python
+import pandas as pd
+import multidataplotting as mdp
+
+dates = pd.date_range(start='2020-01-01', periods=1000)
+data = pd.Series(np.random.randn(1000).cumsum(), index=dates)
+legend_labels = {'original': 'Data', 'max': 'Max Roll', 'min': 'Min Roll', 'avg': 'Average Roll'}
+mdp.plot_rolling_series(data, rolling_period=10, legend_labels=legend_labels, x_tick_interval=90, y_tick_interval=3, is_grid=False, font_name='Times New Roman', font_size=14, is_label=True)
+
+```
+
+![alt text](https://github.com/wwang487/MultiDataPlotting/blob/main/picture/rolling.png?raw=true)
+
 ### Two-Colored Time Series Plot
 
 The `plot_two_colored_time_series` function in our data visualization toolkit offers a distinctive way to visualize time series data by changing the color of the plot line based on a specified threshold value. This is particularly useful for highlighting segments of the data that exceed or fall below critical levels, such as temperature thresholds, stock price targets, or performance benchmarks.
