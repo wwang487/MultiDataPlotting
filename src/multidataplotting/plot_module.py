@@ -4,7 +4,7 @@ import numpy as np
 import pandas as pd
 import seaborn as sns
 import copy
-from scipy.stats import kde
+from scipy.stats import kde, gaussian_kde
 from scipy.optimize import curve_fit
 from scipy.interpolate import griddata
 from matplotlib.colors import to_rgba
@@ -2436,3 +2436,83 @@ def plot_timeline(data, title="Historical Timeline", time_resolution='y', label_
     
     if is_show:
         plt.show()
+
+def plot_density_contours(data, title='Density Contour Plot', xlabel='Idle (min.)', ylabel='Erupting (min.)',
+                          x_tick_interval=None, y_tick_interval=None, font_name='Arial', font_size=12, 
+                          point_color = 'black', point_size = 10,
+                          color_map='viridis', levels=15, convert_to_percent=True, fig_size=(10, 8),
+                          is_colorbar=True, save_path=None, is_show=True):
+    """
+    Plots a density contour map for given data with extensive customization.
+
+    Parameters:
+    - data (list of tuples or 2D array): Input data where each tuple is a point (x, y).
+    - title (str): Title of the plot.
+    - xlabel, ylabel (str): Labels for the x-axis and y-axis.
+    - point_color (str): Color of the data points.
+    - point_size (int): Size of the data points.
+    - x_tick_interval, y_tick_interval (float): Spacing between ticks on x-axis and y-axis.
+    - font_name (str): Font name for text elements.
+    - font_size (int): Font size for text elements.
+    - color_map (str): Matplotlib colormap name.
+    - levels (int): Number of contour levels.
+    - convert_to_percent (bool): If True, convert density values to percentages.
+    - fig_size (tuple): Dimensions of the figure (width, height).
+    - is_colorbar (bool): If True, display a colorbar.
+    - save_path (str): If provided, the plot is saved to this path.
+    - is_show (bool): If True, display the plot window.
+    """
+    fig, ax = plt.subplots(figsize=fig_size)
+    # colors = colormaps.get_cmap(color_map, len(data))
+
+    # Extract x and y coordinates from the data
+    x = np.array([point[0] for point in data])
+    y = np.array([point[1] for point in data])
+    
+    # Calculate the point density
+    xy = np.vstack([x, y])
+    density = gaussian_kde(xy)(xy)
+    if convert_to_percent:
+        density = density / density.sum() * 100  # Convert density to percentages
+    
+    # Sort the points by density
+    idx = density.argsort()
+    x, y, density = x[idx], y[idx], density[idx]
+    
+    
+
+    # Set up the grid for contours
+    xi, yi = np.linspace(x.min(), x.max(), 100), np.linspace(y.min(), y.max(), 100)
+    xi, yi = np.meshgrid(xi, yi)
+    zi = gaussian_kde(xy)(np.vstack([xi.flatten(), yi.flatten()]))
+
+    # Plot contour lines
+    contour = ax.contourf(xi, yi, zi.reshape(xi.shape), levels=levels, cmap=color_map, alpha=0.6)
+    if is_colorbar:
+        cbar = plt.colorbar(contour, ax=ax, label='Density (%)' if convert_to_percent else 'Density')
+        cbar.ax.tick_params(labelsize=font_size - 1)  # set font size for colorbar
+        # set font size for colorbar label
+        cbar.ax.yaxis.label.set_fontsize(font_size)
+    # Scatter plot for the data points
+    scatter = ax.scatter(x, y, c=point_color, s=point_size, edgecolor='none', cmap=color_map)
+    # Customize the plot
+    ax.set_xlabel(xlabel, fontsize=font_size, fontname=font_name)
+    ax.set_ylabel(ylabel, fontsize=font_size, fontname=font_name)
+    plt.title(title, fontsize=font_size + 2, fontname=font_name)
+
+    if x_tick_interval:
+        ax.xaxis.set_major_locator(plt.MultipleLocator(x_tick_interval))
+    if y_tick_interval:
+        ax.yaxis.set_major_locator(plt.MultipleLocator(y_tick_interval))
+
+    plt.tight_layout()
+
+    # Save the plot if a path is provided
+    if save_path:
+        plt.savefig(save_path, dpi=600, bbox_inches='tight')
+
+    # Display the plot if is_show is True
+    if is_show:
+        plt.show()
+    else:
+        plt.close()
