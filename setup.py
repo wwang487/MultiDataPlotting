@@ -2,7 +2,7 @@ from setuptools import setup, find_packages
 
 setup(
     name="MultiDataPlotting",
-    version="1.2.1",
+    version="1.2.2",
     author="Wei Wang",
     author_email="wwang487@wisc.edu",
     description="A package for plotting multiple datasets",
