@@ -364,6 +364,51 @@ mdp.plot_polylines(data, x=0, ys=[1, 2], line_colors={1: 'red', 2: 'green'}, x_t
 ```
 ![alt text](https://github.com/wwang487/MultiDataPlotting/blob/main/picture/polyline.png?raw=true)
 
+### Scatter Plot with Threshold
+
+The `plot_scatter_with_threshold` function in our visualization library creates a scatter plot where points are colored differently based on their position relative to a specified threshold value. This function is ideal for highlighting distributions and differences in datasets relative to a critical value.
+
+_Functionality_
+
+This function generates a scatter plot with two distinct color mappings for data points lying above and below a given threshold. The saturation of colors indicates the distance from the threshold, providing a clear visual representation of how data points deviate from a critical value. Additionally, a threshold line is drawn to visually segregate the data, enhancing the interpretability of the plot.
+
+_Parameters_
+- **data** (pandas DataFrame): Contains the data with 'x' and 'y' columns to be plotted.
+- **threshold** (float): The critical value against which data points are evaluated and colored.
+- **title** (str): The title of the plot.
+- **xlabel**, **ylabel** (str): Labels for the x-axis and y-axis.
+- **edge_color** (str, optional): Color of the edges of scatter plot markers.
+- **base_color_above**, **base_color_below** (str): Color maps for points above and below the threshold.
+- **fig_size** (tuple): The dimensions of the figure.
+- **is_legend** (bool): Whether to display the legend.
+- **legend_font_size** (int): Font size for the legend text.
+- **legend_font_name** (str): Font family for the legend text.
+- **line_color** (str): Color of the threshold line.
+- **line_style** (str): Style of the threshold line (e.g., '-', '--').
+- **line_thickness** (float): Thickness of the threshold line.
+- **label_font_size** (int): Font size for the axis labels.
+- **label_font_name** (str): Font family for the axis labels.
+- **save_path** (str, optional): Path to save the plot image, if desired.
+- **is_show** (bool, optional): Set to True to display the plot. Defaults to True if not specified.
+
+_Example Usage_
+```python
+import pandas as pd
+import numpy as np
+import multidataplotting as mdp
+
+# Example usage
+df = pd.DataFrame({
+    'x': np.random.rand(100),
+    'y': np.random.randn(100)  # Simulated values centered around zero
+})
+mdp.plot_scatter_with_threshold(df, threshold=0, title="Scatter Plot Example", xlabel="Random X", ylabel="Random Y",
+                            base_color_above='Blues', base_color_below='Reds')
+
+```
+
+![alt text](https://github.com/wwang487/MultiDataPlotting/blob/main/picture/thresh_scatter.png?raw=true)
+
 ### Plotting Histograms
 
 The `plot_histograms` function from the multidataprocessing package allows users to plot multiple histograms in a single figure. This feature is particularly useful for comparing the distributions of several datasets simultaneously, providing insights into variability, skewness, or similarity among the datasets.
