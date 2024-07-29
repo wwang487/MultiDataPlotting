@@ -2676,3 +2676,70 @@ def plot_scatter_with_threshold(data, threshold, title='Scatter Plot', xlabel='X
 
     if is_show:
         plt.show()
+
+def plot_movement_arrows(pre_data, post_data, labels, title='Movement Over Time', xlabel='Population', ylabel='Inequality',
+                         x_delta=0.1, y_delta=0.1, arrow_color='red', scale=1, fig_size=(15, 10),
+                         use_log_x=False, use_log_y=False, is_show=True, is_grid=False, save_path=None,
+                         font_name='Arial', font_size=12, annotation_text_size=10, annotation_text_color='blue'):
+    """
+    Plots initial points for one dataset and arrows showing movement to another dataset on a potentially log-scaled axes.
+    Uses 'quiver' to plot arrows, which is suitable for vector fields.
+
+    Parameters:
+    - pre_data (dict): Data points from the initial dataset.
+    - post_data (dict): Data points from the subsequent dataset.
+    - labels (list): List of labels to annotate.
+    - title (str): Title of the plot.
+    - xlabel (str): Label for the x-axis.
+    - ylabel (str): Label for the y-axis.
+    - x_delta, y_delta (float): Margins to adjust the axes limits.
+    - arrow_color (str): Color of the arrows.
+    - scale (float): Scale factor for the arrows to control their size.
+    - fig_size (tuple): Size of the figure.
+    - use_log_x, use_log_y (bool): If True, use log scale for the respective axis.
+    - is_show (bool): If True, display the plot; otherwise, do not display.
+    - is_grid (bool): If True, display the grid.
+    - save_path (str): Path to save the figure to file.
+    - font_name (str), font_size (int), annotation_text_size (int): Font settings.
+    - annotation_text_color (str): Color for the text annotations.
+    """
+    fig, ax = plt.subplots(figsize=fig_size)
+    if use_log_x:
+        ax.set_xscale('log')
+    if use_log_y:
+        ax.set_yscale('log')
+
+    X, Y, U, V, X1, Y1 = [], [], [], [], [], []
+    for label in labels:
+        x0, y0 = pre_data[label]
+        x1, y1 = post_data.get(label, (x0, y0))  # Default to start point if not available
+        X.append(x0)
+        Y.append(y0)
+        X1.append(x1)
+        Y1.append(y1)
+        U.append(x1 - x0)
+        V.append(y1 - y0)
+        
+        # Plotting initial points
+        ax.scatter(x0, y0, color='black')
+        ax.text(x1, y1, f'{label}', fontsize=annotation_text_size, color=annotation_text_color,
+                verticalalignment='bottom', horizontalalignment='right')
+
+    # Using quiver to draw arrows
+    ax.quiver(X, Y, U, V, angles='xy', scale_units='xy', scale=scale, color=arrow_color)
+
+    ax.set_title(title, fontsize=font_size, fontname=font_name)
+    ax.set_xlabel(xlabel, fontsize=font_size, fontname=font_name)
+    ax.set_ylabel(ylabel, fontsize=font_size, fontname=font_name)
+
+    if is_grid:
+        ax.grid(True)
+
+    ax.set_xlim(min(min(X), min(X1)) - x_delta, max(max(X), max(X1)) + x_delta)
+    ax.set_ylim(min(min(Y), min(Y1)) - y_delta, max(max(Y), max(Y1)) + y_delta)
+
+    if save_path:
+        plt.savefig(save_path, dpi=600)
+
+    if is_show:
+        plt.show()
