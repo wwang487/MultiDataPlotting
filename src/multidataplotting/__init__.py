@@ -4,4 +4,4 @@ from .plot_module import plot_time_histogram, plot_polylines, plot_histograms, \
     plot_intensity_velocity_and_classes, plot_pos_neg_dots, plot_clustered_data,\
     plot_heatmap_on_geomap, plot_beeswarm, plot_quadrant_data, plot_ridgelines,\
     plot_bins_with_cdf, plot_surface_with_residuals, plot_ternary, plot_radar_chart,\
-    plot_heatmap_with_bound_and_curves, plot_timeline
+    plot_heatmap_with_bound_and_curves, plot_timeline, plot_density_contours
