@@ -33,6 +33,7 @@ from matplotlib import colormaps
 from matplotlib.ticker import MultipleLocator
 from matplotlib.font_manager import FontProperties
 from matplotlib.cm import ScalarMappable
+import statsmodels.api as sm
 
 class __HandlerRect(HandlerPatch):
     def create_artists(self, legend, orig_handle, xdescent, ydescent, width, height, fontsize, trans):
