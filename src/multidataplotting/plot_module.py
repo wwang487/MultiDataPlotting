@@ -2951,3 +2951,56 @@ def draw_grouped_polar_bars(groups, group_names, group_colors, label_names = Non
     
     if save_path is not None:
         plt.savefig(save_path, dpi=600)
+
+def plot_grouped_dot_chart(data, category_col='State', value_cols=None, label_size=12, tick_label_size=10, cmap = 'tab20',
+                           font_name='Arial', is_legend=True, is_show=True, fig_size=(10, 8), save_path=None):
+    # Dynamically determine value columns if not provided
+    if value_cols is None:
+        value_cols = [col for col in data.columns if col != category_col]
+
+    # Generate a color palette
+    colors = plt.get_cmap(cmap).colors  # This colormap has 20 distinct colors
+    color_dict = {category: colors[i % 20] for i, category in enumerate(value_cols)}
+
+    # Create the plot with custom figure size
+    fig, ax = plt.subplots(figsize=fig_size)
+
+    # Set font properties
+    plt.rcParams.update({'font.size': tick_label_size, 'font.family': font_name})
+
+    # Unique categories for the x-axis
+    categories = data[category_col].unique()
+    category_positions = np.arange(len(categories))
+
+    # Offset to differentiate the dots within the same category group
+    offset = np.linspace(-0.3, 0.3, len(value_cols))
+
+    for idx, value_col in enumerate(value_cols):
+        # Positions for each dot
+        positions = category_positions + offset[idx]
+        # Plot each category
+        ax.scatter(positions, data[value_col], color=color_dict[value_col], label=value_col, s=100)
+        # Draw vertical lines
+        for pos, y in zip(positions, data[value_col]):
+            ax.vlines(pos, ymin=0, ymax=y, color=color_dict[value_col], linewidth=1)
+
+    # Set x-ticks and labels with custom sizes
+    ax.set_xticks(category_positions)
+    ax.set_xticklabels(categories, fontsize=tick_label_size)
+    ax.set_xlabel(category_col, fontsize=label_size)
+    ax.set_ylabel('Values', fontsize=label_size)
+    ax.tick_params(axis='both', which='major', labelsize=tick_label_size)
+    ax.set_title(f'Values by {category_col} and Categories', fontsize=label_size + 2)
+
+    # Optionally add legend
+    if is_legend:
+        ax.legend(title='Categories', title_fontsize=label_size, fontsize=tick_label_size)
+
+    # Optionally save the plot to a file
+    if save_path:
+        plt.savefig(save_path, format='png', dpi=600)
+
+    # Optionally display the plot
+    if is_show:
+        plt.show()
+    plt.close()
