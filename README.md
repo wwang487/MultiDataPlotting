@@ -1384,6 +1384,45 @@ mdp.plot_rose_map(df, key_1='Direction', key_2='Speed', interval=30, title="Wind
 ```
 ![alt text](https://github.com/wwang487/MultiDataPlotting/blob/main/picture/rosemap.png?raw=true)
 
+### Circular Bar Chart Function
+
+The `plot_cyclic_bar` function in our advanced data visualization toolkit offers a robust method for displaying circular bar charts (or donut charts). This tool is perfect for visualizing relative proportions of categories or metrics in a format that is both visually engaging and informative. It is particularly useful in fields such as market analysis, performance tracking, and health data visualization, where understanding the distribution and magnitude of contributions is crucial.
+
+_Functionality_
+
+This function enables the creation of multilayered circular bar charts with a high degree of customization. It provides options for adjusting colors, dimensions, text styling, and more, allowing users to tailor the visualization to their specific needs. Key features include adjustable ring sizes, customizable start angles, and the option to save or display the plot directly.
+
+_Parameters_
+- **data** (pd.DataFrame): Data containing the values to be plotted, with indexes used as labels.
+- **r0** (float): Radius of the innermost circle.
+- **delta** (float): Thickness of each ring.
+- **fig_size** (tuple, optional): Dimensions of the figure, defaulting to `(5, 5)`.
+- **color_list** (list, optional): List of colors for each ring; a default palette is provided.
+- **start_angle** (int, optional): Starting angle for the first segment, default is 90 degrees.
+- **edge_color** (str, optional): Color of the edge between segments, default is 'white'.
+- **text_offset** (float, optional): Vertical offset for the text inside the rings, default is 0.02.
+- **font_size** (int, optional): Font size for labels, default is 10.
+- **font_name** (str, optional): Font family for labels, default is 'sans-serif'.
+- **label_color** (str, optional): Color of the text labels, default is 'black'.
+- **non_filled_color** (str, optional): Color for the non-filled area of each ring, default is 'lightgrey'.
+- **is_show** (bool, optional): If `True`, displays the plot; default is True.
+- **save_path** (str, optional): If provided, saves the plot to the specified path with high resolution.
+
+_Code Example_
+
+```python
+import pandas as pd
+import multidataplotting as mdp
+
+data = pd.DataFrame({
+    'Values': [280, 400, 900, 200, 700, 450, 550, 420, 780]
+}, index=['Apple', 'Banana', 'Cherry', 'Date', 'Elderberry', 'Melon', 'Pineapple', 'Kiwi', 'Mango'])
+
+mdp.plot_cyclic_bar(data, r0=2, delta=0.1)
+```
+
+![alt text](https://github.com/wwang487/MultiDataPlotting/blob/main/picture/cycbar.png?raw=true)
+
 ### Plotting Rose Contour Map for Directional Data
 
 The `plot_rose_contour_map` function creates a rose contour map to visualize directional data using contours with optional threshold-based boundary lines. This is particularly useful in meteorology, oceanography, and environmental sciences where wind, waves, or any directional data need to be visualized for analysis and decision-making.
