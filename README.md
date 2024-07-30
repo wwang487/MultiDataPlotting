@@ -1520,35 +1520,52 @@ This function can plot the CDFs of multiple datasets either on a single figure o
 
 _Parameters_
 
-- **data_lists** (List of lists): Each sublist contains numerical data for plotting.
-- **fig_size** (tuple): Size of the figure.
-- **line_styles** (dict): Dictionary mapping dataset indices to line styles.
-- **line_widths** (dict): Dictionary mapping dataset indices to line widths.
-- **line_colors** (dict): Dictionary mapping dataset indices to line colors.
-- **legends** (list): Legend labels for each dataset.
-- **marker_colors** (dict): Dictionary mapping dataset indices to marker colors.
-- **x_tick_interval** (int): Interval between x-ticks on the axis.
-- **markers** (dict): Dictionary mapping dataset indices to marker types.
-- **show_grid** (bool): Whether to show grid lines.
-- **font_name** (str): Font name for all text elements.
-- **font_size** (int): Font size for all text elements.
-- **save_path** (str): Optional path to save the figure.
-- **dpi** (int): Resolution of the saved figure in dots per inch.
-- **is_same_figure** (bool): Whether to plot all CDFs in the same figure.
-- **is_log_x** (bool): Whether the x-axis should use a logarithmic scale.
+- **data_lists** (list of lists): Each sublist contains data points for which the CDF will be plotted.
+- **fig_size** (tuple, optional): Dimensions of the figure in inches. Default is (10, 6).
+- **line_styles** (dict, optional): Styles of the plot lines for each dataset. Default is solid lines.
+- **line_widths** (dict, optional): Widths of the plot lines for each dataset. Default is 1.
+- **is_percent** (bool, optional): Whether to plot the CDF values in percentage. Default is True.
+- **line_colors** (dict, optional): Colors of the plot lines for each dataset. Default is blue.
+- **legends** (list, optional): Legend labels for each dataset. Default labels are 'Data 1', 'Data 2', etc.
+- **marker_colors** (dict, optional): Colors of the markers for each dataset. Matches line colors by default.
+- **x_tick_interval** (int, optional): Interval between x-axis ticks. Default is 10.
+- **tick_label_fontsize** (int, optional): Font size for tick labels. Default is 12.
+- **markers** (dict, optional): Marker styles for each dataset. Default is None.
+- **show_grid** (bool, optional): Whether to show grid lines. Default is True.
+- **font_name** (str, optional): Font family for all text elements. Default is 'Arial'.
+- **font_size** (int, optional): Font size for all text elements. Default is 12.
+- **save_path** (str, optional): File path to save the plot image, if desired. Default is None.
+- **dpi** (int, optional): Resolution of the saved plot image. Default is 100.
+- **is_same_figure** (bool, optional): Whether to plot all CDFs on the same figure. Default is True.
+- **is_log_x** (bool, optional): Whether to use logarithmic scaling for the x-axis. Default is False.
+- **regression_trans** (list of tuples, optional): Ranges for which to perform OLS regression. Default is None.
+- **title** (str, optional): Title of the plot. Default is 'Cumulative Distribution Function'.
+- **show_reg_eqn** (bool, optional): Whether to display the regression equation. Default is True.
+- **annno_digits** (int, optional): Number of digits after the decimal in the regression equation annotation. Default is 3.
 
 _Code Example_
 ```python
 import numpy as np
 import multidataplotting as mdp
-data1 = np.random.normal(0, 1, 1000)
-data2 = np.random.exponential(1, 1000)
-mdp.plot_cdfs([data1, data2],line_styles={0: '-', 1: '--'},line_widths={0: 2, 1: 3},
-          line_colors={0: 'blue', 1: 'red'},legends=['Normal', 'Exponential'],
-          marker_colors={0: 'blue', 1: 'red'},markers={0: 'o', 1: 'x'},fig_size=(12, 8),font_size=14,
-          show_grid=True,save_path='cdf_plots.png', dpi=300,is_same_figure=True,is_log_x=True)
+# Generate random data for three datasets
+np.random.seed(0)  # For reproducibility
+data1 = np.random.normal(50, 10, 200)
+data2 = np.random.exponential(scale=30, size=200)
+data3 = np.random.lognormal(mean=2, sigma=0.5, size=200)
+
+data_lists = [data1, data2, data3]
+
+# Define regression ranges for each dataset
+# Assuming each tuple corresponds to a specific dataset's regression range
+regression_ranges = [(45, 55), (20, 40), (7, 11)]
+
+# Call your plotting function with regression analysis
+plot_cdfs(data_lists, line_colors={0: 'red', 1: 'blue', 2: 'green'},
+          regression_trans=regression_ranges, is_log_x = True,
+          legends=['Normal Distribution', 'Exponential Distribution', 'Lognormal Distribution'])
+
 ```
-![alt text](https://github.com/wwang487/MultiDataPlotting/blob/main/picture/CDFs.png?raw=true)
+![alt text](https://github.com/wwang487/MultiDataPlotting/blob/main/picture/newCDFs.png?raw=true)
 
 ### Plotting Positive and Negative Dot Plots
 The plot_pos_neg_dot_plot function in the visualization toolkit is specifically designed to create scatter plots that visually distinguish between positive and negative data points over a set of years. This feature is particularly useful in fields like finance, environmental science, and public health, where it is crucial to track and compare upward and downward trends over time.
