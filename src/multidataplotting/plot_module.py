@@ -2688,8 +2688,8 @@ def plot_scatter_with_threshold(data, threshold, title='Scatter Plot', xlabel='X
     if is_show:
         plt.show()
 
-def plot_cyclic_bar(data, r0, delta, fig_size=(5, 5), color_list=None, startangle=90, edgecolor='white',
-               text_offset=0.02, fontsize=10, fontname='sans-serif', label_color='black',
+def plot_cyclic_bar(data, r0, delta, fig_size=(5, 5), color_list=None, start_angle=90, edge_color='white',
+               text_offset=0.02, font_size=10, font_name='sans-serif', label_color='black',
                non_filled_color='lightgrey', is_show=True, save_path=None):
     """
     Draws a circular bar chart with extensive customization options.
@@ -2698,13 +2698,13 @@ def plot_cyclic_bar(data, r0, delta, fig_size=(5, 5), color_list=None, startangl
     - data (pd.DataFrame): Data containing values for the chart.
     - r0 (float): Radius of the innermost circle.
     - delta (float): Thickness of each ring.
-    - figsize (tuple): Size of the figure.
+    - fig_size (tuple): Size of the figure.
     - color_list (list): List of colors for each ring.
     - startangle (int): Starting angle for the first segment.
     - edgecolor (str): Color of the edge between segments.
     - text_offset (float): Vertical offset for the text inside the rings.
-    - fontsize (int): Font size for labels.
-    - fontname (str): Font family for labels.
+    - font_size (int): Font size for labels.
+    - font_name (str): Font family for labels.
     - label_color (str): Color of the text labels.
     - non_filled_color (str): Color for the non-filled area of each ring.
     - is_show (bool): If True, displays the plot.
@@ -2720,15 +2720,15 @@ def plot_cyclic_bar(data, r0, delta, fig_size=(5, 5), color_list=None, startangl
     col0 = data.iloc[:, 0]
     w = 1.25 * col0.max()  # Maximum value for normalization adjusted to fit the chart within bounds
     
-    fig, ax = plt.subplots(figsize=figsize)
+    fig, ax = plt.subplots(figsize=fig_size)
     for i in range(row):
         r1 = delta * row + r0 - delta * i
         colors = [color_list[i % len(color_list)], non_filled_color]
         values = [num[i] / w * 0.7, 0.75 - num[i] / w * 0.7]
-        ax.pie(values, shadow=False, colors=colors, startangle=startangle, radius=r1,
-               wedgeprops={'linewidth': 2, 'edgecolor': edgecolor})
-        plt.text(0, text_offset + r0 + delta * i, ind[i], fontsize=fontsize, fontname=fontname, color=label_color, ha='left')
-        plt.text(0.8, text_offset + r0 + delta * i, f"{num[i]:.2f}", fontsize=fontsize, fontname=fontname, color=label_color, ha='right')
+        ax.pie(values, shadow=False, colors=colors, startangle=start_angle, radius=r1,
+               wedgeprops={'linewidth': 2, 'edgecolor': edge_color})
+        plt.text(0, text_offset + r0 + delta * i, ind[i], fontsize=font_size, fontname=font_name, color=label_color, ha='left')
+        plt.text(0.8, text_offset + r0 + delta * i, f"{num[i]:.2f}", fontsize=font_size, fontname=font_name, color=label_color, ha='right')
 
     ax.pie([1], radius=r0, colors='w')
 
