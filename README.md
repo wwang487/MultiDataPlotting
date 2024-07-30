@@ -229,6 +229,50 @@ mdp.plot_quadrant_data(data, x_threshold, y_threshold)
 
 ![alt text](https://github.com/wwang487/MultiDataPlotting/blob/main/picture/quadrant.png?raw=true)
 
+### Plotting Grouped Dot Chart with Vertical Lines
+
+The `plot_grouped_dot_chart` function in our data visualization toolkit provides a dynamic method for creating grouped dot charts with vertical connecting lines to the x-axis. This function is particularly useful for visualizing categorical data comparisons across different states or groups, highlighting individual data points and their distribution within each category.
+
+_Functionality_
+
+This function enables the visualization of numerical data across categorical groups with enhancements that visually connect each data point to the baseline, thereby facilitating a clearer understanding of value distribution and differences between groups.
+
+_Parameters_
+- **data** (DataFrame): The DataFrame containing the data to be plotted. Must include categorical and numerical columns.
+- **category_col** (str): The column name in DataFrame used as the categorical axis (e.g., 'State').
+- **value_cols** (list of str, optional): The column names to be plotted as numerical values. If `None`, all columns except `category_col` are used.
+- **label_size** (int, optional): Font size for the axis labels. Default is 12.
+- **tick_label_size** (int, optional): Font size for the tick labels. Default is 10.
+- **cmap** (str, optional): Name of the matplotlib colormap used for differentiating categories. Default is 'tab20'.
+- **font_name** (str, optional): Font family for text elements in the plot. Default is 'Arial'.
+- **is_legend** (bool, optional): Whether to display the legend in the plot. Default is True.
+- **is_show** (bool, optional): Whether to display the plot on screen after drawing. Default is True.
+- **fig_size** (tuple, optional): Dimensions of the figure in inches. Default is (10, 8).
+- **save_path** (str, optional): File path to save the plot image, if desired. Default is None.
+
+_Code Example_
+
+```python
+import pandas as pd
+import multidataplotting as mdp
+
+# Example data
+data = pd.DataFrame({
+    'State': ['CA', 'TX', 'NY', 'FL', 'IL', 'PA'],
+    'Under 5 Years': [2.5, 3.0, 1.5, 2.0, 1.8, 2.1],
+    '5 to 13 Years': [4.0, 4.5, 2.5, 3.5, 3.0, 3.6],
+    '14 to 17 Years': [1.0, 1.2, 0.8, 1.1, 1.0, 0.9],
+    '18 to 24 Years': [2.8, 3.2, 1.9, 2.5, 2.2, 2.8],
+    '25 to 44 Years': [8.0, 7.5, 4.5, 6.0, 5.5, 5.9],
+    '45 to 64 Years': [7.5, 8.0, 5.0, 6.5, 6.0, 6.4],
+    '65 Years and Over': [5.0, 5.5, 3.5, 4.0, 3.8, 4.2]
+})
+mdp.plot_grouped_dot_chart(data, is_legend=True, is_show=True, fig_size=(12, 8))
+
+```
+
+![alt text](https://github.com/wwang487/MultiDataPlotting/blob/main/picture/dotline.png?raw=true)
+
 ### Plot Ridgelines
 
 The `plot_ridgelines` function is a specialized visualization tool designed for creating impactful ridgeline plots, which are ideal for displaying the distribution of data across different categories, such as time periods or groups. This function is versatile and can be tailored for various data analysis needs, especially useful in statistics, finance, environmental science, and more.
