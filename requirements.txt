@@ -9,3 +9,4 @@ datetime
 scikit-learn
 contextily
 python-ternary
+statsmodels
