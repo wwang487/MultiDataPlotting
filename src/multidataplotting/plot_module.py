@@ -1413,32 +1413,19 @@ def plot_rose_contour_map(input_data, key_1, key_2, title="Rose Contour Map", la
     if save_path:
         plt.savefig(save_path, bbox_inches='tight', dpi=600)
 
-def plot_cdfs(data_lists, fig_size=(10, 6), line_styles=None, line_widths=None,
-              line_colors=None, legends=None, marker_colors=None, x_tick_interval=10,
+def plot_cdfs(data_lists, fig_size=(10, 6), line_styles=None, line_widths=None, is_percent = True,
+              line_colors=None, legends=None, marker_colors=None, x_tick_interval=10, tick_label_fontsize=12,
               markers=None, show_grid=True, font_name='Arial', font_size=12, save_path=None,
-              dpi=100, is_same_figure=True, is_log_x=False):
+              dpi=100, is_same_figure=True, is_log_x=False, regression_trans=None, title = None,
+              show_reg_eqn=True, annno_digits = 3):
     """
     Plot the CDF for each set of data in data_lists with extensive customization options,
     including the option to plot all on the same figure or on individual subplots, and
-    setting the x-axis to logarithmic scale.
+    setting the x-axis to logarithmic scale. Additionally, performs OLS regression
+    within specified ranges and plots the regression lines.
 
     Parameters:
-    - data_lists: List of lists, each containing numerical data.
-    - fig_size: Tuple indicating the figure size.
-    - line_styles: Dictionary mapping column indices to line styles.
-    - line_widths: Dictionary mapping column indices to line widths.
-    - line_colors: Dictionary mapping column indices to line colors.
-    - legends: List of legend labels.
-    - marker_colors: Dictionary mapping column indices to marker colors.
-    - x_tick_interval: Interval between x-ticks.
-    - markers: Dictionary mapping column indices to markers.
-    - show_grid: Whether to show grid lines.
-    - font_name: Font name for all text elements.
-    - font_size: Font size for all text elements.
-    - save_path: Path to save the figure. If None, the figure is not saved.
-    - dpi: The resolution in dots per inch of the saved figure.
-    - is_same_figure: Whether to plot all datasets in the same figure.
-    - is_log_x: Whether to use a logarithmic scale for the x-axis.
+    - regression_trans: List of tuples, each containing the start and end of a range for OLS regression.
     """
     if is_same_figure:
         fig, ax = plt.subplots(figsize=fig_size)
@@ -1446,16 +1433,21 @@ def plot_cdfs(data_lists, fig_size=(10, 6), line_styles=None, line_widths=None,
         fig, axs = plt.subplots(len(data_lists), 1, figsize=fig_size)
     
     plt.rc('font', family=font_name, size=font_size)
-
+    
+    if title == None:
+        title = 'Cumulative Distribution Function'
+    
     for i, data in enumerate(data_lists):
         sorted_data = np.sort(data)
         yvals = np.arange(1, len(sorted_data) + 1) / len(sorted_data)
-
-        style = line_styles.get(i, '-')
-        width = line_widths.get(i, 1)
-        color = line_colors.get(i, 'b')
-        marker = markers.get(i, None)
-        marker_color = marker_colors.get(i, color)
+        
+        if is_percent:
+            yvals = yvals * 100
+        style = line_styles.get(i, '-') if line_styles else '-'
+        width = line_widths.get(i, 1) if line_widths else 1
+        color = line_colors.get(i, 'b') if line_colors else 'b'
+        marker = markers.get(i, None) if markers else None
+        marker_color = marker_colors.get(i, color) if marker_colors else color
         legend = legends[i] if legends and i < len(legends) else f"Data {i+1}"
 
         current_ax = ax if is_same_figure else axs[i]
@@ -1466,15 +1458,35 @@ def plot_cdfs(data_lists, fig_size=(10, 6), line_styles=None, line_widths=None,
         current_ax.plot(sorted_data, yvals, linestyle=style, linewidth=width, color=color,
                         marker=marker, markerfacecolor=marker_color, label=legend)
         
+        # Regression analysis within specified ranges
+        if regression_trans:
+            for start, end in regression_trans:
+                mask = (sorted_data >= start) & (sorted_data <= end)
+                reg_data = sorted_data[mask]
+                reg_yvals = yvals[mask]
+
+                if len(reg_data) > 1:
+                    reg_model = sm.OLS(reg_yvals, sm.add_constant(reg_data)).fit()
+                    reg_line = reg_model.predict(sm.add_constant(reg_data))
+                    current_ax.plot(reg_data, reg_line, linestyle='--', linewidth=width, color=color)
+                    if show_reg_eqn:
+                        # Annotate regression equation
+                        b, m = reg_model.params
+                        equation_text = f"$y = {m:.{annno_digits}f}x + {b:.{annno_digits}f}$"
+                        x_pos = np.median(reg_data)
+                        y_pos = np.interp(x_pos, reg_data, reg_line)
+                        current_ax.annotate(equation_text, (x_pos, y_pos), textcoords="offset points",
+                                            xytext=(0,10), ha='right', color=color, fontsize=font_size)
+        
         if x_tick_interval and not is_log_x:
             current_ax.set_xticks(np.arange(0, 1.1, 1 / x_tick_interval))
         
         if show_grid:
             current_ax.grid(True)
-
+        current_ax.tick_params(axis='both', which='major', labelsize=tick_label_fontsize)
         current_ax.legend()
 
-    plt.suptitle("CDF Plots of Given Datasets")
+    plt.title(title)
     plt.tight_layout(rect=[0, 0.03, 1, 0.95])
 
     if save_path:
