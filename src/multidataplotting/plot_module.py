@@ -1142,8 +1142,9 @@ def plot_3d_stacked_bar(pair_freq, x_bin_ticks, y_bin_ticks, fig_size=(12, 10), 
     else:
         pair_frequency = copy.deepcopy(pair_freq)
     
+    pair_sum = sum(pair_frequency.values())
     if is_percent:
-        pair_frequency = {key: val / len(pair_freq) * 100 for key, val in pair_frequency.items()}
+        pair_frequency = {key: val / pair_sum * 100 for key, val in pair_frequency.items()}
     
     fig = plt.figure(figsize=fig_size)
     fig.patch.set_facecolor(background_color)  # Set the figure background color
@@ -1167,10 +1168,12 @@ def plot_3d_stacked_bar(pair_freq, x_bin_ticks, y_bin_ticks, fig_size=(12, 10), 
     data = np.zeros((len(ys), len(xs)))
 
     for (x, y), freq in pair_frequency.items():
+        # print(x, y, freq)
         x_index = xs.tolist().index(x)
         y_index = ys.tolist().index(y)
         data[y_index, x_index] += freq
-
+    
+    # print(data)
     # Create bars
     for x in xs:
         for y in ys:
