@@ -497,9 +497,9 @@ def plot_bar_plots(list_of_lists, tuple_range_list, titles = '', ylabels='', bar
         else:
             print("Please provide a valid path to save the figure.")
 
-def draw_cat_bar_curveplots(main_result, other_data_list, bar_colors=None, bar_thickness=0.8, bar_edge_color='black', line_color='black', cat_labels = None,
-                       y_range=None, fig_size=(10, 6), xlabels = None, ylabels = None, line_thickness=1, tick_fontsize=10, tick_fontname='sans-serif', x_tick_interval=1, is_show=False, 
-                       is_save=True, save_path=''):
+def draw_cat_bar_curveplots(main_result, other_data_list, bar_colors=None, bar_thickness=0.8, bar_edge_color='black', line_color='black', cat_labels=None,
+                       y_range=None, fig_size=(10, 6), xlabels=None, ylabels=None, line_thickness=1, tick_fontsize=10, tick_fontname='sans-serif', 
+                       x_tick_interval=1, rotation=45, is_show=False, is_save=True, save_path=''):
     '''
     This function is used to draw bar plots with multiple curve plots with a line plot for each dataset.
     
@@ -519,6 +519,7 @@ def draw_cat_bar_curveplots(main_result, other_data_list, bar_colors=None, bar_t
     tick_fontsize: int, the font size of the ticks
     tick_fontname: str, the font name of the ticks
     x_tick_interval: int, the interval of the x ticks
+    rotation: int, rotation angle for the x-tick labels
     is_show: bool, whether to show the figure
     is_save: bool, whether to save the figure
     save_path: str, the path to save the figure
@@ -527,9 +528,8 @@ def draw_cat_bar_curveplots(main_result, other_data_list, bar_colors=None, bar_t
     None
     
     If you want to customize the plot, you can modify the code in this function.
-    
-    
     '''
+    
     def prepare_data(result):
         dates = list(result.keys())
         values = list(result.values())
@@ -602,7 +602,10 @@ def draw_cat_bar_curveplots(main_result, other_data_list, bar_colors=None, bar_t
     # Set date format on x-axis and set tick interval for all subplots
     axes[-1].xaxis.set_major_locator(mdates.DayLocator(interval=x_tick_interval))
     axes[-1].xaxis.set_major_formatter(mdates.DateFormatter('%m-%d'))
-    fig.autofmt_xdate()  # Auto format x-axis dates for better appearance
+
+    # Apply rotation and alignment to x-tick labels
+    ha_value = 'center' if rotation == 0 else 'right'
+    plt.setp(axes[-1].get_xticklabels(), rotation=rotation, ha=ha_value)
 
     fig.tight_layout()
     if is_show:
@@ -612,6 +615,7 @@ def draw_cat_bar_curveplots(main_result, other_data_list, bar_colors=None, bar_t
             fig.savefig(save_path, dpi=600)
         else:
             print("Please provide a valid path to save the figure.")
+
             
 def plot_histograms(list_of_lists, titles, xlabels='', ylabels='', bins=10, color='blue', edgecolor='black', fig_size=(10, 6), tick_fontname='Arial',
                     tick_fontsize=12, title_fontsize=14, label_fontsize=14, value_range=None, line_color='red', show_all_xticklabels=True,

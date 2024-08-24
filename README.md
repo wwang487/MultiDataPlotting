@@ -631,6 +631,7 @@ _Parameters_
 - **line_thickness** (float or list, optional): Thickness of the lines for curve plots. Can be a single value or a list of values corresponding to each dataset.
 - **tick_fontsize** (int, optional): Font size for the tick labels. Default is 10.
 - **tick_fontname** (str, optional): Font name for the tick labels. Default is 'sans-serif'.
+- **rotation** (int, optional): Rotated angle for x tick labels. Default is 45.
 - **x_tick_interval** (int, optional): Interval between x-ticks, useful for densely packed x-axes. Default is 1.
 - **is_show** (bool, optional): Whether to display the plot on the screen. Default is False.
 - **is_save** (bool, optional): Whether to save the plot to a file. Default is True.
